@@ -1,0 +1,28 @@
+const t = require("../lib/types");
+
+module.exports = {
+  id: t.LONG,
+  unk_2: t.LONG,
+  unk_3: t.LONG,
+  unk_4: t.LONG,
+  unk_5: t.LONG,
+  unk_6: t.LONG,
+  unk_7: t.LONG,
+  unk_8: t.LONG,
+  unk_9: t.LONG,
+  unk_10: t.LONG,
+  unk_11: t.LONG,
+  unk_12: t.LONG,
+  unk_13: t.LONG,
+  unk_14: t.LONG,
+  unk_15: t.LONG,
+  unk_16: t.LONG,
+  unk_17: t.LONG,
+  unk_18: t.LONG,
+  unk_19: t.LONG,
+  unk_20: t.LONG,
+  unk_21: t.LONG,
+  unk_22: t.LONG,
+  unk_23: t.LONG,
+  unk_24: t.LONG,
+};
