@@ -1,12 +1,12 @@
 const t = require("../lib/types");
 
-module.exports =  {
-  id: t.LONG,
-  classId: t.LONG,
-  subClassId: t.LONG,
-  soundOverrideSubclassId: t.LONG,
-  material: t.LONG,
-  displayInfoId: t.LONG,
-  inventoryType: t.LONG,
-  sheathType: t.LONG,
+module.exports = {
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int32le,
+  unk_3: t.int32le,
+  unk_4: t.int32le,
+  unk_5: t.int32le,
+  unk_6: t.int32le,
+  unk_7: t.int32le,
 };

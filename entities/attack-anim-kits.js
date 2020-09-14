@@ -1,9 +1,9 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  animation: t.LONG,
-  type: t.LONG,
-  flags: t.FLAGS,
-  unk_5: t.BOOL,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int32le,
+  unk_3: t.int32le,
+  unk_4: t.int8,
 };

@@ -1,10 +1,10 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  raceId: t.LONG,
-  gender: t.BOOL,
-  variationId: t.LONG,
-  geosetId: t.LONG,
-  showscalp: t.BOOL,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int8,
+  unk_3: t.int32le,
+  unk_4: t.int32le,
+  unk_5: t.int8,
 };

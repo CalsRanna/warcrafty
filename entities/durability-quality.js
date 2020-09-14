@@ -1,6 +1,6 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  unk_2: t.FLOAT,
+  unk_0: t.int32le,
+  unk_1: t.float32le,
 };

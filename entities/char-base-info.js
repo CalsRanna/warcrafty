@@ -1,6 +1,6 @@
 const t = require("../lib/types");
 
 module.exports = {
-  raceId: t.BYTE,
-  classId: t.BYTE,
+  unk_0: t.int8,
+  unk_1: t.int8,
 };

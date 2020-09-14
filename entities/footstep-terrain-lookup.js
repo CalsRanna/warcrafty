@@ -1,9 +1,9 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  creatureFootstepId: t.LONG,
-  terrainSoundId: t.LONG,
-  soundId: t.LONG,
-  soundIdSplash: t.LONG,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int32le,
+  unk_3: t.int32le,
+  unk_4: t.int32le,
 };

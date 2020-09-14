@@ -1,14 +1,14 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  raceId: t.LONG,
-  gender: t.BOOL,
-  baseSection: t.LONG,
-  textureName1: t.STRING,
-  textureName2: t.STRING,
-  textureName3: t.STRING,
-  flags: t.FLAGS,
-  variationIndex: t.LONG,
-  colorIndex: t.LONG,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int8,
+  unk_3: t.int32le,
+  unk_4: t.string,
+  unk_5: t.string,
+  unk_6: t.string,
+  unk_7: t.int32le,
+  unk_8: t.int32le,
+  unk_9: t.int32le,
 };

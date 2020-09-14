@@ -1,12 +1,12 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  shakeType: t.BOOL,
-  direction: t.FLAGS,
-  amplitude: t.FLOAT,
-  frequency: t.FLOAT,
-  duration: t.FLOAT,
-  phase: t.FLOAT,
-  coefficient: t.FLOAT,
+  unk_0: t.int32le,
+  unk_1: t.int8,
+  unk_2: t.int32le,
+  unk_3: t.float32le,
+  unk_4: t.float32le,
+  unk_5: t.float32le,
+  unk_6: t.float32le,
+  unk_7: t.float32le,
 };

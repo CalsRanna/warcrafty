@@ -1,8 +1,8 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  realmType: t.LONG,
-  playerKillingAllowed: t.BOOL,
-  rolePlaying: t.BOOL,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int8,
+  unk_3: t.int8,
 };

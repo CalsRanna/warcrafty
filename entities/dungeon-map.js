@@ -1,12 +1,12 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.LONG,
-  unk_2: t.LONG,
-  unk_3: t.LONG,
-  unk_4: t.FLOAT,
-  unk_5: t.FLOAT,
-  unk_6: t.FLOAT,
-  unk_7: t.FLOAT,
-  unk_8: t.LONG,
+  unk_0: t.int32le,
+  unk_1: t.int32le,
+  unk_2: t.int32le,
+  unk_3: t.float32le,
+  unk_4: t.float32le,
+  unk_5: t.float32le,
+  unk_6: t.float32le,
+  unk_7: t.int32le,
 };
