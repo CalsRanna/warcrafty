@@ -1,9 +1,9 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
-  unk_4: t.int8,
+  id: t.int32le,
+  animation: t.int32le,
+  type: t.int32le,
+  flags: t.int32le,
+  unk_4: t.int32le,
 };

@@ -1,15 +1,15 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.float32le,
-  unk_2: t.int32le,
-  unk_3: t.float32le,
-  unk_4: t.int32le,
-  unk_5: t.float32le,
-  unk_6: t.int32le,
-  unk_7: t.float32le,
-  unk_8: t.int32le,
-  unk_9: t.float32le,
-  unk_10: t.int32le,
+  id: t.int32le,
+  nameMD51: t.uint32le,
+  nameMD52: t.uint32le,
+  nameMD53: t.uint32le,
+  nameMD54: t.uint32le,
+  versionMD51: t.uint32le,
+  versionMD52: t.uint32le,
+  versionMD53: t.uint32le,
+  versionMD54: t.uint32le,
+  lastModified: t.uint32le,
+  flags: t.int32le,
 };
