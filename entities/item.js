@@ -1,12 +1,12 @@
 const t = require("../lib/types");
 
 module.exports = {
-  id: t.int32le,
-  class: t.int32le,
-  subclass: t.int32le,
-  soundOverrideSubclass: t.int32le,
-  material: t.int32le,
-  displayId: t.int32le,
-  inventoryType: t.int32le,
-  sheath: t.int32le,
+  ID: t.int32le,
+  ClassID: t.int32le,
+  SubclassID: t.int32le,
+  Sound_Override_Subclassid: t.int32le,
+  Material: t.int32le,
+  DisplayInfoID: t.int32le,
+  InventoryType: t.int32le,
+  SheatheType: t.int32le,
 };

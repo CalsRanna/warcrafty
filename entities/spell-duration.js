@@ -1,8 +1,8 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
+  ID: t.int32le,
+  Duration: t.int32le,
+  DurationPerLevel: t.int32le,
+  MaxDuration: t.int32le,
 };
