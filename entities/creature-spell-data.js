@@ -1,13 +1,13 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
-  unk_4: t.int32le,
-  unk_5: t.int32le,
-  unk_6: t.int32le,
-  unk_7: t.int32le,
-  unk_8: t.int32le,
+  ID: t.int32le,
+  Spells_1: t.int32le,
+  Spells_2: t.int32le,
+  Spells_3: t.int32le,
+  Spells_4: t.int32le,
+  Availability_1: t.int32le,
+  Availability_2: t.int32le,
+  Availability_3: t.int32le,
+  Availability_4: t.int32le,
 };
