@@ -1,11 +1,11 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.string,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
-  unk_4: t.int32le,
-  unk_5: t.int32le,
-  unk_6: t.int32le,
+  ID: t.int32le,
+  EmoteSlashCommand: t.string,
+  AnimID: t.int32le,
+  EmoteFlags: t.int32le,
+  EmoteSpecProc: t.int32le,
+  EmoteSpecProcParam: t.int32le,
+  EventSoundID: t.int32le,
 };
