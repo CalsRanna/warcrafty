@@ -1,9 +1,9 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.string,
-  unk_2: t.string,
-  unk_3: t.int32le,
-  unk_4: t.int32le,
+  ID: t.int32le,
+  Name: t.string,
+  ScriptBody: t.string,
+  Flags: t.int32le,
+  MIssileCount: t.int32le,
 };

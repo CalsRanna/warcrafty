@@ -1,8 +1,8 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
+  ID: t.int32le,
+  CameraShake_1: t.int32le,
+  CameraShake_2: t.int32le,
+  CameraShake_3: t.int32le,
 };

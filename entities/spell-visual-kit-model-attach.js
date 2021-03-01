@@ -1,14 +1,14 @@
 const t = require("../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int32le,
-  unk_3: t.int32le,
-  unk_4: t.float32le,
-  unk_5: t.float32le,
-  unk_6: t.float32le,
-  unk_7: t.float32le,
-  unk_8: t.float32le,
-  unk_9: t.float32le,
+  ID: t.int32le,
+  ParentSpellVisualKitID: t.int32le,
+  SpellVisualEffectNameID: t.int32le,
+  AttachmentID: t.int32le,
+  OffsetX: t.float32le,
+  OffsetY: t.float32le,
+  OffsetZ: t.float32le,
+  Yaw: t.float32le,
+  Pitch: t.float32le,
+  Roll: t.float32le,
 };
