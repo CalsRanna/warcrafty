@@ -57,7 +57,7 @@ module.exports = {
   Name_Male_Lang_Unk: t.string,
   Name_Male_Lang_Mask: t.int32le,
   FileName: t.string,
-  SpellCastSet: t.int32le,
+  SpellClassSet: t.int32le,
   Flags: t.int32le,
   CinematicSequenceID: t.int32le,
   Required_Expansion: t.int32le,
