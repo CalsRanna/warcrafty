@@ -69,5 +69,5 @@ module.exports = {
   FacialHairCustomization_1: t.string,
   FacialHairCustomization_2: t.string,
   HairCustomization: t.string,
-  RequiredExpansion: t.int32le,
+  Required_Expansion: t.int32le,
 };
