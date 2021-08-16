@@ -1,6 +1,6 @@
 {
   "name": "warcrafty",
-  "description": "A library used to write / read blizzard's dbc file.",
+  "description": "A library used to write / read blizzard's dbc / mpq file",
   "version": "1.0.14",
   "main": "index.js",
   "license": "MIT"

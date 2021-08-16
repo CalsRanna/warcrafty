@@ -1,6 +1,7 @@
+.DS_STORE
 .vscode
 node_modules/
 dbc/
-.DS_STORE
-test.js
+mpq/
+warcrafty.js
 yarn.lock
