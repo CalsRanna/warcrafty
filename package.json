@@ -1,7 +1,10 @@
 {
   "name": "warcrafty",
-  "description": "A library used to write / read blizzard's dbc / mpq file",
-  "version": "1.1.6",
+  "description": "A library used to write / read blizzard's dbc / db2 file",
+  "version": "2.0.1",
   "main": "index.js",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "iconv-lite": "^0.6.3"
+  }
 }

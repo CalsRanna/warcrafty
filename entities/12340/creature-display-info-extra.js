@@ -1,0 +1,25 @@
+const t = require("../../lib/types");
+
+module.exports = {
+  ID: t.int32le,
+  DisplayRaceID: t.int32le,
+  DisplaySexID: t.int32le,
+  SkinID: t.int32le,
+  FaceID: t.int32le,
+  HairStyleID: t.int32le,
+  HairColorID: t.int32le,
+  FacialHairID: t.int32le,
+  NPCItemDisplay_1: t.int32le,
+  NPCItemDisplay_2: t.int32le,
+  NPCItemDisplay_3: t.int32le,
+  NPCItemDisplay_4: t.int32le,
+  NPCItemDisplay_5: t.int32le,
+  NPCItemDisplay_6: t.int32le,
+  NPCItemDisplay_7: t.int32le,
+  NPCItemDisplay_8: t.int32le,
+  NPCItemDisplay_9: t.int32le,
+  NPCItemDisplay_10: t.int32le,
+  NPCItemDisplay_11: t.int32le,
+  Flags: t.int32le,
+  BakeName: t.string,
+};

@@ -2,7 +2,7 @@
 
 ## Introduction
 
-Warcrafty is a library used to read / write dbc file writed with javascript.
+Warcrafty is a library used to read / write blizzard's dbc / db2 file writed with javascript.
 
 ## Install
 
@@ -10,14 +10,28 @@ Warcrafty is a library used to read / write dbc file writed with javascript.
 
 ## Usage
 
+### DBC
+
 ```javascript
-const DBC = require("warcrafty");
+const { DBC } = require("warcrafty");
 
 DBC.read("path/to/your/file/Item.dbc").then((dbc) => {
-  //Do something.
+  // Your code.
 });
 
 DBC.write("path/to/your/file/Item.dbc", records).then(() => {
-  //Do something.
+  // Your code.
 });
 ```
+
+### DB2
+
+```javascript
+const { DB2 } = require("warcrafty");
+
+let db2 = new DB2("path/to/your/file/Item.dbc");
+let records = db2.build();
+// Your code.
+```
+
+> _Seem like there's no need to write db2 files since hotfix can override it, so warcrafty doesn't provide a function to write db2 files._

@@ -3,5 +3,7 @@
 node_modules/
 dbc/
 mpq/
+package-lock.json
+.prettierrc
 warcrafty.js
 yarn.lock
