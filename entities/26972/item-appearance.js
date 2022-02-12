@@ -1,4 +1,4 @@
-const t = require("../../lib/types");
+const t = require("../../types");
 
 module.exports = {
   ItemDisplayInfoID: t.uint32le,
