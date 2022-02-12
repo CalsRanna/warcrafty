@@ -1,9 +1,9 @@
 const t = require("../../lib/types");
 
 module.exports = {
-  unk_0: t.int32le,
-  unk_1: t.int32le,
-  unk_2: t.int8,
-  unk_3: t.int8,
-  unk_4: t.int32le,
+  ID: t.int32le,
+  Enchant_ID: t.int32le,
+  Maxcount_inv: t.int32le,
+  Maxcount_item: t.int32le,
+  Type: t.int32le,
 };
