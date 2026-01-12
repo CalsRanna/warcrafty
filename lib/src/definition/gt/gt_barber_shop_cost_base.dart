@@ -5,11 +5,12 @@ import 'package:warcrafty/src/core/field_format.dart';
 /// GtBarberShopCostBase 格式字符串
 
 /// GtBarberShopCostBase 结构定义
+///
+/// 格式字符串参考 AzerothCore: 单个浮点数
 const gtBarberShopCostBase = DbcStructureDefinition(
   name: 'GtBarberShopCostBase',
-  format: 'df',
+  format: 'f',
   fields: [
-    FieldDefinition(index: 0, name: 'SortValue', description: '排序值', format: DbcFieldFormat.sort),
-    FieldDefinition(index: 1, name: 'Cost', description: '花费', format: DbcFieldFormat.float),
+    FieldDefinition(index: 0, name: 'Cost', description: '花费', format: DbcFieldFormat.float),
   ],
 );

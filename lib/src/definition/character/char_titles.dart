@@ -1,47 +1,19 @@
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/definition/common/locale_fields.dart';
 
 /// CharTitles 结构定义
-const charTitles = DbcStructureDefinition(
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
+final charTitles = DbcStructureDefinition(
   name: 'CharTitles',
-  format: 'nxssssssssssssssssxssssssssssssssssxi',
+  format: 'nissssssssssssssssssssssssssssssssssi',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: '称号 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'Unused1', description: '未使用', format: DbcFieldFormat.na),
-    FieldDefinition(index: 2, name: 'NameMale_enUS', description: '男性英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 3, name: 'NameMale_enGB', description: '男性英式英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 4, name: 'NameMale_koKR', description: '男性韩文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 5, name: 'NameMale_frFR', description: '男性法文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 6, name: 'NameMale_deDE', description: '男性德文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 7, name: 'NameMale_enCN', description: '男性简体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 8, name: 'NameMale_zhCN', description: '男性繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 9, name: 'NameMale_zhTW', description: '男性台湾繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 10, name: 'NameMale_esES', description: '男性西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 11, name: 'NameMale_esMX', description: '男性墨西哥西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 12, name: 'NameMale_ruRU', description: '男性俄文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 13, name: 'NameMale_ptBR', description: '男性葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 14, name: 'NameMale_itIT', description: '男性意大利文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 15, name: 'NameMale_ptPT', description: '男性葡萄牙葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 16, name: 'NameMale_unk', description: '男性未知语言名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 17, name: 'NameMale_unk2', description: '男性未知语言名称 2', format: DbcFieldFormat.string),
-    FieldDefinition(index: 18, name: 'Unused18', description: '未使用', format: DbcFieldFormat.na),
-    FieldDefinition(index: 19, name: 'NameFemale_enUS', description: '女性英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 20, name: 'NameFemale_enGB', description: '女性英式英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 21, name: 'NameFemale_koKR', description: '女性韩文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 22, name: 'NameFemale_frFR', description: '女性法文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 23, name: 'NameFemale_deDE', description: '女性德文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 24, name: 'NameFemale_enCN', description: '女性简体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 25, name: 'NameFemale_zhCN', description: '女性繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 26, name: 'NameFemale_zhTW', description: '女性台湾繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 27, name: 'NameFemale_esES', description: '女性西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 28, name: 'NameFemale_esMX', description: '女性墨西哥西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 29, name: 'NameFemale_ruRU', description: '女性俄文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 30, name: 'NameFemale_ptBR', description: '女性葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 31, name: 'NameFemale_itIT', description: '女性意大利文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 32, name: 'NameFemale_ptPT', description: '女性葡萄牙葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 33, name: 'NameFemale_unk', description: '女性未知语言名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 34, name: 'NameFemale_unk2', description: '女性未知语言名称 2', format: DbcFieldFormat.string),
-    FieldDefinition(index: 35, name: 'BitIndex', description: '位索引', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    const FieldDefinition(index: 1, name: 'Condition_ID', description: 'Condition_ID', format: DbcFieldFormat.intType),
+    ...createLocaleFieldsWithFlag(2, 'Name_lang', 'Name_lang'),
+    ...createLocaleFieldsWithFlag(19, 'Name1_lang', 'Name1_lang'),
+    const FieldDefinition(index: 36, name: 'Mask_ID', description: 'Mask_ID', format: DbcFieldFormat.intType),
   ],
 );

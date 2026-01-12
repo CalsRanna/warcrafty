@@ -11,7 +11,15 @@
       "Bash(grep:*)",
       "mcp__dart-mcp-server__add_roots",
       "mcp__dart-mcp-server__analyze_files",
-      "mcp__dart-mcp-server__run_tests"
+      "mcp__dart-mcp-server__run_tests",
+      "Bash(dir /b \"D:\\\\Simulators\\\\AzerothCore\\\\core\\\\dbc\\\\*.dbc\")",
+      "Bash(powershell -Command \"Get-ChildItem ''D:\\\\Simulators\\\\AzerothCore\\\\core\\\\dbc\\\\*.dbc'' | Select-Object -First 20 -ExpandProperty Name\")",
+      "Bash(powershell -Command:*)",
+      "Bash(dart run:*)",
+      "Bash(xargs:*)",
+      "Bash(cd:*)",
+      "Bash(dir /s /b:*)",
+      "Bash(done)"
     ]
   }
 }

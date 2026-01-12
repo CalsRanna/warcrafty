@@ -6,4 +6,4 @@ export 'package:warcrafty/src/definition/common/locale_fields.dart'
     show createLocaleFields, createLocaleFieldsWithFlag, createUnusedFields, createIntFields, localeNames, localeDescriptions;
 
 // 统一格式接口
-export 'definition.dart' show Definitions, DbcFormatStrings, DbcStructures;
+export 'definition.dart' show Definitions;

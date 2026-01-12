@@ -2,21 +2,21 @@ import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
 
-/// CreatureSpellData 格式字符串
-
 /// CreatureSpellData 结构定义
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 const creatureSpellData = DbcStructureDefinition(
   name: 'CreatureSpellData',
-  format: 'niiiixxxx',
+  format: 'niiiiiiii',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'Spell1', description: '法术 1', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'Spell2', description: '法术 2', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'Spell3', description: '法术 3', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'Spell4', description: '法术 4', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 5, name: 'Spell5', description: '法术 5', format: DbcFieldFormat.na),
-    FieldDefinition(index: 6, name: 'Spell6', description: '法术 6', format: DbcFieldFormat.na),
-    FieldDefinition(index: 7, name: 'Spell7', description: '法术 7', format: DbcFieldFormat.na),
-    FieldDefinition(index: 8, name: 'Spell8', description: '法术 8', format: DbcFieldFormat.na),
+    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    FieldDefinition(index: 1, name: 'Spells0', description: 'Spells 0', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 2, name: 'Spells1', description: 'Spells 1', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 3, name: 'Spells2', description: 'Spells 2', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 4, name: 'Spells3', description: 'Spells 3', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 5, name: 'Availability0', description: 'Availability 0', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 6, name: 'Availability1', description: 'Availability 1', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 7, name: 'Availability2', description: 'Availability 2', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 8, name: 'Availability3', description: 'Availability 3', format: DbcFieldFormat.intType),
   ],
 );

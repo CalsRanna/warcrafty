@@ -1,20 +1,21 @@
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
-
-/// MapDifficulty 格式字符串
+import 'package:warcrafty/src/definition/common/locale_fields.dart';
 
 /// MapDifficulty 结构定义
-const mapDifficulty = DbcStructureDefinition(
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
+final mapDifficulty = DbcStructureDefinition(
   name: 'MapDifficulty',
-  format: 'diisxxxxxxxxxxxxxxxxiix',
+  format: 'niisssssssssssssssssiis',
   fields: [
-    FieldDefinition(index: 0, name: 'MapID', description: '地图 ID', format: DbcFieldFormat.sort),
-    FieldDefinition(index: 1, name: 'Difficulty', description: '难度', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'ResetTime', description: '重置时间', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'MaxPlayers', description: '最大玩家数', format: DbcFieldFormat.string),
-    FieldDefinition(index: 4, name: 'Message', description: '消息', format: DbcFieldFormat.na),
-    FieldDefinition(index: 5, name: 'ExpandedMaxPlayers', description: '扩展最大玩家数', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 6, name: 'Unknown1', description: '未知1', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    const FieldDefinition(index: 1, name: 'MapID', description: 'MapID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 2, name: 'Difficulty', description: 'Difficulty', format: DbcFieldFormat.intType),
+    ...createLocaleFieldsWithFlag(3, 'Message_lang', 'Message_lang'),
+    const FieldDefinition(index: 20, name: 'RaidDuration', description: 'RaidDuration', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 21, name: 'MaxPlayers', description: 'MaxPlayers', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 22, name: 'Difficultystring', description: 'Difficultystring', format: DbcFieldFormat.string),
   ],
 );

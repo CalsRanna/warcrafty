@@ -1,593 +1,531 @@
-import 'base/structure_definition.dart';
+// 自动生成的导出文件
+// 基于 WoWDBDefs 生成，版本 3.3.5.12340
 
-// 成就
-import 'achievement/achievement.dart' as structure_achievement;
-import 'achievement/achievement_category.dart'
-    as structure_achievement_category;
-import 'achievement/achievement_criteria.dart'
-    as structure_achievement_criteria;
+// achievement
+import 'achievement/achievement.dart' as struct_achievement;
+import 'achievement/achievement__category.dart' as struct_achievement__category;
+import 'achievement/achievement__criteria.dart' as struct_achievement__criteria;
 
-// 角色
-import 'character/chr_races.dart' as structure_chr_races;
-import 'character/chr_classes.dart' as structure_chr_classes;
-import 'character/char_start_outfit.dart' as structure_char_start_outfit;
-import 'character/char_titles.dart' as structure_char_titles;
-import 'character/chat_channels.dart' as structure_chat_channels;
-import 'character/talent.dart' as structure_talent;
-import 'character/talent_tab.dart' as structure_talent_tab;
+// area
+import 'area/area_group.dart' as struct_area_group;
+import 'area/area_p_o_i.dart' as struct_area_p_o_i;
+import 'area/area_table.dart' as struct_area_table;
+import 'area/area_trigger.dart' as struct_area_trigger;
+import 'area/w_m_o_area_table.dart' as struct_w_m_o_area_table;
+import 'area/world_chunk_sounds.dart' as struct_world_chunk_sounds;
+import 'area/world_map_area.dart' as struct_world_map_area;
+import 'area/world_map_continent.dart' as struct_world_map_continent;
+import 'area/world_map_overlay.dart' as struct_world_map_overlay;
+import 'area/world_map_transforms.dart' as struct_world_map_transforms;
+import 'area/world_safe_locs.dart' as struct_world_safe_locs;
+import 'area/world_state_u_i.dart' as struct_world_state_u_i;
+import 'area/world_state_zone_sounds.dart' as struct_world_state_zone_sounds;
 
-// 生物
-import 'creature/creature_family.dart' as structure_creature_family;
-import 'creature/creature_display_info.dart' as structure_creature_display_info;
-import 'creature/creature_display_info_extra.dart'
-    as structure_creature_display_info_extra;
-import 'creature/creature_model_data.dart' as structure_creature_model_data;
-import 'creature/creature_spell_data.dart' as structure_creature_spell_data;
-import 'creature/creature_type.dart' as structure_creature_type;
+// character
+import 'character/char_base_info.dart' as struct_char_base_info;
+import 'character/char_hair_geosets.dart' as struct_char_hair_geosets;
+import 'character/char_hair_textures.dart' as struct_char_hair_textures;
+import 'character/char_sections.dart' as struct_char_sections;
+import 'character/char_start_outfit.dart' as struct_char_start_outfit;
+import 'character/char_titles.dart' as struct_char_titles;
+import 'character/character_facial_hair_styles.dart' as struct_character_facial_hair_styles;
+import 'character/chat_channels.dart' as struct_chat_channels;
+import 'character/chat_profanity.dart' as struct_chat_profanity;
+import 'character/chr_classes.dart' as struct_chr_classes;
+import 'character/chr_races.dart' as struct_chr_races;
 
-// 派系
-import 'faction/faction.dart' as structure_faction;
-import 'faction/faction_template.dart' as structure_faction_template;
+// creature
+import 'creature/creature_display_info.dart' as struct_creature_display_info;
+import 'creature/creature_display_info_extra.dart' as struct_creature_display_info_extra;
+import 'creature/creature_family.dart' as struct_creature_family;
+import 'creature/creature_model_data.dart' as struct_creature_model_data;
+import 'creature/creature_movement_info.dart' as struct_creature_movement_info;
+import 'creature/creature_sound_data.dart' as struct_creature_sound_data;
+import 'creature/creature_spell_data.dart' as struct_creature_spell_data;
+import 'creature/creature_type.dart' as struct_creature_type;
 
-// 游戏对象
-import 'gameobject/game_object_display_info.dart'
-    as structure_game_object_display_info;
+// faction
+import 'faction/faction.dart' as struct_faction;
+import 'faction/faction_group.dart' as struct_faction_group;
+import 'faction/faction_template.dart' as struct_faction_template;
 
-// 物品
-import 'item/item.dart' as structure_item;
-import 'item/item_set.dart' as structure_item_set;
-import 'item/item_extended_cost.dart' as structure_item_extended_cost;
-import 'item/item_bag_family.dart' as structure_item_bag_family;
-import 'item/item_display_template.dart' as structure_item_display_template;
-import 'item/item_limit_category.dart' as structure_item_limit_category;
-import 'item/item_random_properties.dart' as structure_item_random_properties;
-import 'item/item_random_suffix.dart' as structure_item_random_suffix;
-import 'item/gem_properties.dart' as structure_gem_properties;
+// gameobject
+import 'gameobject/game_object_art_kit.dart' as struct_game_object_art_kit;
+import 'gameobject/game_object_display_info.dart' as struct_game_object_display_info;
 
-// 地图
-import 'map/map.dart' as structure_map_entry;
-import 'map/area_table.dart' as structure_area_table;
-import 'map/area_group.dart' as structure_area_group;
-import 'map/dungeon_encounter.dart' as structure_dungeon_encounter;
-import 'map/map_difficulty.dart' as structure_map_difficulty;
+// item
+import 'item/gem_properties.dart' as struct_gem_properties;
+import 'item/item.dart' as struct_item;
+import 'item/item_bag_family.dart' as struct_item_bag_family;
+import 'item/item_class.dart' as struct_item_class;
+import 'item/item_cond_ext_costs.dart' as struct_item_cond_ext_costs;
+import 'item/item_display_info.dart' as struct_item_display_info;
+import 'item/item_extended_cost.dart' as struct_item_extended_cost;
+import 'item/item_group_sounds.dart' as struct_item_group_sounds;
+import 'item/item_limit_category.dart' as struct_item_limit_category;
+import 'item/item_pet_food.dart' as struct_item_pet_food;
+import 'item/item_purchase_group.dart' as struct_item_purchase_group;
+import 'item/item_random_properties.dart' as struct_item_random_properties;
+import 'item/item_random_suffix.dart' as struct_item_random_suffix;
+import 'item/item_set.dart' as struct_item_set;
+import 'item/item_sub_class.dart' as struct_item_sub_class;
+import 'item/item_sub_class_mask.dart' as struct_item_sub_class_mask;
+import 'item/item_visual_effects.dart' as struct_item_visual_effects;
+import 'item/item_visuals.dart' as struct_item_visuals;
 
-// 任务
-import 'quest/quest_sort.dart' as structure_quest_sort;
-import 'quest/quest_xp.dart' as structure_quest_xp;
-import 'quest/quest_faction_reward.dart' as structure_quest_faction_reward;
+// light
+import 'light/light.dart' as struct_light;
+import 'light/light_float_band.dart' as struct_light_float_band;
+import 'light/light_int_band.dart' as struct_light_int_band;
+import 'light/light_params.dart' as struct_light_params;
+import 'light/light_skybox.dart' as struct_light_skybox;
 
-// 技能
-import 'skill/skill_line.dart' as structure_skill_line;
-import 'skill/skill_line_ability.dart' as structure_skill_line_ability;
-import 'skill/skill_race_class_info.dart' as structure_skill_race_class_info;
-import 'skill/skill_tiers.dart' as structure_skill_tiers;
+// map
+import 'map/dungeon_encounter.dart' as struct_dungeon_encounter;
+import 'map/dungeon_map.dart' as struct_dungeon_map;
+import 'map/dungeon_map_chunk.dart' as struct_dungeon_map_chunk;
+import 'map/l_f_g_dungeon_expansion.dart' as struct_l_f_g_dungeon_expansion;
+import 'map/l_f_g_dungeon_group.dart' as struct_l_f_g_dungeon_group;
+import 'map/l_f_g_dungeons.dart' as struct_l_f_g_dungeons;
+import 'map/map.dart' as struct_map;
+import 'map/map_difficulty.dart' as struct_map_difficulty;
 
-// 法术
-import 'spell/spell.dart' as structure_spell;
-import 'spell/spell_duration.dart' as structure_spell_duration;
-import 'spell/spell_range.dart' as structure_spell_range;
-import 'spell/spell_cast_time.dart' as structure_spell_cast_time;
-import 'spell/spell_category.dart' as structure_spell_category;
-import 'spell/spell_difficulty.dart' as structure_spell_difficulty;
-import 'spell/spell_focus_object.dart' as structure_spell_focus_object;
-import 'spell/spell_radius.dart' as structure_spell_radius;
-import 'spell/spell_rune_cost.dart' as structure_spell_rune_cost;
-import 'spell/spell_shapeshift_form.dart' as structure_spell_shapeshift_form;
-import 'spell/spell_visual.dart' as structure_spell_visual;
-import 'spell/glyph_properties.dart' as structure_glyph_properties;
-import 'spell/glyph_slot.dart' as structure_glyph_slot;
+// misc
+import 'misc/animation_data.dart' as struct_animation_data;
+import 'misc/attack_anim_kits.dart' as struct_attack_anim_kits;
+import 'misc/attack_anim_types.dart' as struct_attack_anim_types;
+import 'misc/auction_house.dart' as struct_auction_house;
+import 'misc/bank_bag_slot_prices.dart' as struct_bank_bag_slot_prices;
+import 'misc/banned_add_ons.dart' as struct_banned_add_ons;
+import 'misc/barber_shop_style.dart' as struct_barber_shop_style;
+import 'misc/battlemaster_list.dart' as struct_battlemaster_list;
+import 'misc/camera_shakes.dart' as struct_camera_shakes;
+import 'misc/cfg__categories.dart' as struct_cfg__categories;
+import 'misc/cfg__configs.dart' as struct_cfg__configs;
+import 'misc/cinematic_camera.dart' as struct_cinematic_camera;
+import 'misc/cinematic_sequences.dart' as struct_cinematic_sequences;
+import 'misc/currency_category.dart' as struct_currency_category;
+import 'misc/currency_types.dart' as struct_currency_types;
+import 'misc/dance_moves.dart' as struct_dance_moves;
+import 'misc/death_thud_lookups.dart' as struct_death_thud_lookups;
+import 'misc/declined_word.dart' as struct_declined_word;
+import 'misc/declined_word_cases.dart' as struct_declined_word_cases;
+import 'misc/destructible_model_data.dart' as struct_destructible_model_data;
+import 'misc/durability_costs.dart' as struct_durability_costs;
+import 'misc/durability_quality.dart' as struct_durability_quality;
+import 'misc/emotes.dart' as struct_emotes;
+import 'misc/emotes_text.dart' as struct_emotes_text;
+import 'misc/emotes_text_data.dart' as struct_emotes_text_data;
+import 'misc/emotes_text_sound.dart' as struct_emotes_text_sound;
+import 'misc/environmental_damage.dart' as struct_environmental_damage;
+import 'misc/exhaustion.dart' as struct_exhaustion;
+import 'misc/file_data.dart' as struct_file_data;
+import 'misc/footprint_textures.dart' as struct_footprint_textures;
+import 'misc/footstep_terrain_lookup.dart' as struct_footstep_terrain_lookup;
+import 'misc/g_m_survey_answers.dart' as struct_g_m_survey_answers;
+import 'misc/g_m_survey_current_survey.dart' as struct_g_m_survey_current_survey;
+import 'misc/g_m_survey_questions.dart' as struct_g_m_survey_questions;
+import 'misc/g_m_survey_surveys.dart' as struct_g_m_survey_surveys;
+import 'misc/g_m_ticket_category.dart' as struct_g_m_ticket_category;
+import 'misc/game_tables.dart' as struct_game_tables;
+import 'misc/game_tips.dart' as struct_game_tips;
+import 'misc/ground_effect_doodad.dart' as struct_ground_effect_doodad;
+import 'misc/ground_effect_texture.dart' as struct_ground_effect_texture;
+import 'misc/helmet_geoset_vis_data.dart' as struct_helmet_geoset_vis_data;
+import 'misc/holiday_descriptions.dart' as struct_holiday_descriptions;
+import 'misc/holiday_names.dart' as struct_holiday_names;
+import 'misc/holidays.dart' as struct_holidays;
+import 'misc/language_words.dart' as struct_language_words;
+import 'misc/languages.dart' as struct_languages;
+import 'misc/liquid_material.dart' as struct_liquid_material;
+import 'misc/liquid_type.dart' as struct_liquid_type;
+import 'misc/loading_screen_taxi_splines.dart' as struct_loading_screen_taxi_splines;
+import 'misc/loading_screens.dart' as struct_loading_screens;
+import 'misc/lock.dart' as struct_lock;
+import 'misc/lock_type.dart' as struct_lock_type;
+import 'misc/mail_template.dart' as struct_mail_template;
+import 'misc/material.dart' as struct_material;
+import 'misc/movie.dart' as struct_movie;
+import 'misc/movie_file_data.dart' as struct_movie_file_data;
+import 'misc/movie_variation.dart' as struct_movie_variation;
+import 'misc/n_p_c_sounds.dart' as struct_n_p_c_sounds;
+import 'misc/name_gen.dart' as struct_name_gen;
+import 'misc/names_profanity.dart' as struct_names_profanity;
+import 'misc/names_reserved.dart' as struct_names_reserved;
+import 'misc/object_effect.dart' as struct_object_effect;
+import 'misc/object_effect_group.dart' as struct_object_effect_group;
+import 'misc/object_effect_modifier.dart' as struct_object_effect_modifier;
+import 'misc/object_effect_package.dart' as struct_object_effect_package;
+import 'misc/object_effect_package_elem.dart' as struct_object_effect_package_elem;
+import 'misc/override_spell_data.dart' as struct_override_spell_data;
+import 'misc/package.dart' as struct_package;
+import 'misc/page_text_material.dart' as struct_page_text_material;
+import 'misc/paper_doll_item_frame.dart' as struct_paper_doll_item_frame;
+import 'misc/particle_color.dart' as struct_particle_color;
+import 'misc/pet_personality.dart' as struct_pet_personality;
+import 'misc/petition_type.dart' as struct_petition_type;
+import 'misc/power_display.dart' as struct_power_display;
+import 'misc/pvp_difficulty.dart' as struct_pvp_difficulty;
+import 'misc/rand_prop_points.dart' as struct_rand_prop_points;
+import 'misc/resistances.dart' as struct_resistances;
+import 'misc/scaling_stat_distribution.dart' as struct_scaling_stat_distribution;
+import 'misc/scaling_stat_values.dart' as struct_scaling_stat_values;
+import 'misc/screen_effect.dart' as struct_screen_effect;
+import 'misc/server_messages.dart' as struct_server_messages;
+import 'misc/sheathe_sound_lookups.dart' as struct_sheathe_sound_lookups;
+import 'misc/spam_messages.dart' as struct_spam_messages;
+import 'misc/stable_slot_prices.dart' as struct_stable_slot_prices;
+import 'misc/startup__strings.dart' as struct_startup__strings;
+import 'misc/stationery.dart' as struct_stationery;
+import 'misc/string_lookups.dart' as struct_string_lookups;
+import 'misc/summon_properties.dart' as struct_summon_properties;
+import 'misc/team_contribution_points.dart' as struct_team_contribution_points;
+import 'misc/terrain_type.dart' as struct_terrain_type;
+import 'misc/terrain_type_sounds.dart' as struct_terrain_type_sounds;
+import 'misc/transport_animation.dart' as struct_transport_animation;
+import 'misc/transport_physics.dart' as struct_transport_physics;
+import 'misc/transport_rotation.dart' as struct_transport_rotation;
+import 'misc/u_i_sound_lookups.dart' as struct_u_i_sound_lookups;
+import 'misc/unit_blood.dart' as struct_unit_blood;
+import 'misc/unit_blood_levels.dart' as struct_unit_blood_levels;
+import 'misc/video_hardware.dart' as struct_video_hardware;
+import 'misc/vocal_u_i_sounds.dart' as struct_vocal_u_i_sounds;
+import 'misc/weapon_impact_sounds.dart' as struct_weapon_impact_sounds;
+import 'misc/weapon_swing_sounds2.dart' as struct_weapon_swing_sounds2;
+import 'misc/weather.dart' as struct_weather;
+import 'misc/wow_error__strings.dart' as struct_wow_error__strings;
+import 'misc/zone_intro_music_table.dart' as struct_zone_intro_music_table;
+import 'misc/zone_music.dart' as struct_zone_music;
+import 'misc/gtbarber_shop_cost_base.dart' as struct_gtbarber_shop_cost_base;
+import 'misc/gtchance_to_melee_crit.dart' as struct_gtchance_to_melee_crit;
+import 'misc/gtchance_to_melee_crit_base.dart' as struct_gtchance_to_melee_crit_base;
+import 'misc/gtchance_to_spell_crit.dart' as struct_gtchance_to_spell_crit;
+import 'misc/gtchance_to_spell_crit_base.dart' as struct_gtchance_to_spell_crit_base;
+import 'misc/gtcombat_ratings.dart' as struct_gtcombat_ratings;
+import 'misc/gtn_p_c_mana_cost_scaler.dart' as struct_gtn_p_c_mana_cost_scaler;
+import 'misc/gto_c_t_class_combat_rating_scalar.dart' as struct_gto_c_t_class_combat_rating_scalar;
+import 'misc/gto_c_t_regen_h_p.dart' as struct_gto_c_t_regen_h_p;
+import 'misc/gto_c_t_regen_m_p.dart' as struct_gto_c_t_regen_m_p;
+import 'misc/gtregen_h_p_per_spt.dart' as struct_gtregen_h_p_per_spt;
+import 'misc/gtregen_m_p_per_spt.dart' as struct_gtregen_m_p_per_spt;
 
-// GT (游戏数据表)
-import 'gt/gt_barber_shop_cost_base.dart'
-    as structure_gt_barber_shop_cost_base;
-import 'gt/gt_combat_ratings.dart' as structure_gt_combat_ratings;
-import 'gt/gt_chance_to_melee_crit_base.dart'
-    as structure_gt_chance_to_melee_crit_base;
-import 'gt/gt_chance_to_melee_crit.dart' as structure_gt_chance_to_melee_crit;
-import 'gt/gt_chance_to_spell_crit_base.dart'
-    as structure_gt_chance_to_spell_crit_base;
-import 'gt/gt_chance_to_spell_crit.dart' as structure_gt_chance_to_spell_crit;
-import 'gt/gt_npc_mana_cost_scaler.dart' as structure_gt_npc_mana_cost_scaler;
-import 'gt/gt_oct_class_combat_rating_scalar.dart'
-    as structure_gt_oct_class_combat_rating_scalar;
-import 'gt/gt_oct_regen_hp.dart' as structure_gt_oct_regen_hp;
-import 'gt/gt_regen_hp_per_spt.dart' as structure_gt_regen_hp_per_spt;
-import 'gt/gt_regen_mp_per_spt.dart' as structure_gt_regen_mp_per_spt;
+// quest
+import 'quest/quest_faction_reward.dart' as struct_quest_faction_reward;
+import 'quest/quest_info.dart' as struct_quest_info;
+import 'quest/quest_sort.dart' as struct_quest_sort;
+import 'quest/quest_x_p.dart' as struct_quest_x_p;
 
-// 其他
-import 'other/area_poi.dart' as structure_area_poi;
-import 'other/auction_house.dart' as structure_auction_house;
-import 'other/bank_bag_slot_prices.dart' as structure_bank_bag_slot_prices;
-import 'other/barber_shop_style.dart' as structure_barber_shop_style;
-import 'other/battlemaster_list.dart' as structure_battlemaster_list;
-import 'other/cinematic_camera.dart' as structure_cinematic_camera;
-import 'other/cinematic_sequences.dart' as structure_cinematic_sequences;
-import 'other/currency_types.dart' as structure_currency_types;
-import 'other/destructible_model_data.dart' as structure_destructible_model_data;
-import 'other/durability_costs.dart' as structure_durability_costs;
-import 'other/durability_quality.dart' as structure_durability_quality;
-import 'other/emotes.dart' as structure_emotes;
-import 'other/emotes_text.dart' as structure_emotes_text;
-import 'other/game_object_art_kit.dart' as structure_game_object_art_kit;
-import 'other/holidays.dart' as structure_holidays;
-import 'other/lfg_dungeon.dart' as structure_lfg_dungeon;
-import 'other/light.dart' as structure_light;
-import 'other/liquid_type.dart' as structure_liquid_type;
-import 'other/lock.dart' as structure_lock;
-import 'other/mail_template.dart' as structure_mail_template;
-import 'other/movie.dart' as structure_movie;
-import 'other/names_reserved.dart' as structure_names_reserved;
-import 'other/names_profanity.dart' as structure_names_profanity;
-import 'other/override_spell_data.dart' as structure_override_spell_data;
-import 'other/power_display.dart' as structure_power_display;
-import 'other/pvp_difficulty.dart' as structure_pvp_difficulty;
-import 'other/random_properties_points.dart'
-    as structure_random_properties_points;
-import 'other/scaling_stat_distribution.dart'
-    as structure_scaling_stat_distribution;
-import 'other/scaling_stat_values.dart' as structure_scaling_stat_values;
-import 'other/sound_entries.dart' as structure_sound_entries;
-import 'other/stable_slot_prices.dart' as structure_stable_slot_prices;
-import 'other/summon_properties.dart' as structure_summon_properties;
-import 'other/taxi_nodes.dart' as structure_taxi_nodes;
-import 'other/taxi_path.dart' as structure_taxi_path;
-import 'other/taxi_path_node.dart' as structure_taxi_path_node;
-import 'other/team_contribution_points.dart'
-    as structure_team_contribution_points;
-import 'other/totem_category.dart' as structure_totem_category;
-import 'other/transport_animation.dart' as structure_transport_animation;
-import 'other/transport_rotation.dart' as structure_transport_rotation;
-import 'other/vehicle.dart' as structure_vehicle;
-import 'vehicle/vehicle_seat.dart' as structure_vehicle_seat;
-import 'other/wmo_area_table.dart' as structure_wmo_area_table;
-import 'other/world_map_area.dart' as structure_world_map_area;
-import 'other/world_map_overlay.dart' as structure_world_map_overlay;
+// skill
+import 'skill/skill_costs_data.dart' as struct_skill_costs_data;
+import 'skill/skill_line.dart' as struct_skill_line;
+import 'skill/skill_line_ability.dart' as struct_skill_line_ability;
+import 'skill/skill_line_category.dart' as struct_skill_line_category;
+import 'skill/skill_race_class_info.dart' as struct_skill_race_class_info;
+import 'skill/skill_tiers.dart' as struct_skill_tiers;
 
-/// DBC 格式静态类
-///
-/// 提供与 AzerothCore DBCfmt.h 完全对齐的静态属性式格式访问。
-///
-/// 示例用法:
-/// ```dart
-/// // 获取格式字符串
-/// String format = DbcFormats.achievement;
-///
-/// // 获取结构定义
-/// DbcStructureDefinition structure = DbcFormats.achievementStruct;
-/// ```
+// sound
+import 'sound/sound_ambience.dart' as struct_sound_ambience;
+import 'sound/sound_emitters.dart' as struct_sound_emitters;
+import 'sound/sound_entries.dart' as struct_sound_entries;
+import 'sound/sound_entries_advanced.dart' as struct_sound_entries_advanced;
+import 'sound/sound_filter.dart' as struct_sound_filter;
+import 'sound/sound_filter_elem.dart' as struct_sound_filter_elem;
+import 'sound/sound_provider_preferences.dart' as struct_sound_provider_preferences;
+import 'sound/sound_sample_preferences.dart' as struct_sound_sample_preferences;
+import 'sound/sound_water_type.dart' as struct_sound_water_type;
+
+// spell
+import 'spell/glyph_properties.dart' as struct_glyph_properties;
+import 'spell/glyph_slot.dart' as struct_glyph_slot;
+import 'spell/spell.dart' as struct_spell;
+import 'spell/spell_cast_times.dart' as struct_spell_cast_times;
+import 'spell/spell_category.dart' as struct_spell_category;
+import 'spell/spell_chain_effects.dart' as struct_spell_chain_effects;
+import 'spell/spell_description_variables.dart' as struct_spell_description_variables;
+import 'spell/spell_difficulty.dart' as struct_spell_difficulty;
+import 'spell/spell_dispel_type.dart' as struct_spell_dispel_type;
+import 'spell/spell_duration.dart' as struct_spell_duration;
+import 'spell/spell_effect_camera_shakes.dart' as struct_spell_effect_camera_shakes;
+import 'spell/spell_focus_object.dart' as struct_spell_focus_object;
+import 'spell/spell_icon.dart' as struct_spell_icon;
+import 'spell/spell_item_enchantment.dart' as struct_spell_item_enchantment;
+import 'spell/spell_item_enchantment_condition.dart' as struct_spell_item_enchantment_condition;
+import 'spell/spell_mechanic.dart' as struct_spell_mechanic;
+import 'spell/spell_missile.dart' as struct_spell_missile;
+import 'spell/spell_missile_motion.dart' as struct_spell_missile_motion;
+import 'spell/spell_radius.dart' as struct_spell_radius;
+import 'spell/spell_range.dart' as struct_spell_range;
+import 'spell/spell_rune_cost.dart' as struct_spell_rune_cost;
+import 'spell/spell_shapeshift_form.dart' as struct_spell_shapeshift_form;
+import 'spell/spell_visual.dart' as struct_spell_visual;
+import 'spell/spell_visual_effect_name.dart' as struct_spell_visual_effect_name;
+import 'spell/spell_visual_kit.dart' as struct_spell_visual_kit;
+import 'spell/spell_visual_kit_area_model.dart' as struct_spell_visual_kit_area_model;
+import 'spell/spell_visual_kit_model_attach.dart' as struct_spell_visual_kit_model_attach;
+import 'spell/spell_visual_precast_transitions.dart' as struct_spell_visual_precast_transitions;
+import 'spell/totem_category.dart' as struct_totem_category;
+
+// talent
+import 'talent/talent.dart' as struct_talent;
+import 'talent/talent_tab.dart' as struct_talent_tab;
+
+// taxi
+import 'taxi/taxi_nodes.dart' as struct_taxi_nodes;
+import 'taxi/taxi_path.dart' as struct_taxi_path;
+import 'taxi/taxi_path_node.dart' as struct_taxi_path_node;
+
+// vehicle
+import 'vehicle/vehicle.dart' as struct_vehicle;
+import 'vehicle/vehicle_seat.dart' as struct_vehicle_seat;
+import 'vehicle/vehicle_u_i_ind_seat.dart' as struct_vehicle_u_i_ind_seat;
+import 'vehicle/vehicle_u_i_indicator.dart' as struct_vehicle_u_i_indicator;
+
 class Definitions {
-  // ===== 成就 =====
-  static final achievement = structure_achievement.achievement;
-  static const achievementCategory =
-      structure_achievement_category.achievementCategory;
-  static const achievementCriteria =
-      structure_achievement_criteria.achievementCriteria;
+  Definitions._();
 
-  // ===== 角色 =====
-  static final chrRaces = structure_chr_races.chrRaces;
-  static final chrClasses = structure_chr_classes.chrClasses;
-  static const charStartOutfit = structure_char_start_outfit.charStartOutfit;
-  static const charTitles = structure_char_titles.charTitles;
-  static const chatChannels = structure_chat_channels.chatChannels;
-  static const talent = structure_talent.talent;
-  static const talentTab = structure_talent_tab.talentTab;
-
-  // ===== 生物 =====
-  static final creatureFamily = structure_creature_family.creatureFamily;
-  static const creatureDisplayInfo =
-      structure_creature_display_info.creatureDisplayInfo;
-  static const creatureDisplayInfoExtra =
-      structure_creature_display_info_extra.creatureDisplayInfoExtra;
-  static const creatureModelData =
-      structure_creature_model_data.creatureModelData;
-  static const creatureSpellData =
-      structure_creature_spell_data.creatureSpellData;
-  static const creatureType = structure_creature_type.creatureType;
-
-  // ===== 派系 =====
-  static final faction = structure_faction.faction;
-  static const factionTemplate = structure_faction_template.factionTemplate;
-
-  // ===== 游戏对象 =====
-  static const gameObjectDisplayInfo =
-      structure_game_object_display_info.gameObjectDisplayInfo;
-
-  // ===== 物品 =====
-  static const item = structure_item.item;
-  static final itemSet = structure_item_set.itemSet;
-  static const itemExtendedCost =
-      structure_item_extended_cost.itemExtendedCost;
-  static const itemBagFamily = structure_item_bag_family.itemBagFamily;
-  static const itemDisplayTemplate =
-      structure_item_display_template.itemDisplayTemplate;
-  static const itemLimitCategory =
-      structure_item_limit_category.itemLimitCategory;
-  static const itemRandomProperties =
-      structure_item_random_properties.itemRandomProperties;
-  static const itemRandomSuffix =
-      structure_item_random_suffix.itemRandomSuffix;
-  static const gemProperties = structure_gem_properties.gemProperties;
-
-  // ===== 地图 =====
-  static final mapEntry = structure_map_entry.mapEntry;
-  static final areaTable = structure_area_table.areaTable;
-  static const areaGroup = structure_area_group.areaGroup;
-  static final dungeonEncounter =
-      structure_dungeon_encounter.dungeonEncounter;
-  static const mapDifficulty = structure_map_difficulty.mapDifficulty;
-
-  // ===== 任务 =====
-  static const questSort = structure_quest_sort.questSort;
-  static const questXp = structure_quest_xp.questXp;
-  static const questFactionReward =
-      structure_quest_faction_reward.questFactionReward;
-
-  // ===== 技能 =====
-  static final skillLine = structure_skill_line.skillLine;
-  static const skillLineAbility =
-      structure_skill_line_ability.skillLineAbility;
-  static const skillRaceClassInfo =
-      structure_skill_race_class_info.skillRaceClassInfo;
-  static const skillTiers = structure_skill_tiers.skillTiers;
-
-  // ===== 法术 =====
-  static final spell = structure_spell.spell;
-  static const spellDuration = structure_spell_duration.spellDuration;
-  static const spellRange = structure_spell_range.spellRange;
-  static const spellCastTime = structure_spell_cast_time.spellCastTime;
-  static const spellCategory = structure_spell_category.spellCategory;
-  static const spellDifficulty = structure_spell_difficulty.spellDifficulty;
-  static const spellFocusObject =
-      structure_spell_focus_object.spellFocusObject;
-  static const spellRadius = structure_spell_radius.spellRadius;
-  static const spellRuneCost = structure_spell_rune_cost.spellRuneCost;
-  static const spellShapeshiftForm =
-      structure_spell_shapeshift_form.spellShapeshiftForm;
-  static const spellVisual = structure_spell_visual.spellVisual;
-  static const glyphProperties = structure_glyph_properties.glyphProperties;
-  static const glyphSlot = structure_glyph_slot.glyphSlot;
-
-  // ===== GT (游戏数据表) =====
-  static const gtBarberShopCostBase =
-      structure_gt_barber_shop_cost_base.gtBarberShopCostBase;
-  static const gtCombatRatings =
-      structure_gt_combat_ratings.gtCombatRatings;
-  static const gtChanceToMeleeCritBase =
-      structure_gt_chance_to_melee_crit_base.gtChanceToMeleeCritBase;
-  static const gtChanceToMeleeCrit =
-      structure_gt_chance_to_melee_crit.gtChanceToMeleeCrit;
-  static const gtChanceToSpellCritBase =
-      structure_gt_chance_to_spell_crit_base.gtChanceToSpellCritBase;
-  static const gtChanceToSpellCrit =
-      structure_gt_chance_to_spell_crit.gtChanceToSpellCrit;
-  static const gtNpcManaCostScaler =
-      structure_gt_npc_mana_cost_scaler.gtNpcManaCostScaler;
-  static const gtOctClassCombatRatingScalar =
-      structure_gt_oct_class_combat_rating_scalar.gtOctClassCombatRatingScalar;
-  static const gtOctRegenHp = structure_gt_oct_regen_hp.gtOctRegenHp;
-  static const gtRegenHpPerSpt =
-      structure_gt_regen_hp_per_spt.gtRegenHpPerSpt;
-  static const gtRegenMpPerSpt =
-      structure_gt_regen_mp_per_spt.gtRegenMpPerSpt;
-
-  // ===== 其他 =====
-  static const areaPoi = structure_area_poi.areaPoi;
-  static const auctionHouse = structure_auction_house.auctionHouse;
-  static const bankBagSlotPrices =
-      structure_bank_bag_slot_prices.bankBagSlotPrices;
-  static const barberShopStyle =
-      structure_barber_shop_style.barberShopStyle;
-  static const battlemasterList =
-      structure_battlemaster_list.battlemasterList;
-  static const cinematicCamera =
-      structure_cinematic_camera.cinematicCamera;
-  static const cinematicSequences =
-      structure_cinematic_sequences.cinematicSequences;
-  static const currencyTypes = structure_currency_types.currencyTypes;
-  static const destructibleModelData =
-      structure_destructible_model_data.destructibleModelData;
-  static const durabilityCosts =
-      structure_durability_costs.durabilityCosts;
-  static const durabilityQuality =
-      structure_durability_quality.durabilityQuality;
-  static const emotes = structure_emotes.emotes;
-  static const emotesText = structure_emotes_text.emotesText;
-  static const gameObjectArtKit =
-      structure_game_object_art_kit.gameObjectArtKit;
-  static const holidays = structure_holidays.holidays;
-  static const lfgDungeon = structure_lfg_dungeon.lfgDungeon;
-  static const light = structure_light.light;
-  static const liquidType = structure_liquid_type.liquidType;
-  static const lock = structure_lock.lock;
-  static const mailTemplate = structure_mail_template.mailTemplate;
-  static const movie = structure_movie.movie;
-  static const namesReserved = structure_names_reserved.namesReserved;
-  static const namesProfanity = structure_names_profanity.namesProfanity;
-  static const overrideSpellData =
-      structure_override_spell_data.overrideSpellData;
-  static const powerDisplay = structure_power_display.powerDisplay;
-  static const pvpDifficulty = structure_pvp_difficulty.pvpDifficulty;
-  static const randomPropertiesPoints =
-      structure_random_properties_points.randomPropertiesPoints;
-  static const scalingStatDistribution =
-      structure_scaling_stat_distribution.scalingStatDistribution;
-  static const scalingStatValues =
-      structure_scaling_stat_values.scalingStatValues;
-  static const soundEntries = structure_sound_entries.soundEntries;
-  static const stableSlotPrices =
-      structure_stable_slot_prices.stableSlotPrices;
-  static const summonProperties =
-      structure_summon_properties.summonProperties;
-  static final taxiNodes = structure_taxi_nodes.taxiNodes;
-  static const taxiPath = structure_taxi_path.taxiPath;
-  static const taxiPathNode = structure_taxi_path_node.taxiPathNode;
-  static const teamContributionPoints =
-      structure_team_contribution_points.teamContributionPoints;
-  static final totemCategory = structure_totem_category.totemCategory;
-  static const transportAnimation =
-      structure_transport_animation.transportAnimation;
-  static const transportRotation =
-      structure_transport_rotation.transportRotation;
-  static const vehicle = structure_vehicle.vehicle;
-  static const vehicleSeat = structure_vehicle_seat.vehicleSeat;
-  static const wmoAreaTable = structure_wmo_area_table.wmoAreaTable;
-  static const worldMapArea = structure_world_map_area.worldMapArea;
-  static const worldMapOverlay =
-      structure_world_map_overlay.worldMapOverlay;
-}
-
-/// DBC 格式字符串注册表
-///
-/// 提供通过字符串名称查找格式字符串的功能。
-class DbcFormatStrings {
-  DbcFormatStrings._();
-
-  static final Map<String, String> _nameToFormat = {
-    'Achievement': Definitions.achievement.format,
-    'AchievementCategory': Definitions.achievementCategory.format,
-    'AchievementCriteria': Definitions.achievementCriteria.format,
-    'ChrRaces': Definitions.chrRaces.format,
-    'ChrClasses': Definitions.chrClasses.format,
-    'CharStartOutfit': Definitions.charStartOutfit.format,
-    'CharTitles': Definitions.charTitles.format,
-    'ChatChannels': Definitions.chatChannels.format,
-    'Talent': Definitions.talent.format,
-    'TalentTab': Definitions.talentTab.format,
-    'CreatureFamily': Definitions.creatureFamily.format,
-    'CreatureDisplayInfo': Definitions.creatureDisplayInfo.format,
-    'CreatureDisplayInfoExtra': Definitions.creatureDisplayInfoExtra.format,
-    'CreatureModelData': Definitions.creatureModelData.format,
-    'CreatureSpellData': Definitions.creatureSpellData.format,
-    'CreatureType': Definitions.creatureType.format,
-    'Faction': Definitions.faction.format,
-    'FactionTemplate': Definitions.factionTemplate.format,
-    'GameObjectDisplayInfo': Definitions.gameObjectDisplayInfo.format,
-    'Item': Definitions.item.format,
-    'ItemSet': Definitions.itemSet.format,
-    'ItemExtendedCost': Definitions.itemExtendedCost.format,
-    'ItemBagFamily': Definitions.itemBagFamily.format,
-    'ItemDisplayTemplate': Definitions.itemDisplayTemplate.format,
-    'ItemLimitCategory': Definitions.itemLimitCategory.format,
-    'ItemRandomProperties': Definitions.itemRandomProperties.format,
-    'ItemRandomSuffix': Definitions.itemRandomSuffix.format,
-    'GemProperties': Definitions.gemProperties.format,
-    'Map': Definitions.mapEntry.format,
-    'AreaTable': Definitions.areaTable.format,
-    'AreaGroup': Definitions.areaGroup.format,
-    'DungeonEncounter': Definitions.dungeonEncounter.format,
-    'MapDifficulty': Definitions.mapDifficulty.format,
-    'QuestSort': Definitions.questSort.format,
-    'QuestXP': Definitions.questXp.format,
-    'QuestFactionReward': Definitions.questFactionReward.format,
-    'SkillLine': Definitions.skillLine.format,
-    'SkillLineAbility': Definitions.skillLineAbility.format,
-    'SkillRaceClassInfo': Definitions.skillRaceClassInfo.format,
-    'SkillTiers': Definitions.skillTiers.format,
-    'Spell': Definitions.spell.format,
-    'SpellDuration': Definitions.spellDuration.format,
-    'SpellRange': Definitions.spellRange.format,
-    'SpellCastTime': Definitions.spellCastTime.format,
-    'SpellCategory': Definitions.spellCategory.format,
-    'SpellDifficulty': Definitions.spellDifficulty.format,
-    'SpellFocusObject': Definitions.spellFocusObject.format,
-    'SpellRadius': Definitions.spellRadius.format,
-    'SpellRuneCost': Definitions.spellRuneCost.format,
-    'SpellShapeshiftForm': Definitions.spellShapeshiftForm.format,
-    'SpellVisual': Definitions.spellVisual.format,
-    'GlyphProperties': Definitions.glyphProperties.format,
-    'GlyphSlot': Definitions.glyphSlot.format,
-    'GtBarberShopCostBase': Definitions.gtBarberShopCostBase.format,
-    'GtCombatRatings': Definitions.gtCombatRatings.format,
-    'GtChanceToMeleeCritBase': Definitions.gtChanceToMeleeCritBase.format,
-    'GtChanceToMeleeCrit': Definitions.gtChanceToMeleeCrit.format,
-    'GtChanceToSpellCritBase': Definitions.gtChanceToSpellCritBase.format,
-    'GtChanceToSpellCrit': Definitions.gtChanceToSpellCrit.format,
-    'GtNPCManaCostScaler': Definitions.gtNpcManaCostScaler.format,
-    'GtOCTClassCombatRatingScalar': Definitions.gtOctClassCombatRatingScalar.format,
-    'GtOCTRegenHP': Definitions.gtOctRegenHp.format,
-    'GtRegenHPPerSpt': Definitions.gtRegenHpPerSpt.format,
-    'GtRegenMPPerSpt': Definitions.gtRegenMpPerSpt.format,
-    'AreaPOI': Definitions.areaPoi.format,
-    'AuctionHouse': Definitions.auctionHouse.format,
-    'BankBagSlotPrices': Definitions.bankBagSlotPrices.format,
-    'BarberShopStyle': Definitions.barberShopStyle.format,
-    'BattlemasterList': Definitions.battlemasterList.format,
-    'CinematicCamera': Definitions.cinematicCamera.format,
-    'CinematicSequences': Definitions.cinematicSequences.format,
-    'CurrencyTypes': Definitions.currencyTypes.format,
-    'DestructibleModelData': Definitions.destructibleModelData.format,
-    'DurabilityCosts': Definitions.durabilityCosts.format,
-    'DurabilityQuality': Definitions.durabilityQuality.format,
-    'Emotes': Definitions.emotes.format,
-    'EmotesText': Definitions.emotesText.format,
-    'GameObjectArtKit': Definitions.gameObjectArtKit.format,
-    'Holidays': Definitions.holidays.format,
-    'LFGDungeon': Definitions.lfgDungeon.format,
-    'Light': Definitions.light.format,
-    'LiquidType': Definitions.liquidType.format,
-    'Lock': Definitions.lock.format,
-    'MailTemplate': Definitions.mailTemplate.format,
-    'Movie': Definitions.movie.format,
-    'NamesReserved': Definitions.namesReserved.format,
-    'NamesProfanity': Definitions.namesProfanity.format,
-    'OverrideSpellData': Definitions.overrideSpellData.format,
-    'PowerDisplay': Definitions.powerDisplay.format,
-    'PvPDifficulty': Definitions.pvpDifficulty.format,
-    'RandomPropertiesPoints': Definitions.randomPropertiesPoints.format,
-    'ScalingStatDistribution': Definitions.scalingStatDistribution.format,
-    'ScalingStatValues': Definitions.scalingStatValues.format,
-    'SoundEntries': Definitions.soundEntries.format,
-    'StableSlotPrices': Definitions.stableSlotPrices.format,
-    'SummonProperties': Definitions.summonProperties.format,
-    'TaxiNodes': Definitions.taxiNodes.format,
-    'TaxiPath': Definitions.taxiPath.format,
-    'TaxiPathNode': Definitions.taxiPathNode.format,
-    'TeamContributionPoints': Definitions.teamContributionPoints.format,
-    'TotemCategory': Definitions.totemCategory.format,
-    'TransportAnimation': Definitions.transportAnimation.format,
-    'TransportRotation': Definitions.transportRotation.format,
-    'Vehicle': Definitions.vehicle.format,
-    'VehicleSeat': Definitions.vehicleSeat.format,
-    'WMOAreaTable': Definitions.wmoAreaTable.format,
-    'WorldMapArea': Definitions.worldMapArea.format,
-    'WorldMapOverlay': Definitions.worldMapOverlay.format,
-  };
-
-  /// 根据名称获取格式字符串
-  static String? fromName(String name) => _nameToFormat[name];
-
-  /// 获取所有格式名称
-  static List<String> get allNames => _nameToFormat.keys.toList();
-
-  /// 检查格式是否存在
-  static bool has(String name) => _nameToFormat.containsKey(name);
-}
-
-/// DBC 结构定义注册表
-///
-/// 提供通过字符串名称查找结构定义的功能。
-class DbcStructures {
-  DbcStructures._();
-
-  static final Map<String, DbcStructureDefinition> _nameToStructure = {
-    'Achievement': Definitions.achievement,
-    'AchievementCategory': Definitions.achievementCategory,
-    'AchievementCriteria': Definitions.achievementCriteria,
-    'ChrRaces': Definitions.chrRaces,
-    'ChrClasses': Definitions.chrClasses,
-    'CharStartOutfit': Definitions.charStartOutfit,
-    'CharTitles': Definitions.charTitles,
-    'ChatChannels': Definitions.chatChannels,
-    'Talent': Definitions.talent,
-    'TalentTab': Definitions.talentTab,
-    'CreatureFamily': Definitions.creatureFamily,
-    'CreatureDisplayInfo': Definitions.creatureDisplayInfo,
-    'CreatureDisplayInfoExtra': Definitions.creatureDisplayInfoExtra,
-    'CreatureModelData': Definitions.creatureModelData,
-    'CreatureSpellData': Definitions.creatureSpellData,
-    'CreatureType': Definitions.creatureType,
-    'Faction': Definitions.faction,
-    'FactionTemplate': Definitions.factionTemplate,
-    'GameObjectDisplayInfo': Definitions.gameObjectDisplayInfo,
-    'Item': Definitions.item,
-    'ItemSet': Definitions.itemSet,
-    'ItemExtendedCost': Definitions.itemExtendedCost,
-    'ItemBagFamily': Definitions.itemBagFamily,
-    'ItemDisplayTemplate': Definitions.itemDisplayTemplate,
-    'ItemLimitCategory': Definitions.itemLimitCategory,
-    'ItemRandomProperties': Definitions.itemRandomProperties,
-    'ItemRandomSuffix': Definitions.itemRandomSuffix,
-    'GemProperties': Definitions.gemProperties,
-    'Map': Definitions.mapEntry,
-    'AreaTable': Definitions.areaTable,
-    'AreaGroup': Definitions.areaGroup,
-    'DungeonEncounter': Definitions.dungeonEncounter,
-    'MapDifficulty': Definitions.mapDifficulty,
-    'QuestSort': Definitions.questSort,
-    'QuestXP': Definitions.questXp,
-    'QuestFactionReward': Definitions.questFactionReward,
-    'SkillLine': Definitions.skillLine,
-    'SkillLineAbility': Definitions.skillLineAbility,
-    'SkillRaceClassInfo': Definitions.skillRaceClassInfo,
-    'SkillTiers': Definitions.skillTiers,
-    'Spell': Definitions.spell,
-    'SpellDuration': Definitions.spellDuration,
-    'SpellRange': Definitions.spellRange,
-    'SpellCastTime': Definitions.spellCastTime,
-    'SpellCategory': Definitions.spellCategory,
-    'SpellDifficulty': Definitions.spellDifficulty,
-    'SpellFocusObject': Definitions.spellFocusObject,
-    'SpellRadius': Definitions.spellRadius,
-    'SpellRuneCost': Definitions.spellRuneCost,
-    'SpellShapeshiftForm': Definitions.spellShapeshiftForm,
-    'SpellVisual': Definitions.spellVisual,
-    'GlyphProperties': Definitions.glyphProperties,
-    'GlyphSlot': Definitions.glyphSlot,
-    'GtBarberShopCostBase': Definitions.gtBarberShopCostBase,
-    'GtCombatRatings': Definitions.gtCombatRatings,
-    'GtChanceToMeleeCritBase': Definitions.gtChanceToMeleeCritBase,
-    'GtChanceToMeleeCrit': Definitions.gtChanceToMeleeCrit,
-    'GtChanceToSpellCritBase': Definitions.gtChanceToSpellCritBase,
-    'GtChanceToSpellCrit': Definitions.gtChanceToSpellCrit,
-    'GtNPCManaCostScaler': Definitions.gtNpcManaCostScaler,
-    'GtOCTClassCombatRatingScalar':
-        Definitions.gtOctClassCombatRatingScalar,
-    'GtOCTRegenHP': Definitions.gtOctRegenHp,
-    'GtRegenHPPerSpt': Definitions.gtRegenHpPerSpt,
-    'GtRegenMPPerSpt': Definitions.gtRegenMpPerSpt,
-    'AreaPOI': Definitions.areaPoi,
-    'AuctionHouse': Definitions.auctionHouse,
-    'BankBagSlotPrices': Definitions.bankBagSlotPrices,
-    'BarberShopStyle': Definitions.barberShopStyle,
-    'BattlemasterList': Definitions.battlemasterList,
-    'CinematicCamera': Definitions.cinematicCamera,
-    'CinematicSequences': Definitions.cinematicSequences,
-    'CurrencyTypes': Definitions.currencyTypes,
-    'DestructibleModelData': Definitions.destructibleModelData,
-    'DurabilityCosts': Definitions.durabilityCosts,
-    'DurabilityQuality': Definitions.durabilityQuality,
-    'Emotes': Definitions.emotes,
-    'EmotesText': Definitions.emotesText,
-    'GameObjectArtKit': Definitions.gameObjectArtKit,
-    'Holidays': Definitions.holidays,
-    'LFGDungeon': Definitions.lfgDungeon,
-    'Light': Definitions.light,
-    'LiquidType': Definitions.liquidType,
-    'Lock': Definitions.lock,
-    'MailTemplate': Definitions.mailTemplate,
-    'Movie': Definitions.movie,
-    'NamesReserved': Definitions.namesReserved,
-    'NamesProfanity': Definitions.namesProfanity,
-    'OverrideSpellData': Definitions.overrideSpellData,
-    'PowerDisplay': Definitions.powerDisplay,
-    'PvPDifficulty': Definitions.pvpDifficulty,
-    'RandomPropertiesPoints': Definitions.randomPropertiesPoints,
-    'ScalingStatDistribution': Definitions.scalingStatDistribution,
-    'ScalingStatValues': Definitions.scalingStatValues,
-    'SoundEntries': Definitions.soundEntries,
-    'StableSlotPrices': Definitions.stableSlotPrices,
-    'SummonProperties': Definitions.summonProperties,
-    'TaxiNodes': Definitions.taxiNodes,
-    'TaxiPath': Definitions.taxiPath,
-    'TaxiPathNode': Definitions.taxiPathNode,
-    'TeamContributionPoints': Definitions.teamContributionPoints,
-    'TotemCategory': Definitions.totemCategory,
-    'TransportAnimation': Definitions.transportAnimation,
-    'TransportRotation': Definitions.transportRotation,
-    'Vehicle': Definitions.vehicle,
-    'VehicleSeat': Definitions.vehicleSeat,
-    'WMOAreaTable': Definitions.wmoAreaTable,
-    'WorldMapArea': Definitions.worldMapArea,
-    'WorldMapOverlay': Definitions.worldMapOverlay,
-  };
-
-  /// 根据名称获取结构定义
-  static DbcStructureDefinition? fromName(String name) =>
-      _nameToStructure[name];
-
-  /// 获取所有结构名称
-  static List<String> get allNames => _nameToStructure.keys.toList();
-
-  /// 检查结构是否存在
-  static bool has(String name) => _nameToStructure.containsKey(name);
+  static final achievement = struct_achievement.achievement;
+  static final achievementCategory = struct_achievement__category.achievementCategory;
+  static final achievementCriteria = struct_achievement__criteria.achievementCriteria;
+  static final animationData = struct_animation_data.animationData;
+  static final areaGroup = struct_area_group.areaGroup;
+  static final areaPOI = struct_area_p_o_i.areaPOI;
+  static final areaTable = struct_area_table.areaTable;
+  static final areaTrigger = struct_area_trigger.areaTrigger;
+  static final attackAnimKits = struct_attack_anim_kits.attackAnimKits;
+  static final attackAnimTypes = struct_attack_anim_types.attackAnimTypes;
+  static final auctionHouse = struct_auction_house.auctionHouse;
+  static final bankBagSlotPrices = struct_bank_bag_slot_prices.bankBagSlotPrices;
+  static final bannedAddOns = struct_banned_add_ons.bannedAddOns;
+  static final barberShopStyle = struct_barber_shop_style.barberShopStyle;
+  static final battlemasterList = struct_battlemaster_list.battlemasterList;
+  static final cameraShakes = struct_camera_shakes.cameraShakes;
+  static final cfgCategories = struct_cfg__categories.cfgCategories;
+  static final cfgConfigs = struct_cfg__configs.cfgConfigs;
+  static final charBaseInfo = struct_char_base_info.charBaseInfo;
+  static final charHairGeosets = struct_char_hair_geosets.charHairGeosets;
+  static final charHairTextures = struct_char_hair_textures.charHairTextures;
+  static final charSections = struct_char_sections.charSections;
+  static final charStartOutfit = struct_char_start_outfit.charStartOutfit;
+  static final charTitles = struct_char_titles.charTitles;
+  static final characterFacialHairStyles = struct_character_facial_hair_styles.characterFacialHairStyles;
+  static final chatChannels = struct_chat_channels.chatChannels;
+  static final chatProfanity = struct_chat_profanity.chatProfanity;
+  static final chrClasses = struct_chr_classes.chrClasses;
+  static final chrRaces = struct_chr_races.chrRaces;
+  static final cinematicCamera = struct_cinematic_camera.cinematicCamera;
+  static final cinematicSequences = struct_cinematic_sequences.cinematicSequences;
+  static final creatureDisplayInfo = struct_creature_display_info.creatureDisplayInfo;
+  static final creatureDisplayInfoExtra = struct_creature_display_info_extra.creatureDisplayInfoExtra;
+  static final creatureFamily = struct_creature_family.creatureFamily;
+  static final creatureModelData = struct_creature_model_data.creatureModelData;
+  static final creatureMovementInfo = struct_creature_movement_info.creatureMovementInfo;
+  static final creatureSoundData = struct_creature_sound_data.creatureSoundData;
+  static final creatureSpellData = struct_creature_spell_data.creatureSpellData;
+  static final creatureType = struct_creature_type.creatureType;
+  static final currencyCategory = struct_currency_category.currencyCategory;
+  static final currencyTypes = struct_currency_types.currencyTypes;
+  static final danceMoves = struct_dance_moves.danceMoves;
+  static final deathThudLookups = struct_death_thud_lookups.deathThudLookups;
+  static final declinedWord = struct_declined_word.declinedWord;
+  static final declinedWordCases = struct_declined_word_cases.declinedWordCases;
+  static final destructibleModelData = struct_destructible_model_data.destructibleModelData;
+  static final dungeonEncounter = struct_dungeon_encounter.dungeonEncounter;
+  static final dungeonMap = struct_dungeon_map.dungeonMap;
+  static final dungeonMapChunk = struct_dungeon_map_chunk.dungeonMapChunk;
+  static final durabilityCosts = struct_durability_costs.durabilityCosts;
+  static final durabilityQuality = struct_durability_quality.durabilityQuality;
+  static final emotes = struct_emotes.emotes;
+  static final emotesText = struct_emotes_text.emotesText;
+  static final emotesTextData = struct_emotes_text_data.emotesTextData;
+  static final emotesTextSound = struct_emotes_text_sound.emotesTextSound;
+  static final environmentalDamage = struct_environmental_damage.environmentalDamage;
+  static final exhaustion = struct_exhaustion.exhaustion;
+  static final faction = struct_faction.faction;
+  static final factionGroup = struct_faction_group.factionGroup;
+  static final factionTemplate = struct_faction_template.factionTemplate;
+  static final fileData = struct_file_data.fileData;
+  static final footprintTextures = struct_footprint_textures.footprintTextures;
+  static final footstepTerrainLookup = struct_footstep_terrain_lookup.footstepTerrainLookup;
+  static final gMSurveyAnswers = struct_g_m_survey_answers.gMSurveyAnswers;
+  static final gMSurveyCurrentSurvey = struct_g_m_survey_current_survey.gMSurveyCurrentSurvey;
+  static final gMSurveyQuestions = struct_g_m_survey_questions.gMSurveyQuestions;
+  static final gMSurveySurveys = struct_g_m_survey_surveys.gMSurveySurveys;
+  static final gMTicketCategory = struct_g_m_ticket_category.gMTicketCategory;
+  static final gameObjectArtKit = struct_game_object_art_kit.gameObjectArtKit;
+  static final gameObjectDisplayInfo = struct_game_object_display_info.gameObjectDisplayInfo;
+  static final gameTables = struct_game_tables.gameTables;
+  static final gameTips = struct_game_tips.gameTips;
+  static final gemProperties = struct_gem_properties.gemProperties;
+  static final glyphProperties = struct_glyph_properties.glyphProperties;
+  static final glyphSlot = struct_glyph_slot.glyphSlot;
+  static final groundEffectDoodad = struct_ground_effect_doodad.groundEffectDoodad;
+  static final groundEffectTexture = struct_ground_effect_texture.groundEffectTexture;
+  static final helmetGeosetVisData = struct_helmet_geoset_vis_data.helmetGeosetVisData;
+  static final holidayDescriptions = struct_holiday_descriptions.holidayDescriptions;
+  static final holidayNames = struct_holiday_names.holidayNames;
+  static final holidays = struct_holidays.holidays;
+  static final item = struct_item.item;
+  static final itemBagFamily = struct_item_bag_family.itemBagFamily;
+  static final itemClass = struct_item_class.itemClass;
+  static final itemCondExtCosts = struct_item_cond_ext_costs.itemCondExtCosts;
+  static final itemDisplayInfo = struct_item_display_info.itemDisplayInfo;
+  static final itemExtendedCost = struct_item_extended_cost.itemExtendedCost;
+  static final itemGroupSounds = struct_item_group_sounds.itemGroupSounds;
+  static final itemLimitCategory = struct_item_limit_category.itemLimitCategory;
+  static final itemPetFood = struct_item_pet_food.itemPetFood;
+  static final itemPurchaseGroup = struct_item_purchase_group.itemPurchaseGroup;
+  static final itemRandomProperties = struct_item_random_properties.itemRandomProperties;
+  static final itemRandomSuffix = struct_item_random_suffix.itemRandomSuffix;
+  static final itemSet = struct_item_set.itemSet;
+  static final itemSubClass = struct_item_sub_class.itemSubClass;
+  static final itemSubClassMask = struct_item_sub_class_mask.itemSubClassMask;
+  static final itemVisualEffects = struct_item_visual_effects.itemVisualEffects;
+  static final itemVisuals = struct_item_visuals.itemVisuals;
+  static final lFGDungeonExpansion = struct_l_f_g_dungeon_expansion.lFGDungeonExpansion;
+  static final lFGDungeonGroup = struct_l_f_g_dungeon_group.lFGDungeonGroup;
+  static final lFGDungeons = struct_l_f_g_dungeons.lFGDungeons;
+  static final languageWords = struct_language_words.languageWords;
+  static final languages = struct_languages.languages;
+  static final light = struct_light.light;
+  static final lightFloatBand = struct_light_float_band.lightFloatBand;
+  static final lightIntBand = struct_light_int_band.lightIntBand;
+  static final lightParams = struct_light_params.lightParams;
+  static final lightSkybox = struct_light_skybox.lightSkybox;
+  static final liquidMaterial = struct_liquid_material.liquidMaterial;
+  static final liquidType = struct_liquid_type.liquidType;
+  static final loadingScreenTaxiSplines = struct_loading_screen_taxi_splines.loadingScreenTaxiSplines;
+  static final loadingScreens = struct_loading_screens.loadingScreens;
+  static final lock = struct_lock.lock;
+  static final lockType = struct_lock_type.lockType;
+  static final mailTemplate = struct_mail_template.mailTemplate;
+  static final map = struct_map.map;
+  static final mapDifficulty = struct_map_difficulty.mapDifficulty;
+  static final material = struct_material.material;
+  static final movie = struct_movie.movie;
+  static final movieFileData = struct_movie_file_data.movieFileData;
+  static final movieVariation = struct_movie_variation.movieVariation;
+  static final nPCSounds = struct_n_p_c_sounds.nPCSounds;
+  static final nameGen = struct_name_gen.nameGen;
+  static final namesProfanity = struct_names_profanity.namesProfanity;
+  static final namesReserved = struct_names_reserved.namesReserved;
+  static final objectEffect = struct_object_effect.objectEffect;
+  static final objectEffectGroup = struct_object_effect_group.objectEffectGroup;
+  static final objectEffectModifier = struct_object_effect_modifier.objectEffectModifier;
+  static final objectEffectPackage = struct_object_effect_package.objectEffectPackage;
+  static final objectEffectPackageElem = struct_object_effect_package_elem.objectEffectPackageElem;
+  static final overrideSpellData = struct_override_spell_data.overrideSpellData;
+  static final package = struct_package.package;
+  static final pageTextMaterial = struct_page_text_material.pageTextMaterial;
+  static final paperDollItemFrame = struct_paper_doll_item_frame.paperDollItemFrame;
+  static final particleColor = struct_particle_color.particleColor;
+  static final petPersonality = struct_pet_personality.petPersonality;
+  static final petitionType = struct_petition_type.petitionType;
+  static final powerDisplay = struct_power_display.powerDisplay;
+  static final pvpDifficulty = struct_pvp_difficulty.pvpDifficulty;
+  static final questFactionReward = struct_quest_faction_reward.questFactionReward;
+  static final questInfo = struct_quest_info.questInfo;
+  static final questSort = struct_quest_sort.questSort;
+  static final questXP = struct_quest_x_p.questXP;
+  static final randPropPoints = struct_rand_prop_points.randPropPoints;
+  static final resistances = struct_resistances.resistances;
+  static final scalingStatDistribution = struct_scaling_stat_distribution.scalingStatDistribution;
+  static final scalingStatValues = struct_scaling_stat_values.scalingStatValues;
+  static final screenEffect = struct_screen_effect.screenEffect;
+  static final serverMessages = struct_server_messages.serverMessages;
+  static final sheatheSoundLookups = struct_sheathe_sound_lookups.sheatheSoundLookups;
+  static final skillCostsData = struct_skill_costs_data.skillCostsData;
+  static final skillLine = struct_skill_line.skillLine;
+  static final skillLineAbility = struct_skill_line_ability.skillLineAbility;
+  static final skillLineCategory = struct_skill_line_category.skillLineCategory;
+  static final skillRaceClassInfo = struct_skill_race_class_info.skillRaceClassInfo;
+  static final skillTiers = struct_skill_tiers.skillTiers;
+  static final soundAmbience = struct_sound_ambience.soundAmbience;
+  static final soundEmitters = struct_sound_emitters.soundEmitters;
+  static final soundEntries = struct_sound_entries.soundEntries;
+  static final soundEntriesAdvanced = struct_sound_entries_advanced.soundEntriesAdvanced;
+  static final soundFilter = struct_sound_filter.soundFilter;
+  static final soundFilterElem = struct_sound_filter_elem.soundFilterElem;
+  static final soundProviderPreferences = struct_sound_provider_preferences.soundProviderPreferences;
+  static final soundSamplePreferences = struct_sound_sample_preferences.soundSamplePreferences;
+  static final soundWaterType = struct_sound_water_type.soundWaterType;
+  static final spamMessages = struct_spam_messages.spamMessages;
+  static final spell = struct_spell.spell;
+  static final spellCastTimes = struct_spell_cast_times.spellCastTimes;
+  static final spellCategory = struct_spell_category.spellCategory;
+  static final spellChainEffects = struct_spell_chain_effects.spellChainEffects;
+  static final spellDescriptionVariables = struct_spell_description_variables.spellDescriptionVariables;
+  static final spellDifficulty = struct_spell_difficulty.spellDifficulty;
+  static final spellDispelType = struct_spell_dispel_type.spellDispelType;
+  static final spellDuration = struct_spell_duration.spellDuration;
+  static final spellEffectCameraShakes = struct_spell_effect_camera_shakes.spellEffectCameraShakes;
+  static final spellFocusObject = struct_spell_focus_object.spellFocusObject;
+  static final spellIcon = struct_spell_icon.spellIcon;
+  static final spellItemEnchantment = struct_spell_item_enchantment.spellItemEnchantment;
+  static final spellItemEnchantmentCondition = struct_spell_item_enchantment_condition.spellItemEnchantmentCondition;
+  static final spellMechanic = struct_spell_mechanic.spellMechanic;
+  static final spellMissile = struct_spell_missile.spellMissile;
+  static final spellMissileMotion = struct_spell_missile_motion.spellMissileMotion;
+  static final spellRadius = struct_spell_radius.spellRadius;
+  static final spellRange = struct_spell_range.spellRange;
+  static final spellRuneCost = struct_spell_rune_cost.spellRuneCost;
+  static final spellShapeshiftForm = struct_spell_shapeshift_form.spellShapeshiftForm;
+  static final spellVisual = struct_spell_visual.spellVisual;
+  static final spellVisualEffectName = struct_spell_visual_effect_name.spellVisualEffectName;
+  static final spellVisualKit = struct_spell_visual_kit.spellVisualKit;
+  static final spellVisualKitAreaModel = struct_spell_visual_kit_area_model.spellVisualKitAreaModel;
+  static final spellVisualKitModelAttach = struct_spell_visual_kit_model_attach.spellVisualKitModelAttach;
+  static final spellVisualPrecastTransitions = struct_spell_visual_precast_transitions.spellVisualPrecastTransitions;
+  static final stableSlotPrices = struct_stable_slot_prices.stableSlotPrices;
+  static final startupStrings = struct_startup__strings.startupStrings;
+  static final stationery = struct_stationery.stationery;
+  static final stringLookups = struct_string_lookups.stringLookups;
+  static final summonProperties = struct_summon_properties.summonProperties;
+  static final talent = struct_talent.talent;
+  static final talentTab = struct_talent_tab.talentTab;
+  static final taxiNodes = struct_taxi_nodes.taxiNodes;
+  static final taxiPath = struct_taxi_path.taxiPath;
+  static final taxiPathNode = struct_taxi_path_node.taxiPathNode;
+  static final teamContributionPoints = struct_team_contribution_points.teamContributionPoints;
+  static final terrainType = struct_terrain_type.terrainType;
+  static final terrainTypeSounds = struct_terrain_type_sounds.terrainTypeSounds;
+  static final totemCategory = struct_totem_category.totemCategory;
+  static final transportAnimation = struct_transport_animation.transportAnimation;
+  static final transportPhysics = struct_transport_physics.transportPhysics;
+  static final transportRotation = struct_transport_rotation.transportRotation;
+  static final uISoundLookups = struct_u_i_sound_lookups.uISoundLookups;
+  static final unitBlood = struct_unit_blood.unitBlood;
+  static final unitBloodLevels = struct_unit_blood_levels.unitBloodLevels;
+  static final vehicle = struct_vehicle.vehicle;
+  static final vehicleSeat = struct_vehicle_seat.vehicleSeat;
+  static final vehicleUIIndSeat = struct_vehicle_u_i_ind_seat.vehicleUIIndSeat;
+  static final vehicleUIIndicator = struct_vehicle_u_i_indicator.vehicleUIIndicator;
+  static final videoHardware = struct_video_hardware.videoHardware;
+  static final vocalUISounds = struct_vocal_u_i_sounds.vocalUISounds;
+  static final wMOAreaTable = struct_w_m_o_area_table.wMOAreaTable;
+  static final weaponImpactSounds = struct_weapon_impact_sounds.weaponImpactSounds;
+  static final weaponSwingSounds2 = struct_weapon_swing_sounds2.weaponSwingSounds2;
+  static final weather = struct_weather.weather;
+  static final worldChunkSounds = struct_world_chunk_sounds.worldChunkSounds;
+  static final worldMapArea = struct_world_map_area.worldMapArea;
+  static final worldMapContinent = struct_world_map_continent.worldMapContinent;
+  static final worldMapOverlay = struct_world_map_overlay.worldMapOverlay;
+  static final worldMapTransforms = struct_world_map_transforms.worldMapTransforms;
+  static final worldSafeLocs = struct_world_safe_locs.worldSafeLocs;
+  static final worldStateUI = struct_world_state_u_i.worldStateUI;
+  static final worldStateZoneSounds = struct_world_state_zone_sounds.worldStateZoneSounds;
+  static final wowErrorStrings = struct_wow_error__strings.wowErrorStrings;
+  static final zoneIntroMusicTable = struct_zone_intro_music_table.zoneIntroMusicTable;
+  static final zoneMusic = struct_zone_music.zoneMusic;
+  static final gtbarberShopCostBase = struct_gtbarber_shop_cost_base.gtbarberShopCostBase;
+  static final gtchanceToMeleeCrit = struct_gtchance_to_melee_crit.gtchanceToMeleeCrit;
+  static final gtchanceToMeleeCritBase = struct_gtchance_to_melee_crit_base.gtchanceToMeleeCritBase;
+  static final gtchanceToSpellCrit = struct_gtchance_to_spell_crit.gtchanceToSpellCrit;
+  static final gtchanceToSpellCritBase = struct_gtchance_to_spell_crit_base.gtchanceToSpellCritBase;
+  static final gtcombatRatings = struct_gtcombat_ratings.gtcombatRatings;
+  static final gtnPCManaCostScaler = struct_gtn_p_c_mana_cost_scaler.gtnPCManaCostScaler;
+  static final gtoCTClassCombatRatingScalar = struct_gto_c_t_class_combat_rating_scalar.gtoCTClassCombatRatingScalar;
+  static final gtoCTRegenHP = struct_gto_c_t_regen_h_p.gtoCTRegenHP;
+  static final gtoCTRegenMP = struct_gto_c_t_regen_m_p.gtoCTRegenMP;
+  static final gtregenHPPerSpt = struct_gtregen_h_p_per_spt.gtregenHPPerSpt;
+  static final gtregenMPPerSpt = struct_gtregen_m_p_per_spt.gtregenMPPerSpt;
 }

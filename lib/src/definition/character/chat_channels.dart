@@ -1,29 +1,19 @@
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/definition/common/locale_fields.dart';
 
 /// ChatChannels 结构定义
-const chatChannels = DbcStructureDefinition(
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
+final chatChannels = DbcStructureDefinition(
   name: 'ChatChannels',
-  format: 'nixssssssssssssssssxxxxxxxxxxxxxxxxxx',
+  format: 'niissssssssssssssssssssssssssssssssss',
   fields: [
-    FieldDefinition(index: 0, name: 'ChannelID', description: '频道 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'Flags', description: '标志', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'Pattern_enUS', description: '英文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 3, name: 'Pattern_enGB', description: '英式英文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 4, name: 'Pattern_koKR', description: '韩文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 5, name: 'Pattern_frFR', description: '法文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 6, name: 'Pattern_deDE', description: '德文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 7, name: 'Pattern_enCN', description: '简体中文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 8, name: 'Pattern_zhCN', description: '繁体中文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 9, name: 'Pattern_zhTW', description: '台湾繁体中文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 10, name: 'Pattern_esES', description: '西班牙文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 11, name: 'Pattern_esMX', description: '墨西哥西班牙文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 12, name: 'Pattern_ruRU', description: '俄文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 13, name: 'Pattern_ptBR', description: '葡萄牙文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 14, name: 'Pattern_itIT', description: '意大利文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 15, name: 'Pattern_ptPT', description: '葡萄牙葡萄牙文模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 16, name: 'Pattern_unk', description: '未知语言模式', format: DbcFieldFormat.string),
-    FieldDefinition(index: 17, name: 'Pattern_unk2', description: '未知语言模式 2', format: DbcFieldFormat.string),
+    const FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    const FieldDefinition(index: 1, name: 'Flags', description: 'Flags', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 2, name: 'FactionGroup', description: 'FactionGroup', format: DbcFieldFormat.intType),
+    ...createLocaleFieldsWithFlag(3, 'Name_lang', 'Name_lang'),
+    ...createLocaleFieldsWithFlag(20, 'Shortcut_lang', 'Shortcut_lang'),
   ],
 );

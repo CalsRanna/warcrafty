@@ -2,20 +2,20 @@ import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
 
-/// Item 格式字符串
-
 /// Item 结构定义
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 const item = DbcStructureDefinition(
   name: 'Item',
   format: 'niiiiiii',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: '物品 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'ClassID', description: '物品类别 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'SubclassID', description: '物品子类别 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'SoundOverrideSubclassID', description: '声音覆盖子类别 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'Material', description: '材质', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 5, name: 'DisplayInfoID', description: '显示信息 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 6, name: 'InventoryType', description: '背包类型', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 7, name: 'SheatheType', description: ' sheath 类型', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    FieldDefinition(index: 1, name: 'ClassID', description: 'ClassID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 2, name: 'SubclassID', description: 'SubclassID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 3, name: 'Sound_override_subclassID', description: 'Sound_override_subclassID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 4, name: 'Material', description: 'Material', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 5, name: 'DisplayInfoID', description: 'DisplayInfoID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 6, name: 'InventoryType', description: 'InventoryType', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 7, name: 'SheatheType', description: 'SheatheType', format: DbcFieldFormat.intType),
   ],
 );

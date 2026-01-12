@@ -5,11 +5,12 @@ import 'package:warcrafty/src/core/field_format.dart';
 /// GtRegenHPPerSpt 格式字符串
 
 /// GtRegenHPPerSpt 结构定义
+///
+/// 格式字符串参考 AzerothCore: 单个浮点数
 const gtRegenHpPerSpt = DbcStructureDefinition(
   name: 'GtRegenHPPerSpt',
-  format: 'df',
+  format: 'f',
   fields: [
-    FieldDefinition(index: 0, name: 'Ratio', description: '比率', format: DbcFieldFormat.sort),
-    FieldDefinition(index: 1, name: 'Value', description: '值', format: DbcFieldFormat.float),
+    FieldDefinition(index: 0, name: 'Value', description: '值', format: DbcFieldFormat.float),
   ],
 );

@@ -1,0 +1,58 @@
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
+
+/// LiquidType 结构定义
+///
+/// 基于 WoWDBDefs 定义，版本 3.3.5.12340
+const liquidType = DbcStructureDefinition(
+  name: 'LiquidType',
+  format: 'nsiiiiffffifiiissssssiiffffffffffffffffffiiii',
+  fields: [
+    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
+    FieldDefinition(index: 1, name: 'Name', description: 'Name', format: DbcFieldFormat.string),
+    FieldDefinition(index: 2, name: 'Flags', description: 'Flags', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 3, name: 'SoundBank', description: 'SoundBank', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 4, name: 'SoundID', description: 'SoundID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 5, name: 'SpellID', description: 'SpellID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 6, name: 'MaxDarkenDepth', description: 'MaxDarkenDepth', format: DbcFieldFormat.float),
+    FieldDefinition(index: 7, name: 'FogDarkenIntensity', description: 'FogDarkenIntensity', format: DbcFieldFormat.float),
+    FieldDefinition(index: 8, name: 'AmbDarkenIntensity', description: 'AmbDarkenIntensity', format: DbcFieldFormat.float),
+    FieldDefinition(index: 9, name: 'DirDarkenIntensity', description: 'DirDarkenIntensity', format: DbcFieldFormat.float),
+    FieldDefinition(index: 10, name: 'LightID', description: 'LightID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 11, name: 'ParticleScale', description: 'ParticleScale', format: DbcFieldFormat.float),
+    FieldDefinition(index: 12, name: 'ParticleMovement', description: 'ParticleMovement', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 13, name: 'ParticleTexSlots', description: 'ParticleTexSlots', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 14, name: 'MaterialID', description: 'MaterialID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 15, name: 'Texture0', description: 'Texture 0', format: DbcFieldFormat.string),
+    FieldDefinition(index: 16, name: 'Texture1', description: 'Texture 1', format: DbcFieldFormat.string),
+    FieldDefinition(index: 17, name: 'Texture2', description: 'Texture 2', format: DbcFieldFormat.string),
+    FieldDefinition(index: 18, name: 'Texture3', description: 'Texture 3', format: DbcFieldFormat.string),
+    FieldDefinition(index: 19, name: 'Texture4', description: 'Texture 4', format: DbcFieldFormat.string),
+    FieldDefinition(index: 20, name: 'Texture5', description: 'Texture 5', format: DbcFieldFormat.string),
+    FieldDefinition(index: 21, name: 'Color0', description: 'Color 0', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 22, name: 'Color1', description: 'Color 1', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 23, name: 'Float0', description: 'Float 0', format: DbcFieldFormat.float),
+    FieldDefinition(index: 24, name: 'Float1', description: 'Float 1', format: DbcFieldFormat.float),
+    FieldDefinition(index: 25, name: 'Float2', description: 'Float 2', format: DbcFieldFormat.float),
+    FieldDefinition(index: 26, name: 'Float3', description: 'Float 3', format: DbcFieldFormat.float),
+    FieldDefinition(index: 27, name: 'Float4', description: 'Float 4', format: DbcFieldFormat.float),
+    FieldDefinition(index: 28, name: 'Float5', description: 'Float 5', format: DbcFieldFormat.float),
+    FieldDefinition(index: 29, name: 'Float6', description: 'Float 6', format: DbcFieldFormat.float),
+    FieldDefinition(index: 30, name: 'Float7', description: 'Float 7', format: DbcFieldFormat.float),
+    FieldDefinition(index: 31, name: 'Float8', description: 'Float 8', format: DbcFieldFormat.float),
+    FieldDefinition(index: 32, name: 'Float9', description: 'Float 9', format: DbcFieldFormat.float),
+    FieldDefinition(index: 33, name: 'Float10', description: 'Float 10', format: DbcFieldFormat.float),
+    FieldDefinition(index: 34, name: 'Float11', description: 'Float 11', format: DbcFieldFormat.float),
+    FieldDefinition(index: 35, name: 'Float12', description: 'Float 12', format: DbcFieldFormat.float),
+    FieldDefinition(index: 36, name: 'Float13', description: 'Float 13', format: DbcFieldFormat.float),
+    FieldDefinition(index: 37, name: 'Float14', description: 'Float 14', format: DbcFieldFormat.float),
+    FieldDefinition(index: 38, name: 'Float15', description: 'Float 15', format: DbcFieldFormat.float),
+    FieldDefinition(index: 39, name: 'Float16', description: 'Float 16', format: DbcFieldFormat.float),
+    FieldDefinition(index: 40, name: 'Float17', description: 'Float 17', format: DbcFieldFormat.float),
+    FieldDefinition(index: 41, name: 'Int0', description: 'Int 0', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 42, name: 'Int1', description: 'Int 1', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 43, name: 'Int2', description: 'Int 2', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 44, name: 'Int3', description: 'Int 3', format: DbcFieldFormat.intType),
+  ],
+);
