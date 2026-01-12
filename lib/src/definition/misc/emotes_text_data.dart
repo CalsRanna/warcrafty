@@ -1,7 +1,7 @@
-import 'package:warcrafty/src/definition/base/field_definition.dart';
-import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_definition.dart';
+import 'package:warcrafty/src/core/structure_definition.dart';
 import 'package:warcrafty/src/core/field_format.dart';
-import 'package:warcrafty/src/definition/common/locale_fields.dart';
+import 'package:warcrafty/src/core/locale_fields.dart';
 
 /// EmotesTextData 结构定义
 ///

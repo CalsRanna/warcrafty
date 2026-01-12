@@ -377,8 +377,8 @@ String generateDartDefinition(DbdFile dbd) {
   final lines = <String>[];
 
   // 导入
-  lines.add("import 'package:warcrafty/src/definition/base/field_definition.dart';");
-  lines.add("import 'package:warcrafty/src/definition/base/structure_definition.dart';");
+  lines.add("import 'package:warcrafty/src/core/field_definition.dart';");
+  lines.add("import 'package:warcrafty/src/core/structure_definition.dart';");
   lines.add("import 'package:warcrafty/src/core/field_format.dart';");
 
   // 检查是否需要 locale_fields
@@ -392,7 +392,7 @@ String generateDartDefinition(DbdFile dbd) {
   }
 
   if (hasLocstring) {
-    lines.add("import 'package:warcrafty/src/definition/common/locale_fields.dart';");
+    lines.add("import 'package:warcrafty/src/core/locale_fields.dart';");
   }
 
   lines.add('');

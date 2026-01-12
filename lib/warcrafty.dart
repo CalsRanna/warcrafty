@@ -1,8 +1,11 @@
 export 'src/core/dbc_loader.dart';
 export 'src/core/dbc_writer.dart';
 export 'src/core/field_format.dart';
+export 'src/core/field_definition.dart';
+export 'src/core/structure_definition.dart';
+export 'src/core/locale_fields.dart';
 export 'src/core/header.dart';
-export 'src/definition/index.dart';
+export 'src/definition/definition.dart';
 export 'src/handlers/offset_calculator.dart';
 export 'src/handlers/string_handler.dart';
 export 'src/index/binary_search.dart';
