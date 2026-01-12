@@ -1,21 +1,20 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
-import 'package:warcrafty/src/core/locale_fields.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
+import 'package:warcrafty/src/tools/locale_fields.dart';
 
 /// DungeonEncounter 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-final dungeonEncounter = DbcStructureDefinition(
+final dungeonEncounter = DbcSchema(
   name: 'DungeonEncounter',
   format: 'niiiisssssssssssssssssi',
   fields: [
-    const FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    const FieldDefinition(index: 1, name: 'MapID', description: 'MapID', format: DbcFieldFormat.intType),
-    const FieldDefinition(index: 2, name: 'Difficulty', description: 'Difficulty', format: DbcFieldFormat.intType),
-    const FieldDefinition(index: 3, name: 'OrderIndex', description: 'OrderIndex', format: DbcFieldFormat.intType),
-    const FieldDefinition(index: 4, name: 'Bit', description: 'Bit', format: DbcFieldFormat.intType),
+    const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    const Field(index: 1, name: 'MapID', description: 'MapID', type: FieldType.int32),
+    const Field(index: 2, name: 'Difficulty', description: 'Difficulty', type: FieldType.int32),
+    const Field(index: 3, name: 'OrderIndex', description: 'OrderIndex', type: FieldType.int32),
+    const Field(index: 4, name: 'Bit', description: 'Bit', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(5, 'Name_lang', 'Name_lang'),
-    const FieldDefinition(index: 22, name: 'SpellIconID', description: 'SpellIconID', format: DbcFieldFormat.intType),
+    const Field(index: 22, name: 'SpellIconID', description: 'SpellIconID', type: FieldType.int32),
   ],
 );

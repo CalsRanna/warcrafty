@@ -1,17 +1,16 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// ObjectEffectPackageElem 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const objectEffectPackageElem = DbcStructureDefinition(
+const objectEffectPackageElem = DbcSchema(
   name: 'ObjectEffectPackageElem',
   format: 'niii',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    FieldDefinition(index: 1, name: 'ObjectEffectPackageID', description: 'ObjectEffectPackageID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'ObjectEffectGroupID', description: 'ObjectEffectGroupID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'StateType', description: 'StateType', format: DbcFieldFormat.intType),
+    Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    Field(index: 1, name: 'ObjectEffectPackageID', description: 'ObjectEffectPackageID', type: FieldType.int32),
+    Field(index: 2, name: 'ObjectEffectGroupID', description: 'ObjectEffectGroupID', type: FieldType.int32),
+    Field(index: 3, name: 'StateType', description: 'StateType', type: FieldType.int32),
   ],
 );

@@ -1,11 +1,14 @@
 import 'dart:typed_data';
 
-import 'package:warcrafty/src/utils/exceptions.dart';
+import '../utils/exceptions.dart';
 
 /// DBC 文件头
 final class DbcHeader {
   /// WDBC 文件签名值 (0x43424457 = 'WDBC')
   static const int signatureValue = 0x43424457;
+
+  /// 文件头大小
+  static const int size = 20;
 
   /// 文件签名
   final String signature;
@@ -22,7 +25,6 @@ final class DbcHeader {
   /// 字符串表大小
   final int stringBlockSize;
 
-  /// 创建 DBC 文件头
   const DbcHeader({
     required this.signature,
     required this.recordCount,
@@ -32,9 +34,6 @@ final class DbcHeader {
   });
 
   /// 从字节数据读取头信息
-  ///
-  /// [data] - 至少 20 字节的字节数据
-  /// 返回解析后的 DbcHeader 对象
   factory DbcHeader.fromBytes(Uint8List data) {
     if (data.length < 20) {
       throw FileReadException(
@@ -43,32 +42,23 @@ final class DbcHeader {
     }
 
     final byteData = ByteData.sublistView(data);
-
-    // 读取签名 (4 字节)
     final signatureInt = byteData.getUint32(0, Endian.little);
 
-    // 验证签名
     if (signatureInt != signatureValue) {
       throw InvalidSignatureException(signatureInt);
     }
 
-    // 读取各个字段
     final recordCount = byteData.getInt32(4, Endian.little);
     final fieldCount = byteData.getInt32(8, Endian.little);
     final recordSize = byteData.getInt32(12, Endian.little);
     final stringBlockSize = byteData.getInt32(16, Endian.little);
 
-    // 验证字段数量
     if (fieldCount <= 0) {
       throw FormatException('Invalid field count: $fieldCount');
     }
-
-    // 验证记录数量
     if (recordCount < 0) {
       throw FormatException('Invalid record count: $recordCount');
     }
-
-    // 验证记录大小
     if (recordSize <= 0) {
       throw FormatException('Invalid record size: $recordSize');
     }
@@ -83,18 +73,12 @@ final class DbcHeader {
   }
 
   /// 将头信息写入字节缓冲区
-  ///
-  /// [buffer] - 至少 20 字节的缓冲区
-  /// 返回写入后的缓冲区
   Uint8List toBytes([Uint8List? buffer]) {
     final byteData = buffer != null
         ? ByteData.sublistView(buffer)
         : ByteData(20);
 
-    // 写入签名
     byteData.setUint32(0, signatureValue, Endian.little);
-
-    // 写入各个字段
     byteData.setInt32(4, recordCount, Endian.little);
     byteData.setInt32(8, fieldCount, Endian.little);
     byteData.setInt32(12, recordSize, Endian.little);
@@ -102,9 +86,6 @@ final class DbcHeader {
 
     return byteData.buffer.asUint8List();
   }
-
-  /// 计算头大小
-  static const int size = 20;
 
   @override
   bool operator ==(Object other) {
@@ -121,9 +102,6 @@ final class DbcHeader {
       Object.hash(recordCount, fieldCount, recordSize, stringBlockSize);
 
   @override
-  String toString() {
-    return 'DbcHeader(signature: $signature, recordCount: $recordCount, '
-        'fieldCount: $fieldCount, recordSize: $recordSize, '
-        'stringBlockSize: $stringBlockSize)';
-  }
+  String toString() =>
+      'DbcHeader(records: $recordCount, fields: $fieldCount, recordSize: $recordSize)';
 }

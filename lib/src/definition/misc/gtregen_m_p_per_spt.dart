@@ -1,14 +1,13 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// gtRegenMPPerSpt 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const gtregenMPPerSpt = DbcStructureDefinition(
+const gtregenMPPerSpt = DbcSchema(
   name: 'gtRegenMPPerSpt',
   format: 'f',
   fields: [
-    FieldDefinition(index: 0, name: 'Data', description: 'Data', format: DbcFieldFormat.float),
+    Field(index: 0, name: 'Data', description: 'Data', type: FieldType.float),
   ],
 );

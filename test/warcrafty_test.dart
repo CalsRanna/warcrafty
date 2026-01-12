@@ -6,70 +6,34 @@ import 'package:test/test.dart';
 import 'package:warcrafty/warcrafty.dart';
 
 // 内部模块导入（仅用于测试）
-import 'package:warcrafty/src/utils/endian_converter.dart';
-import 'package:warcrafty/src/handlers/offset_calculator.dart';
-import 'package:warcrafty/src/core/header.dart';
-import 'package:warcrafty/src/handlers/string_handler.dart';
-import 'package:warcrafty/src/index/binary_search.dart';
-import 'package:warcrafty/src/core/locale_fields.dart';
+import 'package:warcrafty/src/internal/offsets.dart';
+import 'package:warcrafty/src/internal/header.dart';
+import 'package:warcrafty/src/internal/strings.dart';
+import 'package:warcrafty/src/internal/search.dart';
+import 'package:warcrafty/src/tools/locale_fields.dart';
 
 void main() {
-  group('EndianConverter', () {
-    test('swapInt16 swaps bytes correctly', () {
-      expect(EndianConverter.swapInt16(0x1234), equals(0x3412));
-      expect(EndianConverter.swapInt16(0xABCD), equals(0xCDAB));
-    });
-
-    test('swapInt32 swaps bytes correctly', () {
-      expect(EndianConverter.swapInt32(0x12345678), equals(0x78563412));
-      expect(EndianConverter.swapInt32(0xAABBCCDD), equals(0xDDCCBBAA));
-    });
-
-    test('swapInt64 swaps bytes correctly', () {
-      expect(
-        EndianConverter.swapInt64(0x0123456789ABCDEF),
-        equals(0xEFCDAB8967452301),
-      );
-    });
-
-    // 注意：在小端序系统上，字节交换会改变浮点数的值（从小端转大端）
-    // 这些测试验证字节确实被交换了
-    test('swapFloat32 exchanges bytes', () {
-      final bytes = Float32List.fromList([3.14159]);
-      final intValue = bytes.buffer.asInt32List()[0];
-      final swapped = EndianConverter.swapInt32(intValue);
-      expect(swapped, isNot(equals(intValue)));
-    });
-
-    test('swapFloat64 exchanges bytes', () {
-      final bytes = Float64List.fromList([3.141592653589793]);
-      final intValue = bytes.buffer.asInt64List()[0];
-      final swapped = EndianConverter.swapInt64(intValue);
-      expect(swapped, isNot(equals(intValue)));
-    });
-  });
-
-  group('DbcFieldFormat', () {
+  group('FieldType', () {
     test('fromChar returns correct format', () {
-      expect(DbcFieldFormat.fromChar('n'), equals(DbcFieldFormat.indexField));
-      expect(DbcFieldFormat.fromChar('i'), equals(DbcFieldFormat.intType));
-      expect(DbcFieldFormat.fromChar('s'), equals(DbcFieldFormat.string));
-      expect(DbcFieldFormat.fromChar('f'), equals(DbcFieldFormat.float));
-      expect(DbcFieldFormat.fromChar('b'), equals(DbcFieldFormat.byte));
+      expect(FieldType.fromChar('n'), equals(FieldType.id));
+      expect(FieldType.fromChar('i'), equals(FieldType.int32));
+      expect(FieldType.fromChar('s'), equals(FieldType.string));
+      expect(FieldType.fromChar('f'), equals(FieldType.float));
+      expect(FieldType.fromChar('b'), equals(FieldType.uint8));
     });
 
     test('size returns correct byte size', () {
-      expect(DbcFieldFormat.byte.size, equals(1));
-      expect(DbcFieldFormat.naByte.size, equals(1));
-      expect(DbcFieldFormat.intType.size, equals(4));
-      expect(DbcFieldFormat.float.size, equals(4));
-      expect(DbcFieldFormat.string.size, equals(4));
+      expect(FieldType.uint8.size, equals(1));
+      expect(FieldType.unusedByte.size, equals(1));
+      expect(FieldType.int32.size, equals(4));
+      expect(FieldType.float.size, equals(4));
+      expect(FieldType.string.size, equals(4));
     });
   });
 
-  group('FieldOffsetCalculator', () {
+  group('FieldOffsets', () {
     test('calculates correct offsets for simple format', () {
-      final calculator = FieldOffsetCalculator('niii');
+      final calculator = FieldOffsets('niii');
       expect(calculator[0], equals(0));
       expect(calculator[1], equals(4));
       expect(calculator[2], equals(8));
@@ -77,12 +41,12 @@ void main() {
     });
 
     test('calculates correct record size', () {
-      final calculator = FieldOffsetCalculator('niii');
+      final calculator = FieldOffsets('niii');
       expect(calculator.recordSize, equals(16));
     });
 
     test('handles byte fields correctly', () {
-      final calculator = FieldOffsetCalculator('nbbii');
+      final calculator = FieldOffsets('nbbii');
       expect(calculator[0], equals(0));
       expect(calculator[1], equals(4));
       expect(calculator[2], equals(5));
@@ -92,12 +56,12 @@ void main() {
     });
 
     test('finds index field position', () {
-      final calculator = FieldOffsetCalculator('niii');
+      final calculator = FieldOffsets('niii');
       expect(calculator.indexField, equals(0));
     });
 
     test('returns -1 when no index field exists', () {
-      final calculator = FieldOffsetCalculator('iiii');
+      final calculator = FieldOffsets('iiii');
       expect(calculator.indexField, equals(-1));
     });
   });
@@ -178,10 +142,10 @@ void main() {
     });
   });
 
-  group('StringBlockHandler', () {
+  group('StringBlock', () {
     test('handles empty string block', () {
-      final handler = StringBlockHandler(Uint8List.fromList([0]));
-      expect(handler.readString(0), equals(''));
+      final handler = StringBlock(Uint8List.fromList([0]));
+      expect(handler.read(0), equals(''));
       expect(handler.count, equals(1));
     });
 
@@ -194,14 +158,14 @@ void main() {
         0,
       ]);
 
-      final handler = StringBlockHandler(data);
-      expect(handler.readString(1), equals('Hello'));
-      expect(handler.readString(7), equals('World'));
+      final handler = StringBlock(data);
+      expect(handler.read(1), equals('Hello'));
+      expect(handler.read(7), equals('World'));
     });
 
     test('returns empty string for invalid offset', () {
-      final handler = StringBlockHandler(Uint8List.fromList([0]));
-      expect(handler.readString(100), equals(''));
+      final handler = StringBlock(Uint8List.fromList([0]));
+      expect(handler.read(100), equals(''));
     });
 
     test('builds correct string cache', () {
@@ -213,29 +177,29 @@ void main() {
         0,
       ]);
 
-      final handler = StringBlockHandler(data);
+      final handler = StringBlock(data);
       expect(handler.count, equals(3));
-      expect(handler.allStrings, containsAll(['Test', 'Another']));
+      expect(handler.all, containsAll(['Test', 'Another']));
     });
   });
 
-  group('StringTableBuilder', () {
+  group('StringTable', () {
     test('starts with empty string at offset 0', () {
-      final builder = StringTableBuilder();
-      expect(builder.addString(''), equals(0));
+      final builder = StringTable();
+      expect(builder.add(''), equals(0));
     });
 
     test('deduplicates strings', () {
-      final builder = StringTableBuilder();
-      expect(builder.addString('Hello'), equals(1));
-      expect(builder.addString('Hello'), equals(1));
-      expect(builder.addString('World'), equals(7));
+      final builder = StringTable();
+      expect(builder.add('Hello'), equals(1));
+      expect(builder.add('Hello'), equals(1));
+      expect(builder.add('World'), equals(7));
     });
 
     test('builds correct string table', () {
-      final builder = StringTableBuilder();
-      builder.addString('Hello');
-      builder.addString('World');
+      final builder = StringTable();
+      builder.add('Hello');
+      builder.add('World');
 
       final table = builder.build();
 
@@ -247,8 +211,8 @@ void main() {
     });
 
     test('handles unicode strings', () {
-      final builder = StringTableBuilder();
-      final offset = builder.addString('你好世界');
+      final builder = StringTable();
+      final offset = builder.add('你好世界');
       expect(offset, equals(1));
 
       final table = builder.build();
@@ -260,14 +224,14 @@ void main() {
   group('BinarySearch', () {
     test('finds existing element', () {
       final list = [1, 3, 5, 7, 9];
-      final result = BinarySearch.search(list, 5, (x) => x - 5);
+      final result = BinarySearch.search(list, 5, (x) => x);
       expect(result.found, isTrue);
       expect(result.index, equals(2));
     });
 
     test('returns not found for missing element', () {
       final list = [1, 3, 5, 7, 9];
-      final result = BinarySearch.search(list, 4, (x) => x - 4);
+      final result = BinarySearch.search(list, 4, (x) => x);
       expect(result.found, isFalse);
     });
 
@@ -286,7 +250,7 @@ void main() {
     });
   });
 
-  group('DbcIndexBuilder', () {
+  group('DbcIndex', () {
     test('builds index from list of maps', () {
       final records = [
         {'ID': 1, 'Name': 'One'},
@@ -294,7 +258,7 @@ void main() {
         {'ID': 3, 'Name': 'Three'},
       ];
 
-      final builder = DbcIndexBuilder<Map<String, dynamic>>(records, 0);
+      final builder = DbcIndex<Map<String, dynamic>>(records, 0);
       expect(builder.count, equals(3));
       expect(builder.lookup(1)?['Name'], equals('One'));
       expect(builder.lookup(2)?['Name'], equals('Two'));
@@ -308,7 +272,7 @@ void main() {
         {'ID': 2, 'Name': 'Two'},
       ];
 
-      final builder = DbcIndexBuilder<Map<String, dynamic>>(records, 0);
+      final builder = DbcIndex<Map<String, dynamic>>(records, 0);
       expect(builder.contains(1), isTrue);
       expect(builder.contains(2), isTrue);
       expect(builder.contains(99), isFalse);
@@ -319,10 +283,10 @@ void main() {
         {'ID': 1, 'Name': 'One'},
       ];
 
-      final builder = DbcIndexBuilder<Map<String, dynamic>>(records, 0);
+      final builder = DbcIndex<Map<String, dynamic>>(records, 0);
       expect(
         () => builder.lookupOrThrow(99),
-        throwsA(isA<Exception>()), // 验证抛出异常即可，不指定具体类型
+        throwsA(isA<StateError>()),
       );
     });
   });

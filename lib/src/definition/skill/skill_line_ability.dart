@@ -1,27 +1,26 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// SkillLineAbility 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const skillLineAbility = DbcStructureDefinition(
+const skillLineAbility = DbcSchema(
   name: 'SkillLineAbility',
   format: 'niiiiiiiiiiiii',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    FieldDefinition(index: 1, name: 'SkillLine', description: 'SkillLine', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'Spell', description: 'Spell', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'RaceMask', description: 'RaceMask', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'ClassMask', description: 'ClassMask', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 5, name: 'ExcludeRace', description: 'ExcludeRace', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 6, name: 'ExcludeClass', description: 'ExcludeClass', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 7, name: 'MinSkillLineRank', description: 'MinSkillLineRank', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 8, name: 'SupercededBySpell', description: 'SupercededBySpell', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 9, name: 'AcquireMethod', description: 'AcquireMethod', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 10, name: 'TrivialSkillLineRankHigh', description: 'TrivialSkillLineRankHigh', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 11, name: 'TrivialSkillLineRankLow', description: 'TrivialSkillLineRankLow', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 12, name: 'CharacterPoints0', description: 'CharacterPoints 0', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 13, name: 'CharacterPoints1', description: 'CharacterPoints 1', format: DbcFieldFormat.intType),
+    Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    Field(index: 1, name: 'SkillLine', description: 'SkillLine', type: FieldType.int32),
+    Field(index: 2, name: 'Spell', description: 'Spell', type: FieldType.int32),
+    Field(index: 3, name: 'RaceMask', description: 'RaceMask', type: FieldType.int32),
+    Field(index: 4, name: 'ClassMask', description: 'ClassMask', type: FieldType.int32),
+    Field(index: 5, name: 'ExcludeRace', description: 'ExcludeRace', type: FieldType.int32),
+    Field(index: 6, name: 'ExcludeClass', description: 'ExcludeClass', type: FieldType.int32),
+    Field(index: 7, name: 'MinSkillLineRank', description: 'MinSkillLineRank', type: FieldType.int32),
+    Field(index: 8, name: 'SupercededBySpell', description: 'SupercededBySpell', type: FieldType.int32),
+    Field(index: 9, name: 'AcquireMethod', description: 'AcquireMethod', type: FieldType.int32),
+    Field(index: 10, name: 'TrivialSkillLineRankHigh', description: 'TrivialSkillLineRankHigh', type: FieldType.int32),
+    Field(index: 11, name: 'TrivialSkillLineRankLow', description: 'TrivialSkillLineRankLow', type: FieldType.int32),
+    Field(index: 12, name: 'CharacterPoints0', description: 'CharacterPoints 0', type: FieldType.int32),
+    Field(index: 13, name: 'CharacterPoints1', description: 'CharacterPoints 1', type: FieldType.int32),
   ],
 );

@@ -1,18 +1,17 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// ZoneIntroMusicTable 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const zoneIntroMusicTable = DbcStructureDefinition(
+const zoneIntroMusicTable = DbcSchema(
   name: 'ZoneIntroMusicTable',
   format: 'nsiii',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    FieldDefinition(index: 1, name: 'Name', description: 'Name', format: DbcFieldFormat.string),
-    FieldDefinition(index: 2, name: 'SoundID', description: 'SoundID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'Priority', description: 'Priority', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'MinDelayMinutes', description: 'MinDelayMinutes', format: DbcFieldFormat.intType),
+    Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    Field(index: 1, name: 'Name', description: 'Name', type: FieldType.string),
+    Field(index: 2, name: 'SoundID', description: 'SoundID', type: FieldType.int32),
+    Field(index: 3, name: 'Priority', description: 'Priority', type: FieldType.int32),
+    Field(index: 4, name: 'MinDelayMinutes', description: 'MinDelayMinutes', type: FieldType.int32),
   ],
 );

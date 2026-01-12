@@ -322,12 +322,12 @@ bool isByteField(FieldDef field) {
 
   // $id$ 标记
   if (field.isId) {
-    return ('DbcFieldFormat.indexField', 'n');
+    return ('FieldType.id', 'n');
   }
 
   // 检查字节字段 (<8> 或 <u8>)
   if (isByteField(field)) {
-    return ('DbcFieldFormat.byte', 'b');
+    return ('FieldType.uint8', 'b');
   }
 
   if (col != null) {
@@ -335,15 +335,15 @@ bool isByteField(FieldDef field) {
       case 'locstring':
         return ('LOCSTRING', 'LOCSTRING');
       case 'float':
-        return ('DbcFieldFormat.float', 'f');
+        return ('FieldType.float', 'f');
       case 'string':
-        return ('DbcFieldFormat.string', 's');
+        return ('FieldType.string', 's');
       case 'int':
-        return ('DbcFieldFormat.intType', 'i');
+        return ('FieldType.int32', 'i');
     }
   }
 
-  return ('DbcFieldFormat.intType', 'i');
+  return ('FieldType.int32', 'i');
 }
 
 /// 转换为 snake_case
@@ -377,9 +377,8 @@ String generateDartDefinition(DbdFile dbd) {
   final lines = <String>[];
 
   // 导入
-  lines.add("import 'package:warcrafty/src/core/field_definition.dart';");
-  lines.add("import 'package:warcrafty/src/core/structure_definition.dart';");
-  lines.add("import 'package:warcrafty/src/core/field_format.dart';");
+  lines.add("import 'package:warcrafty/src/schema/field.dart';");
+  lines.add("import 'package:warcrafty/src/schema/schema.dart';");
 
   // 检查是否需要 locale_fields
   var hasLocstring = false;
@@ -392,7 +391,7 @@ String generateDartDefinition(DbdFile dbd) {
   }
 
   if (hasLocstring) {
-    lines.add("import 'package:warcrafty/src/core/locale_fields.dart';");
+    lines.add("import 'package:warcrafty/src/tools/locale_fields.dart';");
   }
 
   lines.add('');
@@ -419,7 +418,7 @@ String generateDartDefinition(DbdFile dbd) {
   // 当外层是 const 时，内部不需要 const 关键字；当外层是 final 时，内部需要 const
   final fieldConst = hasLocstring ? 'const ' : '';
 
-  lines.add('$constOrFinal $varName = DbcStructureDefinition(');
+  lines.add('$constOrFinal $varName = DbcSchema(');
   lines.add("  name: '${dbd.name}',");
   lines.add("  format: '$formatString',");
   lines.add('  fields: [');
@@ -437,12 +436,12 @@ String generateDartDefinition(DbdFile dbd) {
     } else if (count > 1) {
       for (var j = 0; j < count; j++) {
         lines.add(
-            "    ${fieldConst}FieldDefinition(index: $fieldIndex, name: '${f.name}$j', description: '${f.name} $j', format: $fieldType),");
+            "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}$j', description: '${f.name} $j', type: $fieldType),");
         fieldIndex++;
       }
     } else {
       lines.add(
-          "    ${fieldConst}FieldDefinition(index: $fieldIndex, name: '${f.name}', description: '${f.name}', format: $fieldType),");
+          "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}', description: '${f.name}', type: $fieldType),");
       fieldIndex++;
     }
   }
@@ -571,6 +570,8 @@ Future<void> generateExportsTemplate(List<String> successNames) async {
   lines.add('// 自动生成的导出文件');
   lines.add('// 基于 WoWDBDefs 生成，版本 $targetVersion');
   lines.add('');
+  lines.add("import 'package:warcrafty/src/schema/schema.dart';");
+  lines.add('');
 
   // 按分类分组
   final byCategory = <String, List<String>>{};
@@ -590,6 +591,7 @@ Future<void> generateExportsTemplate(List<String> successNames) async {
   }
 
   // Definitions 类
+  lines.add('/// DBC 结构定义集合');
   lines.add('class Definitions {');
   lines.add('  Definitions._();');
   lines.add('');
@@ -597,7 +599,7 @@ Future<void> generateExportsTemplate(List<String> successNames) async {
   for (final name in successNames) {
     final snake = toSnakeCase(name);
     final camel = toCamelCase(name);
-    lines.add('  static final $camel = struct_$snake.$camel;');
+    lines.add('  static DbcSchema get $camel => struct_$snake.$camel;');
   }
 
   lines.add('}');

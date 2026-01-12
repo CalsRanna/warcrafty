@@ -1,41 +1,40 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// CreatureModelData 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const creatureModelData = DbcStructureDefinition(
+const creatureModelData = DbcSchema(
   name: 'CreatureModelData',
   format: 'nisifiifffiiiiffffffffffffff',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    FieldDefinition(index: 1, name: 'Flags', description: 'Flags', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'ModelName', description: 'ModelName', format: DbcFieldFormat.string),
-    FieldDefinition(index: 3, name: 'SizeClass', description: 'SizeClass', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'ModelScale', description: 'ModelScale', format: DbcFieldFormat.float),
-    FieldDefinition(index: 5, name: 'BloodID', description: 'BloodID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 6, name: 'FootprintTextureID', description: 'FootprintTextureID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 7, name: 'FootprintTextureLength', description: 'FootprintTextureLength', format: DbcFieldFormat.float),
-    FieldDefinition(index: 8, name: 'FootprintTextureWidth', description: 'FootprintTextureWidth', format: DbcFieldFormat.float),
-    FieldDefinition(index: 9, name: 'FootprintParticleScale', description: 'FootprintParticleScale', format: DbcFieldFormat.float),
-    FieldDefinition(index: 10, name: 'FoleyMaterialID', description: 'FoleyMaterialID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 11, name: 'FootstepShakeSize', description: 'FootstepShakeSize', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 12, name: 'DeathThudShakeSize', description: 'DeathThudShakeSize', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 13, name: 'SoundID', description: 'SoundID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 14, name: 'CollisionWidth', description: 'CollisionWidth', format: DbcFieldFormat.float),
-    FieldDefinition(index: 15, name: 'CollisionHeight', description: 'CollisionHeight', format: DbcFieldFormat.float),
-    FieldDefinition(index: 16, name: 'MountHeight', description: 'MountHeight', format: DbcFieldFormat.float),
-    FieldDefinition(index: 17, name: 'GeoBoxMinX', description: 'GeoBoxMinX', format: DbcFieldFormat.float),
-    FieldDefinition(index: 18, name: 'GeoBoxMinY', description: 'GeoBoxMinY', format: DbcFieldFormat.float),
-    FieldDefinition(index: 19, name: 'GeoBoxMinZ', description: 'GeoBoxMinZ', format: DbcFieldFormat.float),
-    FieldDefinition(index: 20, name: 'GeoBoxMaxX', description: 'GeoBoxMaxX', format: DbcFieldFormat.float),
-    FieldDefinition(index: 21, name: 'GeoBoxMaxY', description: 'GeoBoxMaxY', format: DbcFieldFormat.float),
-    FieldDefinition(index: 22, name: 'GeoBoxMaxZ', description: 'GeoBoxMaxZ', format: DbcFieldFormat.float),
-    FieldDefinition(index: 23, name: 'WorldEffectScale', description: 'WorldEffectScale', format: DbcFieldFormat.float),
-    FieldDefinition(index: 24, name: 'AttachedEffectScale', description: 'AttachedEffectScale', format: DbcFieldFormat.float),
-    FieldDefinition(index: 25, name: 'MissileCollisionRadius', description: 'MissileCollisionRadius', format: DbcFieldFormat.float),
-    FieldDefinition(index: 26, name: 'MissileCollisionPush', description: 'MissileCollisionPush', format: DbcFieldFormat.float),
-    FieldDefinition(index: 27, name: 'MissileCollisionRaise', description: 'MissileCollisionRaise', format: DbcFieldFormat.float),
+    Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    Field(index: 1, name: 'Flags', description: 'Flags', type: FieldType.int32),
+    Field(index: 2, name: 'ModelName', description: 'ModelName', type: FieldType.string),
+    Field(index: 3, name: 'SizeClass', description: 'SizeClass', type: FieldType.int32),
+    Field(index: 4, name: 'ModelScale', description: 'ModelScale', type: FieldType.float),
+    Field(index: 5, name: 'BloodID', description: 'BloodID', type: FieldType.int32),
+    Field(index: 6, name: 'FootprintTextureID', description: 'FootprintTextureID', type: FieldType.int32),
+    Field(index: 7, name: 'FootprintTextureLength', description: 'FootprintTextureLength', type: FieldType.float),
+    Field(index: 8, name: 'FootprintTextureWidth', description: 'FootprintTextureWidth', type: FieldType.float),
+    Field(index: 9, name: 'FootprintParticleScale', description: 'FootprintParticleScale', type: FieldType.float),
+    Field(index: 10, name: 'FoleyMaterialID', description: 'FoleyMaterialID', type: FieldType.int32),
+    Field(index: 11, name: 'FootstepShakeSize', description: 'FootstepShakeSize', type: FieldType.int32),
+    Field(index: 12, name: 'DeathThudShakeSize', description: 'DeathThudShakeSize', type: FieldType.int32),
+    Field(index: 13, name: 'SoundID', description: 'SoundID', type: FieldType.int32),
+    Field(index: 14, name: 'CollisionWidth', description: 'CollisionWidth', type: FieldType.float),
+    Field(index: 15, name: 'CollisionHeight', description: 'CollisionHeight', type: FieldType.float),
+    Field(index: 16, name: 'MountHeight', description: 'MountHeight', type: FieldType.float),
+    Field(index: 17, name: 'GeoBoxMinX', description: 'GeoBoxMinX', type: FieldType.float),
+    Field(index: 18, name: 'GeoBoxMinY', description: 'GeoBoxMinY', type: FieldType.float),
+    Field(index: 19, name: 'GeoBoxMinZ', description: 'GeoBoxMinZ', type: FieldType.float),
+    Field(index: 20, name: 'GeoBoxMaxX', description: 'GeoBoxMaxX', type: FieldType.float),
+    Field(index: 21, name: 'GeoBoxMaxY', description: 'GeoBoxMaxY', type: FieldType.float),
+    Field(index: 22, name: 'GeoBoxMaxZ', description: 'GeoBoxMaxZ', type: FieldType.float),
+    Field(index: 23, name: 'WorldEffectScale', description: 'WorldEffectScale', type: FieldType.float),
+    Field(index: 24, name: 'AttachedEffectScale', description: 'AttachedEffectScale', type: FieldType.float),
+    Field(index: 25, name: 'MissileCollisionRadius', description: 'MissileCollisionRadius', type: FieldType.float),
+    Field(index: 26, name: 'MissileCollisionPush', description: 'MissileCollisionPush', type: FieldType.float),
+    Field(index: 27, name: 'MissileCollisionRaise', description: 'MissileCollisionRaise', type: FieldType.float),
   ],
 );

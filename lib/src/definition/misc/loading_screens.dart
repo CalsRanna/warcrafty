@@ -1,17 +1,16 @@
-import 'package:warcrafty/src/core/field_definition.dart';
-import 'package:warcrafty/src/core/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/schema/field.dart';
+import 'package:warcrafty/src/schema/schema.dart';
 
 /// LoadingScreens 结构定义
 ///
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
-const loadingScreens = DbcStructureDefinition(
+const loadingScreens = DbcSchema(
   name: 'LoadingScreens',
   format: 'nssi',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.indexField),
-    FieldDefinition(index: 1, name: 'Name', description: 'Name', format: DbcFieldFormat.string),
-    FieldDefinition(index: 2, name: 'FileName', description: 'FileName', format: DbcFieldFormat.string),
-    FieldDefinition(index: 3, name: 'HasWideScreen', description: 'HasWideScreen', format: DbcFieldFormat.intType),
+    Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
+    Field(index: 1, name: 'Name', description: 'Name', type: FieldType.string),
+    Field(index: 2, name: 'FileName', description: 'FileName', type: FieldType.string),
+    Field(index: 3, name: 'HasWideScreen', description: 'HasWideScreen', type: FieldType.int32),
   ],
 );

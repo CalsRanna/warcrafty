@@ -4,7 +4,7 @@ import 'package:test/test.dart';
 import 'package:warcrafty/warcrafty.dart';
 
 /// DBC 文件名到定义的映射 (基于自动生成的 definition.dart)
-final Map<String, DbcStructureDefinition> dbcDefinitions = {
+final Map<String, DbcSchema> dbcDefinitions = {
   // achievement
   'Achievement.dbc': Definitions.achievement,
   'Achievement_Category.dbc': Definitions.achievementCategory,
