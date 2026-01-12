@@ -1,11 +1,3 @@
-/// 字节序转换工具
-///
-/// DBC 文件使用小端序 (Little Endian)。在大多数平台上，Dart 的
-/// [Endian.little] 与之匹配，无需转换。但在大端序系统上需要转换。
-///
-/// 参考 AzerothCore ByteConverter.h 实现
-library;
-
 import 'dart:typed_data';
 
 /// 字节序转换类

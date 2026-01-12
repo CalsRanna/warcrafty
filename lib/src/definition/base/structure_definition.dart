@@ -1,4 +1,4 @@
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 import 'field_definition.dart';
 
 /// DBC 结构定义

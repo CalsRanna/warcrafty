@@ -1,4 +1,4 @@
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// 字段定义
 ///

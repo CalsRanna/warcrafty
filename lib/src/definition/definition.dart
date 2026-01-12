@@ -1,8 +1,3 @@
-/// DBC 格式统一接口
-///
-/// 提供与 AzerothCore DBCfmt.h 完全对齐的静态属性式格式访问。
-library;
-
 import 'base/structure_definition.dart';
 
 // 成就

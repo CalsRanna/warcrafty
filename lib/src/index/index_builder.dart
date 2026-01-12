@@ -1,9 +1,4 @@
-/// 索引构建器
-///
-/// 根据 DBC 文件中的索引字段 (FT_IND = 'n') 构建快速查找索引。
-library;
-
-import '../core/dbc_loader.dart';
+import 'package:warcrafty/src/core/dbc_loader.dart';
 
 /// 索引构建器
 ///

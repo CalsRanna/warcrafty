@@ -1,15 +1,3 @@
-/// DBC 字段格式枚举
-///
-/// 与 AzerothCore DBCfmt.h 保持一致:
-/// - 'x': FT_NA - 未知/跳过 (4字节)
-/// - 'X': FT_NA_BYTE - 未知字节 (1字节)
-/// - 's': FT_STRING - 字符串偏移量
-/// - 'f': FT_FLOAT - 浮点数
-/// - 'i': FT_INT - 32位整数
-/// - 'b': FT_BYTE - 8位整数
-/// - 'd': FT_SORT - 排序字段 (不包含在数据中)
-/// - 'n': FT_IND - 索引字段 (ID)
-/// - 'l': FT_LOGIC - 布尔值
 enum DbcFieldFormat {
   na('x'), // not used or unknown, 4 byte
   naByte('X'), // not used or unknown, 1 byte

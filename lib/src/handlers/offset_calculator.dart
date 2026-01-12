@@ -1,17 +1,5 @@
-/// 字段偏移量计算器
-///
-/// 根据格式字符串计算每个字段在记录中的字节偏移量。
-/// 参考 AzerothCore DBCFileLoader.cpp 中的字段偏移量计算算法。
-///
-/// 示例:
-/// ```dart
-/// final calculator = FieldOffsetCalculator('niiiiss');
-/// // 偏移量: [0, 4, 8, 12, 16, 20]
-/// ```
-library;
-
-import '../core/field_format.dart';
-import '../utils/exceptions.dart';
+import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/utils/exceptions.dart';
 
 /// 字段偏移量计算器
 ///

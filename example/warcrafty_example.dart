@@ -1,8 +1,6 @@
 /// DBC 文件读写示例
 ///
 /// 演示如何使用 warcrafty 库读取和写入 DBC 文件。
-library;
-
 import 'package:warcrafty/warcrafty.dart';
 
 void main() async {

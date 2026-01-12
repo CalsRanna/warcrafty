@@ -1,20 +1,12 @@
-/// DBC 文件写入器
-///
-/// 负责将数据写入 DBC 文件，支持:
-/// - 格式字符串驱动的灵活写入
-/// - 字符串去重 (减少文件大小)
-/// - 自动构建字符串表
-library;
-
 import 'dart:io';
 import 'dart:typed_data';
 
-import '../core/dbc_loader.dart';
-import '../core/field_format.dart';
-import '../core/header.dart';
-import '../handlers/offset_calculator.dart';
-import '../handlers/string_handler.dart';
-import '../utils/exceptions.dart';
+import 'package:warcrafty/src/core/dbc_loader.dart';
+import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/core/header.dart';
+import 'package:warcrafty/src/handlers/offset_calculator.dart';
+import 'package:warcrafty/src/handlers/string_handler.dart';
+import 'package:warcrafty/src/utils/exceptions.dart';
 
 /// DBC 文件写入器
 final class DbcWriter {

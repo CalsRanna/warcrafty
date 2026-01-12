@@ -1,5 +1,3 @@
-library;
-
 export 'src/core/dbc_loader.dart';
 export 'src/core/dbc_writer.dart';
 export 'src/core/field_format.dart';

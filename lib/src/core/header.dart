@@ -1,18 +1,6 @@
-/// DBC 文件头结构
-///
-/// 标准 WDBC 文件头结构 (20 字节):
-/// | 偏移 | 大小 | 类型   | 说明                    |
-/// |------|------|--------|-------------------------|
-/// | 0x00 | 4    | char[4]| 文件签名 "WDBC"         |
-/// | 0x04 | 4    | uint32 | 记录数量                |
-/// | 0x08 | 4    | uint32 | 字段数量                |
-/// | 0x0C | 4    | uint32 | 单条记录大小 (字节)      |
-/// | 0x10 | 4    | uint32 | 字符串表大小            |
-library;
-
 import 'dart:typed_data';
 
-import '../utils/exceptions.dart';
+import 'package:warcrafty/src/utils/exceptions.dart';
 
 /// DBC 文件头
 final class DbcHeader {

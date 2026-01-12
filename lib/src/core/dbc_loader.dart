@@ -1,17 +1,11 @@
-/// DBC 文件加载器
-///
-/// 负责读取和解析 DBC 文件，支持格式字符串驱动的灵活解析。
-/// 参考 AzerothCore DBCFileLoader 实现。
-library;
-
 import 'dart:io';
 import 'dart:typed_data';
 
-import '../core/field_format.dart';
-import '../core/header.dart';
-import '../handlers/offset_calculator.dart';
-import '../handlers/string_handler.dart';
-import '../utils/exceptions.dart';
+import 'package:warcrafty/src/core/field_format.dart';
+import 'package:warcrafty/src/core/header.dart';
+import 'package:warcrafty/src/handlers/offset_calculator.dart';
+import 'package:warcrafty/src/handlers/string_handler.dart';
+import 'package:warcrafty/src/utils/exceptions.dart';
 
 /// DBC 文件记录访问器
 ///

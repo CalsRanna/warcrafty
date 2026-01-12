@@ -1,12 +1,8 @@
-/// DBC 库核心功能测试
-library;
-
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
-
 import 'package:warcrafty/warcrafty.dart';
 
 void main() {
@@ -170,10 +166,7 @@ void main() {
       byteData.setInt32(16, 100, Endian.little);
       final bytes = byteData.buffer.asUint8List();
 
-      expect(
-        () => DbcHeader.fromBytes(bytes),
-        throwsA(isA<FormatException>()),
-      );
+      expect(() => DbcHeader.fromBytes(bytes), throwsA(isA<FormatException>()));
     });
   });
 
@@ -331,14 +324,10 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_output.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-            [2, 300, 400],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+          [2, 300, 400],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         expect(loader.recordCount, equals(2));
@@ -365,15 +354,11 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_strings.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'ns',
-          [
-            [1, 'Hello'],
-            [2, 'World'],
-            [3, 'Hello'],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'ns', [
+          [1, 'Hello'],
+          [2, 'World'],
+          [3, 'Hello'],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'ns');
         expect(loader.getRecord(0).getString(1), equals('Hello'));
@@ -392,13 +377,9 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_error.dbc');
 
       expect(
-        () => DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200, 300],
-          ],
-        ),
+        () => DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200, 300],
+        ]),
         throwsA(isA<FormatException>()),
       );
     });
@@ -409,13 +390,9 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_int.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, -100],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, -100],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         final record = loader.getRecord(0);
@@ -435,21 +412,14 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_float.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nf',
-          [
-            [1, 3.14],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nf', [
+          [1, 3.14],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nf');
         final record = loader.getRecord(0);
 
-        expect(
-          (record.getFloat(1) - 3.14).abs(),
-          lessThan(0.0001),
-        );
+        expect((record.getFloat(1) - 3.14).abs(), lessThan(0.0001));
 
         loader.close();
       } finally {
@@ -463,13 +433,9 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_map.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         final map = loader.getRecord(0).toMap();
@@ -492,15 +458,11 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_records.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-            [2, 300, 400],
-            [3, 500, 600],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+          [2, 300, 400],
+          [3, 500, 600],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         expect(loader.recordCount, equals(3));
@@ -519,15 +481,11 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_iter.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 10, 20],
-            [2, 30, 40],
-            [3, 50, 60],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 10, 20],
+          [2, 30, 40],
+          [3, 50, 60],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         final ids = loader.records.map((r) => r.getInt(0)).toList();
@@ -546,14 +504,10 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_maplist.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-            [2, 300, 400],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+          [2, 300, 400],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         final mapList = loader.toMapList();
@@ -574,13 +528,9 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_invalid.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+        ]);
 
         final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
         expect(
@@ -600,13 +550,9 @@ void main() {
       final testFile = File('${Directory.systemTemp.path}/test_async.dbc');
 
       try {
-        DbcWriter.writeToPath(
-          testFile.path,
-          'nii',
-          [
-            [1, 100, 200],
-          ],
-        );
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+        ]);
 
         final loader = DbcLoader(testFile.path);
         await loader.loadAsync('nii');

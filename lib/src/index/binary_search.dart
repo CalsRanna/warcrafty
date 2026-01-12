@@ -1,9 +1,4 @@
-/// 二分搜索工具
-///
-/// 提供高效的二分搜索算法，用于在已排序的记录列表中查找目标。
-library;
-
-import '../core/dbc_loader.dart';
+import 'package:warcrafty/src/core/dbc_loader.dart';
 
 /// 二分搜索结果
 final class BinarySearchResult<T> {
