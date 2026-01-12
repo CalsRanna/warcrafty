@@ -6,11 +6,11 @@ import 'package:test/test.dart';
 import 'package:warcrafty/warcrafty.dart';
 
 // 内部模块导入（仅用于测试）
-import 'package:warcrafty/src/internal/offsets.dart';
+import 'package:warcrafty/src/internal/offset.dart';
 import 'package:warcrafty/src/internal/header.dart';
-import 'package:warcrafty/src/internal/strings.dart';
+import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/internal/search.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 void main() {
   group('FieldType', () {
@@ -284,10 +284,7 @@ void main() {
       ];
 
       final builder = DbcIndex<Map<String, dynamic>>(records, 0);
-      expect(
-        () => builder.lookupOrThrow(99),
-        throwsA(isA<StateError>()),
-      );
+      expect(() => builder.lookupOrThrow(99), throwsA(isA<StateError>()));
     });
   });
 
@@ -611,7 +608,9 @@ void main() {
       final achievementDef = Definitions.achievement;
       expect(
         achievementDef.format.length,
-        equals(62), // niixssssssssssssssssxxxxxxxxxxxxxxxxxxiixixxxxxxxxxxxxxxxxxxii = 62 字符
+        equals(
+          62,
+        ), // niixssssssssssssssssxxxxxxxxxxxxxxxxxxiixixxxxxxxxxxxxxxxxxxii = 62 字符
       );
     });
 

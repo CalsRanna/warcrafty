@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// ItemBagFamily 结构定义
 ///

@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// Exhaustion 结构定义
 ///
@@ -11,10 +11,30 @@ final exhaustion = DbcSchema(
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     const Field(index: 1, name: 'Xp', description: 'Xp', type: FieldType.int32),
-    const Field(index: 2, name: 'Factor', description: 'Factor', type: FieldType.float),
-    const Field(index: 3, name: 'OutdoorHours', description: 'OutdoorHours', type: FieldType.float),
-    const Field(index: 4, name: 'InnHours', description: 'InnHours', type: FieldType.float),
+    const Field(
+      index: 2,
+      name: 'Factor',
+      description: 'Factor',
+      type: FieldType.float,
+    ),
+    const Field(
+      index: 3,
+      name: 'OutdoorHours',
+      description: 'OutdoorHours',
+      type: FieldType.float,
+    ),
+    const Field(
+      index: 4,
+      name: 'InnHours',
+      description: 'InnHours',
+      type: FieldType.float,
+    ),
     ...createLocaleFieldsWithFlag(5, 'Name_lang', 'Name_lang'),
-    const Field(index: 22, name: 'Threshold', description: 'Threshold', type: FieldType.float),
+    const Field(
+      index: 22,
+      name: 'Threshold',
+      description: 'Threshold',
+      type: FieldType.float,
+    ),
   ],
 );

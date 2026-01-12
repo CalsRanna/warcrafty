@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// GMSurveyAnswers 结构定义
 ///
@@ -10,8 +10,18 @@ final gMSurveyAnswers = DbcSchema(
   format: 'niisssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(index: 1, name: 'Sort_Index', description: 'Sort_Index', type: FieldType.int32),
-    const Field(index: 2, name: 'GMSurveyQuestionID', description: 'GMSurveyQuestionID', type: FieldType.int32),
+    const Field(
+      index: 1,
+      name: 'Sort_Index',
+      description: 'Sort_Index',
+      type: FieldType.int32,
+    ),
+    const Field(
+      index: 2,
+      name: 'GMSurveyQuestionID',
+      description: 'GMSurveyQuestionID',
+      type: FieldType.int32,
+    ),
     ...createLocaleFieldsWithFlag(3, 'Answer_lang', 'Answer_lang'),
   ],
 );

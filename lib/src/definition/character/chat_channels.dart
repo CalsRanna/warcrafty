@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// ChatChannels 结构定义
 ///
@@ -10,8 +10,18 @@ final chatChannels = DbcSchema(
   format: 'niissssssssssssssssssssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(index: 1, name: 'Flags', description: 'Flags', type: FieldType.int32),
-    const Field(index: 2, name: 'FactionGroup', description: 'FactionGroup', type: FieldType.int32),
+    const Field(
+      index: 1,
+      name: 'Flags',
+      description: 'Flags',
+      type: FieldType.int32,
+    ),
+    const Field(
+      index: 2,
+      name: 'FactionGroup',
+      description: 'FactionGroup',
+      type: FieldType.int32,
+    ),
     ...createLocaleFieldsWithFlag(3, 'Name_lang', 'Name_lang'),
     ...createLocaleFieldsWithFlag(20, 'Shortcut_lang', 'Shortcut_lang'),
   ],

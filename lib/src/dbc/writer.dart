@@ -4,9 +4,9 @@ import 'dart:typed_data';
 import 'loader.dart';
 import '../schema/field.dart';
 import '../internal/header.dart';
-import '../internal/offsets.dart';
-import '../internal/strings.dart';
-import '../utils/exceptions.dart';
+import '../internal/offset.dart';
+import '../internal/string.dart';
+import '../util/exception.dart';
 
 /// DBC 文件写入器
 final class DbcWriter {
@@ -16,8 +16,8 @@ final class DbcWriter {
   final int _fieldCount;
 
   DbcWriter(this._path, this._format)
-      : _offsets = FieldOffsets(_format),
-        _fieldCount = _format.length;
+    : _offsets = FieldOffsets(_format),
+      _fieldCount = _format.length;
 
   /// 写入记录
   void write(List<List<dynamic>> records) {
@@ -154,12 +154,20 @@ final class DbcWriter {
   }
 
   /// 静态方法：写入文件
-  static void writeToPath(String path, String format, List<List<dynamic>> records) {
+  static void writeToPath(
+    String path,
+    String format,
+    List<List<dynamic>> records,
+  ) {
     DbcWriter(path, format).write(records);
   }
 
   /// 静态方法：异步写入
-  static Future<void> writeToPathAsync(String path, String format, List<List<dynamic>> records) {
+  static Future<void> writeToPathAsync(
+    String path,
+    String format,
+    List<List<dynamic>> records,
+  ) {
     return DbcWriter(path, format).writeAsync(records);
   }
 

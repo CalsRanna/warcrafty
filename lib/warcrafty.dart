@@ -11,4 +11,4 @@ export 'src/schema/schema.dart'; // DbcSchema
 export 'src/definition/definition.dart'; // Definitions
 
 // 异常
-export 'src/utils/exceptions.dart';
+export 'src/util/exception.dart';

@@ -3,9 +3,9 @@ import 'dart:typed_data';
 
 import '../schema/field.dart';
 import '../internal/header.dart';
-import '../internal/offsets.dart';
-import '../internal/strings.dart';
-import '../utils/exceptions.dart';
+import '../internal/offset.dart';
+import '../internal/string.dart';
+import '../util/exception.dart';
 
 /// DBC 记录访问器
 final class DbcRecord {
@@ -159,7 +159,8 @@ final class DbcLoader {
   }
 
   void _readData() {
-    final dataSize = _header.recordSize * _header.recordCount + _header.stringBlockSize;
+    final dataSize =
+        _header.recordSize * _header.recordCount + _header.stringBlockSize;
     final bytes = _file.readSync(dataSize);
     final recordEnd = _header.recordSize * _header.recordCount;
 
@@ -168,7 +169,8 @@ final class DbcLoader {
   }
 
   Future<void> _readDataAsync() async {
-    final dataSize = _header.recordSize * _header.recordCount + _header.stringBlockSize;
+    final dataSize =
+        _header.recordSize * _header.recordCount + _header.stringBlockSize;
     final bytes = await _file.read(dataSize);
     final recordEnd = _header.recordSize * _header.recordCount;
 

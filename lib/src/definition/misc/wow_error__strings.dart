@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// WowError_Strings 结构定义
 ///
@@ -10,7 +10,12 @@ final wowErrorStrings = DbcSchema(
   format: 'nssssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(index: 1, name: 'Name', description: 'Name', type: FieldType.string),
+    const Field(
+      index: 1,
+      name: 'Name',
+      description: 'Name',
+      type: FieldType.string,
+    ),
     ...createLocaleFieldsWithFlag(2, 'Description_lang', 'Description_lang'),
   ],
 );

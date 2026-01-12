@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// ItemLimitCategory 结构定义
 ///
@@ -11,7 +11,17 @@ final itemLimitCategory = DbcSchema(
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     ...createLocaleFieldsWithFlag(1, 'Name_lang', 'Name_lang'),
-    const Field(index: 18, name: 'Quantity', description: 'Quantity', type: FieldType.int32),
-    const Field(index: 19, name: 'Flags', description: 'Flags', type: FieldType.int32),
+    const Field(
+      index: 18,
+      name: 'Quantity',
+      description: 'Quantity',
+      type: FieldType.int32,
+    ),
+    const Field(
+      index: 19,
+      name: 'Flags',
+      description: 'Flags',
+      type: FieldType.int32,
+    ),
   ],
 );

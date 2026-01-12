@@ -1,6 +1,6 @@
 import 'package:warcrafty/src/schema/field.dart';
 import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tools/locale_fields.dart';
+import 'package:warcrafty/src/tool/locale_field.dart';
 
 /// CreatureType 结构定义
 ///
@@ -11,6 +11,11 @@ final creatureType = DbcSchema(
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     ...createLocaleFieldsWithFlag(1, 'Name_lang', 'Name_lang'),
-    const Field(index: 18, name: 'Flags', description: 'Flags', type: FieldType.int32),
+    const Field(
+      index: 18,
+      name: 'Flags',
+      description: 'Flags',
+      type: FieldType.int32,
+    ),
   ],
 );
