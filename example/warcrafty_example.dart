@@ -8,8 +8,8 @@ import 'package:warcrafty/warcrafty.dart';
 void main() async {
   // 示例 1: 使用预定义的格式
   print('=== 示例 1: 使用预定义格式 ===');
-  print('Achievement 格式: ${DbcFormats.achievement}');
-  print('ChrRaces 结构: ${DbcFormats.chrRacesStruct.name}');
+  print('Achievement 格式: ${Definitions.achievement}');
+  print('ChrRaces 结构: ${Definitions.chrRacesStruct.name}');
 
   // 示例 2: 通过字符串查找格式
   print('\n=== 示例 2: 字符串查找 ===');

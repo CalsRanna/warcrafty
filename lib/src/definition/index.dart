@@ -4,8 +4,10 @@
 /// 包含所有常用 DBC 文件的格式字符串和完整字段定义。
 library;
 
-export 'base/field_definition.dart' show FieldDefinition, FieldDefinitionBuilder;
-export 'base/structure_definition.dart' show DbcStructureDefinition, DbcStructureDefinitionCollection;
+export 'base/field_definition.dart'
+    show FieldDefinition, FieldDefinitionBuilder;
+export 'base/structure_definition.dart'
+    show DbcStructureDefinition, DbcStructureDefinitionCollection;
 
 // 统一格式接口
-export 'dbc_formats.dart' show DbcFormats, DbcFormatStrings, DbcStructures;
+export 'definition.dart' show Definitions, DbcFormatStrings, DbcStructures;
