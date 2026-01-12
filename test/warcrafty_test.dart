@@ -5,6 +5,14 @@ import 'dart:typed_data';
 import 'package:test/test.dart';
 import 'package:warcrafty/warcrafty.dart';
 
+// 内部模块导入（仅用于测试）
+import 'package:warcrafty/src/utils/endian_converter.dart';
+import 'package:warcrafty/src/handlers/offset_calculator.dart';
+import 'package:warcrafty/src/core/header.dart';
+import 'package:warcrafty/src/handlers/string_handler.dart';
+import 'package:warcrafty/src/index/binary_search.dart';
+import 'package:warcrafty/src/core/locale_fields.dart';
+
 void main() {
   group('EndianConverter', () {
     test('swapInt16 swaps bytes correctly', () {
