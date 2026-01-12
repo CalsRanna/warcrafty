@@ -1,17 +1,13 @@
-/// ItemExtendedCost.dbc - 物品扩展花费格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// ItemExtendedCost 格式字符串
-const String itemExtendedCostFormat = 'niiiiiiiiiiiiiix';
 
 /// ItemExtendedCost 结构定义
-const DbcStructureDefinition itemExtendedCost = DbcStructureDefinition(
+const itemExtendedCost = DbcStructureDefinition(
   name: 'ItemExtendedCost',
-  format: itemExtendedCostFormat,
+  format: 'niiiiiiiiiiiiiix',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '扩展花费 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'ReqHonorPoints', description: '需求荣誉点数', format: DbcFieldFormat.intType),

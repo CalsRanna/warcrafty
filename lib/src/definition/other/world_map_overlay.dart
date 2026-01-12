@@ -1,17 +1,13 @@
-/// WorldMapOverlay.dbc - 世界地图覆盖层格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// WorldMapOverlay 格式字符串
-const String worldMapOverlayFormat = 'nxiiiixxxxxxxxxxx';
 
 /// WorldMapOverlay 结构定义
-const DbcStructureDefinition worldMapOverlay = DbcStructureDefinition(
+const worldMapOverlay = DbcStructureDefinition(
   name: 'WorldMapOverlay',
-  format: worldMapOverlayFormat,
+  format: 'nxiiiixxxxxxxxxxx',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Unknown1', description: '未知1', format: DbcFieldFormat.na),

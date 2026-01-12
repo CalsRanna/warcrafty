@@ -1,17 +1,13 @@
-/// SkillRaceClassInfo.dbc - 种族职业技能信息格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// SkillRaceClassInfo 格式字符串
-const String skillRaceClassInfoFormat = 'diiiixix';
 
 /// SkillRaceClassInfo 结构定义
-const DbcStructureDefinition skillRaceClassInfo = DbcStructureDefinition(
+const skillRaceClassInfo = DbcStructureDefinition(
   name: 'SkillRaceClassInfo',
-  format: skillRaceClassInfoFormat,
+  format: 'diiiixix',
   fields: [
     FieldDefinition(index: 0, name: 'SortValue', description: '排序值', format: DbcFieldFormat.sort),
     FieldDefinition(index: 1, name: 'SkillID', description: '技能 ID', format: DbcFieldFormat.intType),

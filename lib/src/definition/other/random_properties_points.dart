@@ -1,17 +1,13 @@
-/// RandomPropertiesPoints.dbc - 随机属性点数格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// RandomPropertiesPoints 格式字符串
-const String randomPropertiesPointsFormat = 'niiiiiiiiiiiiiii';
 
 /// RandomPropertiesPoints 结构定义
-const DbcStructureDefinition randomPropertiesPoints = DbcStructureDefinition(
+const randomPropertiesPoints = DbcStructureDefinition(
   name: 'RandomPropertiesPoints',
-  format: randomPropertiesPointsFormat,
+  format: 'niiiiiiiiiiiiiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Epic1', description: '史诗 1', format: DbcFieldFormat.intType),

@@ -1,6 +1,3 @@
-/// Achievement.dbc - 成就格式
-library;
-
 import 'package:warcrafty/src/core/field_format.dart';
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';

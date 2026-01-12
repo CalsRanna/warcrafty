@@ -1,17 +1,13 @@
-/// ItemRandomSuffix.dbc - 物品随机后缀格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// ItemRandomSuffix 格式字符串
-const String itemRandomSuffixFormat = 'nssssssssssssssssxxiiiiiiiiii';
 
 /// ItemRandomSuffix 结构定义
-const DbcStructureDefinition itemRandomSuffix = DbcStructureDefinition(
+const itemRandomSuffix = DbcStructureDefinition(
   name: 'ItemRandomSuffix',
-  format: itemRandomSuffixFormat,
+  format: 'nssssssssssssssssxxiiiiiiiiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Name', description: '名称', format: DbcFieldFormat.string),

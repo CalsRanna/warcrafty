@@ -1,17 +1,11 @@
-/// CharStartOutfit.dbc - 起始装备格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
-
-/// CharStartOutfit 格式字符串
-const String charStartOutfitFormat = 'dbbbXiiiiiiiiiiiiiiiiiiiiiiiixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// CharStartOutfit 结构定义
-const DbcStructureDefinition charStartOutfit = DbcStructureDefinition(
+const charStartOutfit = DbcStructureDefinition(
   name: 'CharStartOutfit',
-  format: charStartOutfitFormat,
+  format: 'dbbbXiiiiiiiiiiiiiiiiiiiiiiiixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx',
   fields: [
     FieldDefinition(index: 0, name: 'SortValue', description: '排序值', format: DbcFieldFormat.sort),
     FieldDefinition(index: 1, name: 'Race', description: '种族 ID', format: DbcFieldFormat.byte),

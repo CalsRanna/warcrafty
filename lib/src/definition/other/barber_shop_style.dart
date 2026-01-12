@@ -1,17 +1,13 @@
-/// BarberShopStyle.dbc - 理发店风格格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// BarberShopStyle 格式字符串
-const String barberShopStyleFormat = 'nixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxiii';
 
 /// BarberShopStyle 结构定义
-const DbcStructureDefinition barberShopStyle = DbcStructureDefinition(
+const barberShopStyle = DbcStructureDefinition(
   name: 'BarberShopStyle',
-  format: barberShopStyleFormat,
+  format: 'nixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '风格 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'DisplayName', description: '显示名称', format: DbcFieldFormat.string),

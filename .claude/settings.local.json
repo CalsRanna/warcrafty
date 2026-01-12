@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python refactor_definitions.py:*)",
+      "Bash(powershell -ExecutionPolicy Bypass -File:*)",
+      "Bash(dart analyze:*)",
+      "Bash(dart test:*)"
+    ]
+  }
+}

@@ -1,17 +1,13 @@
-/// Emotes.dbc - 表情格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// Emotes 格式字符串
-const String emotesFormat = 'nxxiiix';
 
 /// Emotes 结构定义
-const DbcStructureDefinition emotes = DbcStructureDefinition(
+const emotes = DbcStructureDefinition(
   name: 'Emotes',
-  format: emotesFormat,
+  format: 'nxxiiix',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '表情 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Unused1', description: '未使用', format: DbcFieldFormat.na),

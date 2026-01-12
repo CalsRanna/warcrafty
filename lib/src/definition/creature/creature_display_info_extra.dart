@@ -1,17 +1,13 @@
-/// CreatureDisplayInfoExtra.dbc - 生物显示信息扩展格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// CreatureDisplayInfoExtra 格式字符串
-const String creatureDisplayInfoExtraFormat = 'dixxxxxxxxxxxxxxxxxx';
 
 /// CreatureDisplayInfoExtra 结构定义
-const DbcStructureDefinition creatureDisplayInfoExtra = DbcStructureDefinition(
+const creatureDisplayInfoExtra = DbcStructureDefinition(
   name: 'CreatureDisplayInfoExtra',
-  format: creatureDisplayInfoExtraFormat,
+  format: 'dixxxxxxxxxxxxxxxxxx',
   fields: [
     FieldDefinition(index: 0, name: 'DisplayID', description: '显示 ID', format: DbcFieldFormat.sort),
     FieldDefinition(index: 1, name: 'NPCSoundID', description: 'NPC 声音 ID', format: DbcFieldFormat.intType),

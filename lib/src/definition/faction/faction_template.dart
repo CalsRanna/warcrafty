@@ -1,17 +1,13 @@
-/// FactionTemplate.dbc - 派系模板格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// FactionTemplate 格式字符串
-const String factionTemplateFormat = 'niiiiiiiiiiiii';
 
 /// FactionTemplate 结构定义
-const DbcStructureDefinition factionTemplate = DbcStructureDefinition(
+const factionTemplate = DbcStructureDefinition(
   name: 'FactionTemplate',
-  format: factionTemplateFormat,
+  format: 'niiiiiiiiiiiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '派系模板 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Faction', description: '派系 ID', format: DbcFieldFormat.intType),

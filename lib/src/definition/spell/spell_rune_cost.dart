@@ -1,17 +1,13 @@
-/// SpellRuneCost.dbc - 法术符文消耗格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// SpellRuneCost 格式字符串
-const String spellRuneCostFormat = 'niiii';
 
 /// SpellRuneCost 结构定义
-const DbcStructureDefinition spellRuneCost = DbcStructureDefinition(
+const spellRuneCost = DbcStructureDefinition(
   name: 'SpellRuneCost',
-  format: spellRuneCostFormat,
+  format: 'niiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'BloodCost', description: '鲜血符文消耗', format: DbcFieldFormat.intType),

@@ -1,17 +1,13 @@
-/// WorldMapArea.dbc - 世界地图区域格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// WorldMapArea 格式字符串
-const String worldMapAreaFormat = 'xinxffffixx';
 
 /// WorldMapArea 结构定义
-const DbcStructureDefinition worldMapArea = DbcStructureDefinition(
+const worldMapArea = DbcStructureDefinition(
   name: 'WorldMapArea',
-  format: worldMapAreaFormat,
+  format: 'xinxffffixx',
   fields: [
     FieldDefinition(index: 0, name: 'MapID', description: '地图 ID', format: DbcFieldFormat.na),
     FieldDefinition(index: 1, name: 'AreaID', description: '区域 ID', format: DbcFieldFormat.intType),

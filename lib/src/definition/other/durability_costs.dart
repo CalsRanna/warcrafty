@@ -1,17 +1,13 @@
-/// DurabilityCosts.dbc - 持久度花费格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// DurabilityCosts 格式字符串
-const String durabilityCostsFormat = 'niiiiiiiiiiiiiiiiiiiiiiiiiiiii';
 
 /// DurabilityCosts 结构定义
-const DbcStructureDefinition durabilityCosts = DbcStructureDefinition(
+const durabilityCosts = DbcStructureDefinition(
   name: 'DurabilityCosts',
-  format: durabilityCostsFormat,
+  format: 'niiiiiiiiiiiiiiiiiiiiiiiiiiiii',
   fields: [
     FieldDefinition(index: 0, name: 'ItemLevel', description: '物品等级', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Multiplier0', description: '乘数 0', format: DbcFieldFormat.intType),

@@ -1,17 +1,11 @@
-/// ChatChannels.dbc - 聊天频道格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
-
-/// ChatChannels 格式字符串
-const String chatChannelsFormat = 'nixssssssssssssssssxxxxxxxxxxxxxxxxxx';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// ChatChannels 结构定义
-const DbcStructureDefinition chatChannels = DbcStructureDefinition(
+const chatChannels = DbcStructureDefinition(
   name: 'ChatChannels',
-  format: chatChannelsFormat,
+  format: 'nixssssssssssssssssxxxxxxxxxxxxxxxxxx',
   fields: [
     FieldDefinition(index: 0, name: 'ChannelID', description: '频道 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Flags', description: '标志', format: DbcFieldFormat.intType),

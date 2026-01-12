@@ -1,28 +1,11 @@
-/// ChrRaces.dbc - 种族定义格式
-///
-/// 字段说明:
-/// - ID: 种族 ID
-/// - Flags: 种族标志 (CHRRACES_FLAGS_*)
-/// - FactionID: 派系模板 ID
-/// - ModelM: 男性模型 ID
-/// - ModelF: 女性模型 ID
-/// - TeamID: 团队 ID (7=Alliance, 1=Horde)
-/// - CinematicSequence: 过场动画序列 ID
-/// - Name: 种族名称 (16个本地化字符串)
-/// - Expansion: 资料片 ID (0=Vanilla, 1=TBC, 2=WotLK)
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
-
-/// ChrRaces 格式字符串 (与 AzerothCore DBCfmt.h 一致)
-const String chrRacesFormat = 'niixiixixxxxixssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxi';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// ChrRaces 结构定义
-const DbcStructureDefinition chrRaces = DbcStructureDefinition(
+const chrRaces = DbcStructureDefinition(
   name: 'ChrRaces',
-  format: chrRacesFormat,
+  format: 'niixiixixxxxixssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxi',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '种族 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Flags', description: '种族标志', format: DbcFieldFormat.intType),

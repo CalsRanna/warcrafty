@@ -1,17 +1,13 @@
-/// SkillLine.dbc - 技能线格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// SkillLine 格式字符串
-const String skillLineFormat = 'nixssssssssssssssssxxxxxxxxxxxxxxxxxxixxxxxxxxxxxxxxxxxi';
 
 /// SkillLine 结构定义
-const DbcStructureDefinition skillLine = DbcStructureDefinition(
+const skillLine = DbcStructureDefinition(
   name: 'SkillLine',
-  format: skillLineFormat,
+  format: 'nixssssssssssssssssxxxxxxxxxxxxxxxxxxixxxxxxxxxxxxxxxxxi',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '技能线 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'CategoryID', description: '类别 ID', format: DbcFieldFormat.intType),

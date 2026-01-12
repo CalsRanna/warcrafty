@@ -1,17 +1,13 @@
-/// TaxiPathNode.dbc - 航线路径节点格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// TaxiPathNode 格式字符串
-const String taxiPathNodeFormat = 'diiifffiiii';
 
 /// TaxiPathNode 结构定义
-const DbcStructureDefinition taxiPathNode = DbcStructureDefinition(
+const taxiPathNode = DbcStructureDefinition(
   name: 'TaxiPathNode',
-  format: taxiPathNodeFormat,
+  format: 'diiifffiiii',
   fields: [
     FieldDefinition(index: 0, name: 'PathID', description: '路径 ID', format: DbcFieldFormat.sort),
     FieldDefinition(index: 1, name: 'NodeIndex', description: '节点索引', format: DbcFieldFormat.intType),

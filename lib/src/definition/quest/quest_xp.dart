@@ -1,17 +1,13 @@
-/// QuestXP.dbc - 任务经验值格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// QuestXP 格式字符串
-const String questXpFormat = 'niiiiiiiiii';
 
 /// QuestXP 结构定义
-const DbcStructureDefinition questXp = DbcStructureDefinition(
+const questXp = DbcStructureDefinition(
   name: 'QuestXP',
-  format: questXpFormat,
+  format: 'niiiiiiiiii',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: 'ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'Level1', description: '等级 1', format: DbcFieldFormat.intType),

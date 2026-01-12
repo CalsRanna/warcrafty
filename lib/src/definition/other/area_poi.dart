@@ -1,17 +1,13 @@
-/// AreaPOI.dbc - 区域兴趣点格式
-library;
-
-import '../base/field_definition.dart';
-import '../base/structure_definition.dart';
-import '../../core/field_format.dart';
+import 'package:warcrafty/src/definition/base/field_definition.dart';
+import 'package:warcrafty/src/definition/base/structure_definition.dart';
+import 'package:warcrafty/src/core/field_format.dart';
 
 /// AreaPOI 格式字符串
-const String areaPoiFormat = 'niiiiiiiiiiifffixixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxix';
 
 /// AreaPOI 结构定义
-const DbcStructureDefinition areaPoi = DbcStructureDefinition(
+const areaPoi = DbcStructureDefinition(
   name: 'AreaPOI',
-  format: areaPoiFormat,
+  format: 'niiiiiiiiiiifffixixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxix',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '区域 POI ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'IconFlags', description: '图标标志', format: DbcFieldFormat.intType),
