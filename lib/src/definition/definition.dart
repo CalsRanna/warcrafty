@@ -319,15 +319,9 @@ import 'other/world_map_overlay.dart'
 /// ```
 class Definitions {
   static const achievement = structure_achievement.achievement;
-
-  static const String achievementCategory =
-      structure_achievement_category.achievementCategoryFormat;
-  static const DbcStructureDefinition achievementCategoryStruct =
+  static const achievementCategory =
       structure_achievement_category.achievementCategory;
-
-  static const String achievementCriteria =
-      structure_achievement_criteria.achievementCriteriaFormat;
-  static const DbcStructureDefinition achievementCriteriaStruct =
+  static const achievementCriteria =
       structure_achievement_criteria.achievementCriteria;
 
   // ===== 角色 =====
@@ -796,8 +790,8 @@ class DbcFormatStrings {
 
   static final Map<String, String> _nameToFormat = {
     'Achievement': Definitions.achievement.format,
-    'AchievementCategory': Definitions.achievementCategory,
-    'AchievementCriteria': Definitions.achievementCriteria,
+    'AchievementCategory': Definitions.achievementCategory.format,
+    'AchievementCriteria': Definitions.achievementCriteria.format,
     'ChrRaces': Definitions.chrRaces,
     'ChrClasses': Definitions.chrClasses,
     'CharStartOutfit': Definitions.charStartOutfit,
@@ -923,8 +917,8 @@ class DbcStructures {
 
   static final Map<String, DbcStructureDefinition> _nameToStructure = {
     'Achievement': Definitions.achievement,
-    'AchievementCategory': Definitions.achievementCategoryStruct,
-    'AchievementCriteria': Definitions.achievementCriteriaStruct,
+    'AchievementCategory': Definitions.achievementCategory,
+    'AchievementCriteria': Definitions.achievementCriteria,
     'ChrRaces': Definitions.chrRacesStruct,
     'ChrClasses': Definitions.chrClassesStruct,
     'CharStartOutfit': Definitions.charStartOutfitStruct,

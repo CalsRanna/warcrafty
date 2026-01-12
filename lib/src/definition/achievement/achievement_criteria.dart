@@ -5,13 +5,10 @@ import '../base/field_definition.dart';
 import '../base/structure_definition.dart';
 import '../../core/field_format.dart';
 
-/// AchievementCriteria 格式字符串
-const String achievementCriteriaFormat = 'niiiiiiiixxxxxxxxxxxxxxxxxiiiix';
-
 /// AchievementCriteria 结构定义
-const DbcStructureDefinition achievementCriteria = DbcStructureDefinition(
+const achievementCriteria = DbcStructureDefinition(
   name: 'AchievementCriteria',
-  format: achievementCriteriaFormat,
+  format: 'niiiiiiiixxxxxxxxxxxxxxxxxiiiix',
   fields: [
     FieldDefinition(index: 0, name: 'ID', description: '条件 ID', format: DbcFieldFormat.intType),
     FieldDefinition(index: 1, name: 'ReferredAchievement', description: '引用成就 ID', format: DbcFieldFormat.intType),
