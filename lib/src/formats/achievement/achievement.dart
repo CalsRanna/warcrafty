@@ -1,0 +1,46 @@
+/// Achievement.dbc - 成就格式
+library;
+
+import '../base/field_definition.dart';
+import '../base/structure_definition.dart';
+import '../../core/field_format.dart';
+
+/// Achievement 格式字符串
+const String achievementFormat = 'niixssssssssssssssssxxxxxxxxxxxxxxxxxxiixixxxxxxxxxxxxxxxxxxii';
+
+/// Achievement 结构定义
+const DbcStructureDefinition achievement = DbcStructureDefinition(
+  name: 'Achievement',
+  format: achievementFormat,
+  fields: [
+    FieldDefinition(index: 0, name: 'ID', description: '成就 ID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 1, name: 'RequiredFaction', description: '需求阵营 (-1=所有, 0=部落, 1=联盟)', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 2, name: 'MapID', description: '地图 ID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 3, name: 'Unused3', description: '未使用', format: DbcFieldFormat.na),
+    FieldDefinition(index: 4, name: 'Name_enUS', description: '英文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 5, name: 'Name_enGB', description: '英式英文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 6, name: 'Name_koKR', description: '韩文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 7, name: 'Name_frFR', description: '法文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 8, name: 'Name_deDE', description: '德文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 9, name: 'Name_enCN', description: '简体中文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 10, name: 'Name_zhCN', description: '繁体中文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 11, name: 'Name_zhTW', description: '台湾繁体中文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 12, name: 'Name_esES', description: '西班牙文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 13, name: 'Name_esMX', description: '墨西哥西班牙文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 14, name: 'Name_ruRU', description: '俄文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 15, name: 'Name_ptBR', description: '葡萄牙文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 16, name: 'Name_itIT', description: '意大利文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 17, name: 'Name_ptPT', description: '葡萄牙葡萄牙文名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 18, name: 'Name_unk', description: '未知语言名称', format: DbcFieldFormat.string),
+    FieldDefinition(index: 19, name: 'Name_unk2', description: '未知语言名称 2', format: DbcFieldFormat.string),
+    FieldDefinition(index: 20, name: 'Unused20', description: '未使用', format: DbcFieldFormat.na),
+    FieldDefinition(index: 21, name: 'Unused21', description: '未使用', format: DbcFieldFormat.na),
+    FieldDefinition(index: 22, name: 'CategoryID', description: '类别 ID', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 23, name: 'Points', description: '成就点数', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 24, name: 'Unused24', description: '未使用', format: DbcFieldFormat.na),
+    FieldDefinition(index: 25, name: 'Flags', description: '标志', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 26, name: 'Unused26', description: '未使用', format: DbcFieldFormat.na),
+    FieldDefinition(index: 27, name: 'Count', description: '需求计数', format: DbcFieldFormat.intType),
+    FieldDefinition(index: 28, name: 'RefAchievement', description: '引用成就', format: DbcFieldFormat.intType),
+  ],
+);

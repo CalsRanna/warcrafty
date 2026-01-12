@@ -1,0 +1,14 @@
+name: warcrafty
+description: A high-performance Dart library for reading and writing World of Warcraft DBC files.
+version: 1.0.0
+repository: https://github.com/calsranna/warcrafty
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  # path: ^1.9.0
+
+dev_dependencies:
+  lints: ^6.0.0
+  test: ^1.25.6
