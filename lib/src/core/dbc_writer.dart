@@ -33,22 +33,8 @@ final class DbcWriter {
       // 构建字符串表
       final stringTableBuilder = StringTableBuilder();
 
-      // 第一遍：收集所有字符串
-      for (final record in records) {
-        if (record.length != _fieldCount) {
-          throw FormatException(
-            'Record field count mismatch: expected $_fieldCount, got ${record.length}',
-          );
-        }
-
-        for (int i = 0; i < _fieldCount; i++) {
-          final format = DbcFieldFormat.fromChar(_format[i]);
-          if (format == DbcFieldFormat.string) {
-            final str = record[i] as String;
-            stringTableBuilder.addString(str);
-          }
-        }
-      }
+      // 第一遍：验证并收集所有字符串
+      _collectStrings(records, stringTableBuilder);
 
       final stringTable = stringTableBuilder.build();
 
@@ -84,22 +70,8 @@ final class DbcWriter {
       // 构建字符串表
       final stringTableBuilder = StringTableBuilder();
 
-      // 第一遍：收集所有字符串
-      for (final record in records) {
-        if (record.length != _fieldCount) {
-          throw FormatException(
-            'Record field count mismatch: expected $_fieldCount, got ${record.length}',
-          );
-        }
-
-        for (int i = 0; i < _fieldCount; i++) {
-          final format = DbcFieldFormat.fromChar(_format[i]);
-          if (format == DbcFieldFormat.string) {
-            final str = record[i] as String;
-            stringTableBuilder.addString(str);
-          }
-        }
-      }
+      // 第一遍：验证并收集所有字符串
+      _collectStrings(records, stringTableBuilder);
 
       final stringTable = stringTableBuilder.build();
 
@@ -127,6 +99,94 @@ final class DbcWriter {
     }
   }
 
+  /// 收集所有字符串并验证记录格式
+  ///
+  /// [records] - 记录列表
+  /// [stringTableBuilder] - 字符串表构建器
+  void _collectStrings(
+    List<List<dynamic>> records,
+    StringTableBuilder stringTableBuilder,
+  ) {
+    for (int recordIndex = 0; recordIndex < records.length; recordIndex++) {
+      final record = records[recordIndex];
+
+      if (record.length != _fieldCount) {
+        throw FormatException(
+          'Record $recordIndex field count mismatch: expected $_fieldCount, got ${record.length}',
+        );
+      }
+
+      for (int i = 0; i < _fieldCount; i++) {
+        final format = DbcFieldFormat.fromChar(_format[i]);
+        final value = record[i];
+
+        // 验证字段类型
+        _validateFieldType(recordIndex, i, format, value);
+
+        // 收集字符串
+        if (format == DbcFieldFormat.string) {
+          stringTableBuilder.addString(value as String);
+        }
+      }
+    }
+  }
+
+  /// 验证字段值类型是否与格式匹配
+  ///
+  /// [recordIndex] - 记录索引
+  /// [fieldIndex] - 字段索引
+  /// [format] - 字段格式
+  /// [value] - 字段值
+  void _validateFieldType(
+    int recordIndex,
+    int fieldIndex,
+    DbcFieldFormat format,
+    dynamic value,
+  ) {
+    switch (format) {
+      case DbcFieldFormat.byte:
+      case DbcFieldFormat.intType:
+      case DbcFieldFormat.indexField:
+        if (value is! int) {
+          throw WriteException(
+            'Record $recordIndex, field $fieldIndex: expected int, got ${value.runtimeType}',
+          );
+        }
+        if (format == DbcFieldFormat.byte && (value < 0 || value > 255)) {
+          throw WriteException(
+            'Record $recordIndex, field $fieldIndex: byte value $value out of range [0, 255]',
+          );
+        }
+        break;
+      case DbcFieldFormat.float:
+        if (value is! num) {
+          throw WriteException(
+            'Record $recordIndex, field $fieldIndex: expected num (int or double), got ${value.runtimeType}',
+          );
+        }
+        break;
+      case DbcFieldFormat.string:
+        if (value is! String) {
+          throw WriteException(
+            'Record $recordIndex, field $fieldIndex: expected String, got ${value.runtimeType}',
+          );
+        }
+        break;
+      case DbcFieldFormat.logic:
+        if (value is! bool) {
+          throw WriteException(
+            'Record $recordIndex, field $fieldIndex: expected bool, got ${value.runtimeType}',
+          );
+        }
+        break;
+      case DbcFieldFormat.na:
+      case DbcFieldFormat.naByte:
+      case DbcFieldFormat.sort:
+        // 跳过字段，不验证
+        break;
+    }
+  }
+
   /// 编码单条记录
   Uint8List _encodeRecord(
     List<dynamic> record,
@@ -148,7 +208,7 @@ final class DbcWriter {
           bytes.setInt32(offset, value as int, Endian.little);
           break;
         case DbcFieldFormat.float:
-          bytes.setFloat32(offset, (value as double).toDouble(), Endian.little);
+          bytes.setFloat32(offset, (value as num).toDouble(), Endian.little);
           break;
         case DbcFieldFormat.string:
           final stringOffset = stringTableBuilder.addString(value as String);

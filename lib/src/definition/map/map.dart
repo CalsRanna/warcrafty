@@ -1,75 +1,35 @@
+import 'package:warcrafty/src/core/field_format.dart';
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
-
-/// Map 格式字符串
+import 'package:warcrafty/src/definition/common/locale_fields.dart';
 
 /// Map 结构定义
-const DbcStructureDefinition mapEntry = DbcStructureDefinition(
+///
+/// 格式字符串参考 AzerothCore DBCfmt.h:
+/// char constexpr MapEntryfmt[] = "nxixxssssssssssssssssxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxixifffii";
+final mapEntry = DbcStructureDefinition(
   name: 'Map',
   format: 'nxiixssssssssssssssssxixxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxixiffxixi',
   fields: [
-    FieldDefinition(index: 0, name: 'MapID', description: '地图 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'InternalName', description: '内部名称', format: DbcFieldFormat.na),
-    FieldDefinition(index: 2, name: 'MapType', description: '地图类型', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'Flags', description: '标志', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'Name_enUS', description: '英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 5, name: 'Name_enGB', description: '英式英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 6, name: 'Name_koKR', description: '韩文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 7, name: 'Name_frFR', description: '法文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 8, name: 'Name_deDE', description: '德文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 9, name: 'Name_enCN', description: '简体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 10, name: 'Name_zhCN', description: '繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 11, name: 'Name_zhTW', description: '台湾繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 12, name: 'Name_esES', description: '西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 13, name: 'Name_esMX', description: '墨西哥西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 14, name: 'Name_ruRU', description: '俄文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 15, name: 'Name_ptBR', description: '葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 16, name: 'Name_itIT', description: '意大利文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 17, name: 'Name_ptPT', description: '葡萄牙葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 18, name: 'Name_unk', description: '未知语言名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 19, name: 'Name_unk2', description: '未知语言名称 2', format: DbcFieldFormat.string),
-    FieldDefinition(index: 20, name: 'LinkedZone', description: '关联区域', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 21, name: 'HordeIntro_enUS', description: '部落介绍文本', format: DbcFieldFormat.string),
-    FieldDefinition(index: 22, name: 'HordeIntro_enGB', description: '部落英式英文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 23, name: 'HordeIntro_koKR', description: '部落韩文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 24, name: 'HordeIntro_frFR', description: '部落法文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 25, name: 'HordeIntro_deDE', description: '部落德文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 26, name: 'HordeIntro_enCN', description: '部落简体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 27, name: 'HordeIntro_zhCN', description: '部落繁体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 28, name: 'HordeIntro_zhTW', description: '部落台湾繁体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 29, name: 'HordeIntro_esES', description: '部落西班牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 30, name: 'HordeIntro_esMX', description: '部落墨西哥西班牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 31, name: 'HordeIntro_ruRU', description: '部落俄文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 32, name: 'HordeIntro_ptBR', description: '部落葡萄牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 33, name: 'HordeIntro_itIT', description: '部落意大利文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 34, name: 'HordeIntro_ptPT', description: '部落葡萄牙葡萄牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 35, name: 'HordeIntro_unk', description: '部落未知语言介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 36, name: 'HordeIntro_unk2', description: '部落未知语言介绍 2', format: DbcFieldFormat.string),
-    FieldDefinition(index: 37, name: 'AllianceIntro_enUS', description: '联盟介绍文本', format: DbcFieldFormat.string),
-    FieldDefinition(index: 38, name: 'AllianceIntro_enGB', description: '联盟英式英文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 39, name: 'AllianceIntro_koKR', description: '联盟韩文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 40, name: 'AllianceIntro_frFR', description: '联盟法文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 41, name: 'AllianceIntro_deDE', description: '联盟德文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 42, name: 'AllianceIntro_enCN', description: '联盟简体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 43, name: 'AllianceIntro_zhCN', description: '联盟繁体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 44, name: 'AllianceIntro_zhTW', description: '联盟台湾繁体中文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 45, name: 'AllianceIntro_esES', description: '联盟西班牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 46, name: 'AllianceIntro_esMX', description: '联盟墨西哥西班牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 47, name: 'AllianceIntro_ruRU', description: '联盟俄文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 48, name: 'AllianceIntro_ptBR', description: '联盟葡萄牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 49, name: 'AllianceIntro_itIT', description: '联盟意大利文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 50, name: 'AllianceIntro_ptPT', description: '联盟葡萄牙葡萄牙文介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 51, name: 'AllianceIntro_unk', description: '联盟未知语言介绍', format: DbcFieldFormat.string),
-    FieldDefinition(index: 52, name: 'AllianceIntro_unk2', description: '联盟未知语言介绍 2', format: DbcFieldFormat.string),
-    FieldDefinition(index: 53, name: 'MultiMapID', description: '多地图 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 54, name: ' BattlefieldMapIconScale', description: '战场地图图标缩放', format: DbcFieldFormat.float),
-    FieldDefinition(index: 55, name: 'EntranceMap', description: '入口地图 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 56, name: 'EntranceX', description: '入口 X 坐标', format: DbcFieldFormat.float),
-    FieldDefinition(index: 57, name: 'EntranceY', description: '入口 Y 坐标', format: DbcFieldFormat.float),
-    FieldDefinition(index: 58, name: 'TimeOfDayOverride', description: '时间覆盖', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 59, name: 'ExpansionID', description: '资料片 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 60, name: 'RaidOffset', description: '副本偏移', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 61, name: 'MaxPlayers', description: '最大玩家数', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 0, name: 'MapID', description: '地图 ID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 1, name: 'InternalName', description: '内部名称', format: DbcFieldFormat.na),
+    const FieldDefinition(index: 2, name: 'MapType', description: '地图类型', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 3, name: 'Flags', description: '标志', format: DbcFieldFormat.intType),
+    // 名称字段 (4-19): 16 种语言
+    ...createLocaleFields(4, 'Name', '地图名称'),
+    const FieldDefinition(index: 20, name: 'LinkedZone', description: '关联区域', format: DbcFieldFormat.intType),
+    // 部落介绍字段 (21-36): 16 种语言 (未使用)
+    ...createUnusedFields(21, 16, baseName: 'HordeIntro'),
+    // 联盟介绍字段 (37-52): 16 种语言 (未使用)
+    ...createUnusedFields(37, 16, baseName: 'AllianceIntro'),
+    const FieldDefinition(index: 53, name: 'MultiMapID', description: '多地图 ID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 54, name: 'BattlefieldMapIconScale', description: '战场地图图标缩放', format: DbcFieldFormat.float),
+    const FieldDefinition(index: 55, name: 'EntranceMap', description: '入口地图 ID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 56, name: 'EntranceX', description: '入口 X 坐标', format: DbcFieldFormat.float),
+    const FieldDefinition(index: 57, name: 'EntranceY', description: '入口 Y 坐标', format: DbcFieldFormat.float),
+    const FieldDefinition(index: 58, name: 'TimeOfDayOverride', description: '时间覆盖', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 59, name: 'ExpansionID', description: '资料片 ID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 60, name: 'RaidOffset', description: '副本偏移', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 61, name: 'MaxPlayers', description: '最大玩家数', format: DbcFieldFormat.intType),
   ],
 );

@@ -157,15 +157,15 @@ import 'other/world_map_overlay.dart' as structure_world_map_overlay;
 /// ```
 class Definitions {
   // ===== 成就 =====
-  static const achievement = structure_achievement.achievement;
+  static final achievement = structure_achievement.achievement;
   static const achievementCategory =
       structure_achievement_category.achievementCategory;
   static const achievementCriteria =
       structure_achievement_criteria.achievementCriteria;
 
   // ===== 角色 =====
-  static const chrRaces = structure_chr_races.chrRaces;
-  static const chrClasses = structure_chr_classes.chrClasses;
+  static final chrRaces = structure_chr_races.chrRaces;
+  static final chrClasses = structure_chr_classes.chrClasses;
   static const charStartOutfit = structure_char_start_outfit.charStartOutfit;
   static const charTitles = structure_char_titles.charTitles;
   static const chatChannels = structure_chat_channels.chatChannels;
@@ -173,7 +173,7 @@ class Definitions {
   static const talentTab = structure_talent_tab.talentTab;
 
   // ===== 生物 =====
-  static const creatureFamily = structure_creature_family.creatureFamily;
+  static final creatureFamily = structure_creature_family.creatureFamily;
   static const creatureDisplayInfo =
       structure_creature_display_info.creatureDisplayInfo;
   static const creatureDisplayInfoExtra =
@@ -185,7 +185,7 @@ class Definitions {
   static const creatureType = structure_creature_type.creatureType;
 
   // ===== 派系 =====
-  static const faction = structure_faction.faction;
+  static final faction = structure_faction.faction;
   static const factionTemplate = structure_faction_template.factionTemplate;
 
   // ===== 游戏对象 =====
@@ -194,7 +194,7 @@ class Definitions {
 
   // ===== 物品 =====
   static const item = structure_item.item;
-  static const itemSet = structure_item_set.itemSet;
+  static final itemSet = structure_item_set.itemSet;
   static const itemExtendedCost =
       structure_item_extended_cost.itemExtendedCost;
   static const itemBagFamily = structure_item_bag_family.itemBagFamily;
@@ -209,10 +209,10 @@ class Definitions {
   static const gemProperties = structure_gem_properties.gemProperties;
 
   // ===== 地图 =====
-  static const mapEntry = structure_map_entry.mapEntry;
-  static const areaTable = structure_area_table.areaTable;
+  static final mapEntry = structure_map_entry.mapEntry;
+  static final areaTable = structure_area_table.areaTable;
   static const areaGroup = structure_area_group.areaGroup;
-  static const dungeonEncounter =
+  static final dungeonEncounter =
       structure_dungeon_encounter.dungeonEncounter;
   static const mapDifficulty = structure_map_difficulty.mapDifficulty;
 
@@ -223,7 +223,7 @@ class Definitions {
       structure_quest_faction_reward.questFactionReward;
 
   // ===== 技能 =====
-  static const skillLine = structure_skill_line.skillLine;
+  static final skillLine = structure_skill_line.skillLine;
   static const skillLineAbility =
       structure_skill_line_ability.skillLineAbility;
   static const skillRaceClassInfo =
@@ -231,7 +231,7 @@ class Definitions {
   static const skillTiers = structure_skill_tiers.skillTiers;
 
   // ===== 法术 =====
-  static const spell = structure_spell.spell;
+  static final spell = structure_spell.spell;
   static const spellDuration = structure_spell_duration.spellDuration;
   static const spellRange = structure_spell_range.spellRange;
   static const spellCastTime = structure_spell_cast_time.spellCastTime;
@@ -318,12 +318,12 @@ class Definitions {
       structure_stable_slot_prices.stableSlotPrices;
   static const summonProperties =
       structure_summon_properties.summonProperties;
-  static const taxiNodes = structure_taxi_nodes.taxiNodes;
+  static final taxiNodes = structure_taxi_nodes.taxiNodes;
   static const taxiPath = structure_taxi_path.taxiPath;
   static const taxiPathNode = structure_taxi_path_node.taxiPathNode;
   static const teamContributionPoints =
       structure_team_contribution_points.teamContributionPoints;
-  static const totemCategory = structure_totem_category.totemCategory;
+  static final totemCategory = structure_totem_category.totemCategory;
   static const transportAnimation =
       structure_transport_animation.transportAnimation;
   static const transportRotation =

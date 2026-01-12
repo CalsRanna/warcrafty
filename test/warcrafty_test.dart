@@ -568,4 +568,103 @@ void main() {
       }
     });
   });
+
+  group('DbcWriter Type Validation', () {
+    test('throws on wrong integer type', () {
+      final testFile = File('${Directory.systemTemp.path}/test_type_int.dbc');
+
+      expect(
+        () => DbcWriter.writeToPath(testFile.path, 'ni', [
+          [1, 'not an int'], // 应该是 int，给了 String
+        ]),
+        throwsA(isA<WriteException>()),
+      );
+    });
+
+    test('throws on wrong string type', () {
+      final testFile = File('${Directory.systemTemp.path}/test_type_str.dbc');
+
+      expect(
+        () => DbcWriter.writeToPath(testFile.path, 'ns', [
+          [1, 123], // 应该是 String，给了 int
+        ]),
+        throwsA(isA<WriteException>()),
+      );
+    });
+
+    test('throws on wrong float type', () {
+      final testFile = File('${Directory.systemTemp.path}/test_type_float.dbc');
+
+      expect(
+        () => DbcWriter.writeToPath(testFile.path, 'nf', [
+          [1, 'not a float'], // 应该是 num，给了 String
+        ]),
+        throwsA(isA<WriteException>()),
+      );
+    });
+
+    test('throws on byte out of range', () {
+      final testFile = File('${Directory.systemTemp.path}/test_type_byte.dbc');
+
+      expect(
+        () => DbcWriter.writeToPath(testFile.path, 'nb', [
+          [1, 300], // byte 范围是 0-255
+        ]),
+        throwsA(isA<WriteException>()),
+      );
+    });
+
+    test('accepts int for float field', () async {
+      final testFile = File('${Directory.systemTemp.path}/test_int_float.dbc');
+
+      try {
+        // int 可以用于 float 字段（num 类型）
+        DbcWriter.writeToPath(testFile.path, 'nf', [
+          [1, 42], // int 可以转为 double
+        ]);
+
+        final loader = DbcLoader.loadFromPath(testFile.path, 'nf');
+        expect(loader.getRecord(0).getFloat(1), equals(42.0));
+        loader.close();
+      } finally {
+        if (await testFile.exists()) {
+          await testFile.delete();
+        }
+      }
+    });
+  });
+
+  group('Format Definition Validation', () {
+    test('Achievement format length matches field count', () {
+      final achievementDef = Definitions.achievement;
+      expect(
+        achievementDef.format.length,
+        equals(62), // niixssssssssssssssssxxxxxxxxxxxxxxxxxxiixixxxxxxxxxxxxxxxxxxii = 62 字符
+      );
+    });
+
+    test('TotemCategory format length matches field count', () {
+      final totemCategoryDef = Definitions.totemCategory;
+      expect(
+        totemCategoryDef.format.length,
+        equals(20), // nxxxxxxxxxxxxxxxxxii = 20 字符
+      );
+    });
+
+    test('locale fields helper creates correct count', () {
+      final fields = createLocaleFields(0, 'Name', '名称');
+      expect(fields.length, equals(16));
+      expect(fields.first.name, equals('Name_enUS'));
+      expect(fields.last.name, equals('Name_unk3'));
+    });
+
+    test('unused fields helper creates correct count', () {
+      final fields = createUnusedFields(10, 5);
+      expect(fields.length, equals(5));
+      expect(fields.first.index, equals(10));
+      expect(fields.first.name, equals('Unused10'));
+      expect(fields.last.index, equals(14));
+      expect(fields.last.name, equals('Unused14'));
+    });
+  });
 }

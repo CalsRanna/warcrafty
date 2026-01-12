@@ -1,52 +1,46 @@
+import 'package:warcrafty/src/core/field_format.dart';
 import 'package:warcrafty/src/definition/base/field_definition.dart';
 import 'package:warcrafty/src/definition/base/structure_definition.dart';
-import 'package:warcrafty/src/core/field_format.dart';
-
-/// Faction 格式字符串
+import 'package:warcrafty/src/definition/common/locale_fields.dart';
 
 /// Faction 结构定义
-const faction = DbcStructureDefinition(
+///
+/// 格式字符串参考 AzerothCore DBCfmt.h:
+/// char constexpr FactionEntryfmt[] = "niiiiiiiiiiiiiiiiiiffixssssssssssssssssxxxxxxxxxxxxxxxxxx";
+final faction = DbcStructureDefinition(
   name: 'Faction',
   format: 'niiiiiiiiiiiiiiiiiiffixssssssssssssssssxxxxxxxxxxxxxxxxxx',
   fields: [
-    FieldDefinition(index: 0, name: 'ID', description: '派系 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 1, name: 'ReputationListID', description: '声望列表 ID', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 2, name: 'BaseRepRaceMask0', description: '基础声望种族掩码 0', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 3, name: 'BaseRepRaceMask1', description: '基础声望种族掩码 1', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 4, name: 'BaseRepRaceMask2', description: '基础声望种族掩码 2', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 5, name: 'BaseRepRaceMask3', description: '基础声望种族掩码 3', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 6, name: 'BaseRepClassMask0', description: '基础声望职业掩码 0', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 7, name: 'BaseRepClassMask1', description: '基础声望职业掩码 1', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 8, name: 'BaseRepClassMask2', description: '基础声望职业掩码 2', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 9, name: 'BaseRepClassMask3', description: '基础声望职业掩码 3', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 10, name: 'BaseRepValue0', description: '基础声望值 0', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 11, name: 'BaseRepValue1', description: '基础声望值 1', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 12, name: 'BaseRepValue2', description: '基础声望值 2', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 13, name: 'BaseRepValue3', description: '基础声望值 3', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 14, name: 'ReputationFlags0', description: '声望标志 0', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 15, name: 'ReputationFlags1', description: '声望标志 1', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 16, name: 'ReputationFlags2', description: '声望标志 2', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 17, name: 'ReputationFlags3', description: '声望标志 3', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 18, name: 'Team', description: '团队', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 19, name: 'SpilloverRateIn', description: '溢出率输入', format: DbcFieldFormat.float),
-    FieldDefinition(index: 20, name: 'SpilloverRateOut', description: '溢出率输出', format: DbcFieldFormat.float),
-    FieldDefinition(index: 21, name: 'SpilloverMaxRankIn', description: '溢出最大等级输入', format: DbcFieldFormat.intType),
-    FieldDefinition(index: 22, name: 'Unused22', description: '未使用', format: DbcFieldFormat.na),
-    FieldDefinition(index: 23, name: 'Name_enUS', description: '英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 24, name: 'Name_enGB', description: '英式英文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 25, name: 'Name_koKR', description: '韩文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 26, name: 'Name_frFR', description: '法文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 27, name: 'Name_deDE', description: '德文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 28, name: 'Name_enCN', description: '简体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 29, name: 'Name_zhCN', description: '繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 30, name: 'Name_zhTW', description: '台湾繁体中文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 31, name: 'Name_esES', description: '西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 32, name: 'Name_esMX', description: '墨西哥西班牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 33, name: 'Name_ruRU', description: '俄文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 34, name: 'Name_ptBR', description: '葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 35, name: 'Name_itIT', description: '意大利文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 36, name: 'Name_ptPT', description: '葡萄牙葡萄牙文名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 37, name: 'Name_unk', description: '未知语言名称', format: DbcFieldFormat.string),
-    FieldDefinition(index: 38, name: 'Name_unk2', description: '未知语言名称 2', format: DbcFieldFormat.string),
+    const FieldDefinition(index: 0, name: 'ID', description: '派系 ID', format: DbcFieldFormat.indexField),
+    const FieldDefinition(index: 1, name: 'ReputationIndex', description: '声望索引', format: DbcFieldFormat.intType),
+    // 基础声望种族掩码 (2-5)
+    const FieldDefinition(index: 2, name: 'ReputationRaceMask0', description: '声望种族掩码 0', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 3, name: 'ReputationRaceMask1', description: '声望种族掩码 1', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 4, name: 'ReputationRaceMask2', description: '声望种族掩码 2', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 5, name: 'ReputationRaceMask3', description: '声望种族掩码 3', format: DbcFieldFormat.intType),
+    // 基础声望职业掩码 (6-9)
+    const FieldDefinition(index: 6, name: 'ReputationClassMask0', description: '声望职业掩码 0', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 7, name: 'ReputationClassMask1', description: '声望职业掩码 1', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 8, name: 'ReputationClassMask2', description: '声望职业掩码 2', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 9, name: 'ReputationClassMask3', description: '声望职业掩码 3', format: DbcFieldFormat.intType),
+    // 基础声望值 (10-13)
+    const FieldDefinition(index: 10, name: 'ReputationBase0', description: '声望基础值 0', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 11, name: 'ReputationBase1', description: '声望基础值 1', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 12, name: 'ReputationBase2', description: '声望基础值 2', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 13, name: 'ReputationBase3', description: '声望基础值 3', format: DbcFieldFormat.intType),
+    // 声望标志 (14-17)
+    const FieldDefinition(index: 14, name: 'ReputationFlags0', description: '声望标志 0', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 15, name: 'ReputationFlags1', description: '声望标志 1', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 16, name: 'ReputationFlags2', description: '声望标志 2', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 17, name: 'ReputationFlags3', description: '声望标志 3', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 18, name: 'ParentFactionID', description: '父派系 ID', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 19, name: 'ParentFactionMod0', description: '父派系修正值 0', format: DbcFieldFormat.float),
+    const FieldDefinition(index: 20, name: 'ParentFactionMod1', description: '父派系修正值 1', format: DbcFieldFormat.float),
+    const FieldDefinition(index: 21, name: 'ParentFactionCap0', description: '父派系上限 0', format: DbcFieldFormat.intType),
+    const FieldDefinition(index: 22, name: 'ParentFactionCap1', description: '父派系上限 1 (未使用)', format: DbcFieldFormat.na),
+    // 名称字段 (23-38): 16 种语言
+    ...createLocaleFields(23, 'Name', '派系名称'),
+    // 未使用字段 (39-56): 18 个 x (描述字段等)
+    ...createUnusedFields(39, 18),
   ],
 );

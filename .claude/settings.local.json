@@ -4,7 +4,14 @@
       "Bash(python refactor_definitions.py:*)",
       "Bash(powershell -ExecutionPolicy Bypass -File:*)",
       "Bash(dart analyze:*)",
-      "Bash(dart test:*)"
+      "Bash(dart test:*)",
+      "Bash(dir /s /b *.dart)",
+      "Bash(dart pub get:*)",
+      "Bash(wc:*)",
+      "Bash(grep:*)",
+      "mcp__dart-mcp-server__add_roots",
+      "mcp__dart-mcp-server__analyze_files",
+      "mcp__dart-mcp-server__run_tests"
     ]
   }
 }

@@ -55,8 +55,8 @@ final class BinarySearch {
   /// [list] - 已排序的列表
   /// [target] - 目标值
   /// [keyExtractor] - 从元素提取键的函数
-  /// 返回查找结果
-  static BinarySearchResult<int> searchByKey<T>(
+  /// 返回查找结果，未找到时 value 为 null
+  static BinarySearchResult<int?> searchByKey<T>(
     List<T> list,
     int target,
     int Function(T element) keyExtractor,
@@ -78,7 +78,7 @@ final class BinarySearch {
       }
     }
 
-    return BinarySearchResult(-1, 0, false);
+    return BinarySearchResult(-1, null, false);
   }
 
   /// 在已排序的列表中查找第一个大于或等于目标值的位置
