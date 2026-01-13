@@ -134,7 +134,20 @@ final class DbcLoader {
     if (index < 0 || index >= header.recordCount) {
       throw RecordIndexOutOfRangeException(index, header.recordCount);
     }
-    return DbcRecord(this, index);
+
+    final recordOffset = header.recordSize * index;
+    final recordData = ByteData.sublistView(
+      data,
+      recordOffset,
+      recordOffset + header.recordSize,
+    );
+
+    return DbcRecord(
+      index: index,
+      data: recordData,
+      offsets: offsets,
+      strings: strings,
+    );
   }
 
   /// 迭代所有记录
