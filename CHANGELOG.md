@@ -1,3 +1,18 @@
+## 1.0.1
+
+### Fixed
+
+- **Exception Handling**
+  - Replace `FormatException` with `DbcFormatException` for consistent error handling across DBC operations
+  - Improved error specificity for format-related issues
+
+### Refactored
+
+- **Code Cleanup**
+  - Removed redundant `fieldOffsets` getter from `DbcLoader`
+  - Simplified `loader.dart` by eliminating unnecessary field offset delegation
+  - Updated `DbcIndex` to directly access field offsets from loader's internal structure
+
 ## 1.0.0
 
 ### Added
