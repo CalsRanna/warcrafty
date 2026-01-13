@@ -3,14 +3,13 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:test/test.dart';
-import 'package:warcrafty/warcrafty.dart';
-
+import 'package:warcrafty/src/internal/header.dart';
 // 内部模块导入（仅用于测试）
 import 'package:warcrafty/src/internal/offset.dart';
-import 'package:warcrafty/src/internal/header.dart';
-import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/internal/search.dart';
+import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/warcrafty.dart';
 
 void main() {
   group('FieldType', () {
@@ -572,7 +571,8 @@ void main() {
         ]);
 
         final loader = DbcLoader(testFile.path, 'nf');
-        expect(loader.getRecord(0).getFloat(1), equals(42.0));      } finally {
+        expect(loader.getRecord(0).getFloat(1), equals(42.0));
+      } finally {
         if (await testFile.exists()) {
           await testFile.delete();
         }

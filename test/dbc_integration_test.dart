@@ -3,6 +3,138 @@ import 'dart:io';
 import 'package:test/test.dart';
 import 'package:warcrafty/warcrafty.dart';
 
+void main() {
+  final dbcDir = Directory(dbcDirPath);
+
+  group('DBC 文件集成测试', () {
+    setUpAll(() {
+      if (!dbcDir.existsSync()) {
+        print('跳过 DBC 集成测试: 目录不存在 $dbcDirPath');
+      }
+    });
+
+    test('DBC 目录存在且包含文件', () {
+      if (!dbcDir.existsSync()) {
+        markTestSkipped('DBC 目录不存在: $dbcDirPath');
+        return;
+      }
+
+      final dbcFiles = dbcDir
+          .listSync()
+          .whereType<File>()
+          .where((f) => f.path.toLowerCase().endsWith('.dbc'))
+          .toList();
+
+      expect(dbcFiles, isNotEmpty, reason: 'DBC 目录应包含 .dbc 文件');
+      print('发现 ${dbcFiles.length} 个 DBC 文件');
+    });
+
+    test('已定义格式数量检查', () {
+      expect(
+        dbcDefinitions.length,
+        greaterThanOrEqualTo(200),
+        reason: '应该定义至少 200 个 DBC 格式',
+      );
+      print('已定义 ${dbcDefinitions.length} 个 DBC 格式');
+    });
+
+    // 为每个已定义的 DBC 文件创建单独的测试
+    for (final entry in dbcDefinitions.entries) {
+      final fileName = entry.key;
+      final definition = entry.value;
+
+      test('读取 $fileName', () {
+        if (!dbcDir.existsSync()) {
+          markTestSkipped('DBC 目录不存在');
+          return;
+        }
+
+        final file = File('$dbcDirPath/$fileName');
+        if (!file.existsSync()) {
+          markTestSkipped('文件不存在: $fileName');
+          return;
+        }
+
+        // 尝试加载 DBC 文件
+        final loader = DbcLoader(file.path, definition.format);
+
+        // 验证基本属性
+        expect(loader.recordCount, greaterThanOrEqualTo(0));
+
+        // 如果有记录，验证第一条记录可以被读取
+        if (loader.recordCount > 0) {
+          final firstRecord = loader.records.first;
+          // 尝试转换为 Map 验证所有字段访问
+          final map = firstRecord.toMap();
+          expect(map, isNotEmpty);
+        }
+      });
+    }
+  });
+
+  group('DBC 文件批量读取汇总', () {
+    test('批量读取所有已定义的 DBC 文件', () {
+      if (!dbcDir.existsSync()) {
+        markTestSkipped('DBC 目录不存在: $dbcDirPath');
+        return;
+      }
+
+      int successCount = 0;
+      int failCount = 0;
+      int skipCount = 0;
+      final List<String> failures = [];
+
+      for (final entry in dbcDefinitions.entries) {
+        final fileName = entry.key;
+        final definition = entry.value;
+        final file = File('$dbcDirPath/$fileName');
+
+        if (!file.existsSync()) {
+          skipCount++;
+          continue;
+        }
+
+        try {
+          final loader = DbcLoader(file.path, definition.format);
+          final recordCount = loader.records.length;
+
+          // 验证记录可读
+          if (recordCount > 0) {
+            loader.records.first.toMap();
+          }
+
+          successCount++;
+        } catch (e) {
+          failCount++;
+          failures.add('$fileName: $e');
+        }
+      }
+
+      print('');
+      print('=' * 60);
+      print('DBC 文件批量读取结果');
+      print('=' * 60);
+      print('成功: $successCount');
+      print('失败: $failCount');
+      print('跳过 (文件不存在): $skipCount');
+
+      if (failures.isNotEmpty) {
+        print('');
+        print('失败详情:');
+        for (final f in failures) {
+          print('  - $f');
+        }
+      }
+
+      // 断言：所有存在的文件都应该成功读取
+      expect(failCount, equals(0), reason: '所有 DBC 文件应该都能成功读取');
+    });
+  });
+}
+
+/// DBC 文件目录路径
+const dbcDirPath = r'dbc';
+
 /// DBC 文件名到定义的映射 (基于自动生成的 definition.dart)
 final Map<String, DbcSchema> dbcDefinitions = {
   // achievement
@@ -241,7 +373,8 @@ final Map<String, DbcSchema> dbcDefinitions = {
   'SpellFocusObject.dbc': Definitions.spellFocusObject,
   'SpellIcon.dbc': Definitions.spellIcon,
   'SpellItemEnchantment.dbc': Definitions.spellItemEnchantment,
-  'SpellItemEnchantmentCondition.dbc': Definitions.spellItemEnchantmentCondition,
+  'SpellItemEnchantmentCondition.dbc':
+      Definitions.spellItemEnchantmentCondition,
   'SpellMechanic.dbc': Definitions.spellMechanic,
   'SpellMissile.dbc': Definitions.spellMissile,
   'SpellMissileMotion.dbc': Definitions.spellMissileMotion,
@@ -254,7 +387,8 @@ final Map<String, DbcSchema> dbcDefinitions = {
   'SpellVisualKit.dbc': Definitions.spellVisualKit,
   'SpellVisualKitAreaModel.dbc': Definitions.spellVisualKitAreaModel,
   'SpellVisualKitModelAttach.dbc': Definitions.spellVisualKitModelAttach,
-  'SpellVisualPrecastTransitions.dbc': Definitions.spellVisualPrecastTransitions,
+  'SpellVisualPrecastTransitions.dbc':
+      Definitions.spellVisualPrecastTransitions,
   'TotemCategory.dbc': Definitions.totemCategory,
 
   // talent
@@ -286,135 +420,3 @@ final Map<String, DbcSchema> dbcDefinitions = {
   'gtRegenHPPerSpt.dbc': Definitions.gtregenHPPerSpt,
   'gtRegenMPPerSpt.dbc': Definitions.gtregenMPPerSpt,
 };
-
-/// DBC 文件目录路径
-const dbcDirPath = r'D:\Simulators\AzerothCore\core\dbc';
-
-void main() {
-  final dbcDir = Directory(dbcDirPath);
-
-  group('DBC 文件集成测试', () {
-    setUpAll(() {
-      if (!dbcDir.existsSync()) {
-        print('跳过 DBC 集成测试: 目录不存在 $dbcDirPath');
-      }
-    });
-
-    test('DBC 目录存在且包含文件', () {
-      if (!dbcDir.existsSync()) {
-        markTestSkipped('DBC 目录不存在: $dbcDirPath');
-        return;
-      }
-
-      final dbcFiles = dbcDir
-          .listSync()
-          .whereType<File>()
-          .where((f) => f.path.toLowerCase().endsWith('.dbc'))
-          .toList();
-
-      expect(dbcFiles, isNotEmpty, reason: 'DBC 目录应包含 .dbc 文件');
-      print('发现 ${dbcFiles.length} 个 DBC 文件');
-    });
-
-    test('已定义格式数量检查', () {
-      expect(
-        dbcDefinitions.length,
-        greaterThanOrEqualTo(200),
-        reason: '应该定义至少 200 个 DBC 格式',
-      );
-      print('已定义 ${dbcDefinitions.length} 个 DBC 格式');
-    });
-
-    // 为每个已定义的 DBC 文件创建单独的测试
-    for (final entry in dbcDefinitions.entries) {
-      final fileName = entry.key;
-      final definition = entry.value;
-
-      test('读取 $fileName', () {
-        if (!dbcDir.existsSync()) {
-          markTestSkipped('DBC 目录不存在');
-          return;
-        }
-
-        final file = File('$dbcDirPath/$fileName');
-        if (!file.existsSync()) {
-          markTestSkipped('文件不存在: $fileName');
-          return;
-        }
-
-        // 尝试加载 DBC 文件
-        final loader = DbcLoader(file.path, definition.format);
-
-        // 验证基本属性
-        expect(loader.recordCount, greaterThanOrEqualTo(0));
-
-        // 如果有记录，验证第一条记录可以被读取
-        if (loader.recordCount > 0) {
-          final firstRecord = loader.records.first;
-          // 尝试转换为 Map 验证所有字段访问
-          final map = firstRecord.toMap();
-          expect(map, isNotEmpty);
-        }
-      });
-    }
-  });
-
-  group('DBC 文件批量读取汇总', () {
-    test('批量读取所有已定义的 DBC 文件', () {
-      if (!dbcDir.existsSync()) {
-        markTestSkipped('DBC 目录不存在: $dbcDirPath');
-        return;
-      }
-
-      int successCount = 0;
-      int failCount = 0;
-      int skipCount = 0;
-      final List<String> failures = [];
-
-      for (final entry in dbcDefinitions.entries) {
-        final fileName = entry.key;
-        final definition = entry.value;
-        final file = File('$dbcDirPath/$fileName');
-
-        if (!file.existsSync()) {
-          skipCount++;
-          continue;
-        }
-
-        try {
-          final loader = DbcLoader(file.path, definition.format);
-          final recordCount = loader.records.length;
-
-          // 验证记录可读
-          if (recordCount > 0) {
-            loader.records.first.toMap();
-          }
-
-          successCount++;
-        } catch (e) {
-          failCount++;
-          failures.add('$fileName: $e');
-        }
-      }
-
-      print('');
-      print('=' * 60);
-      print('DBC 文件批量读取结果');
-      print('=' * 60);
-      print('成功: $successCount');
-      print('失败: $failCount');
-      print('跳过 (文件不存在): $skipCount');
-
-      if (failures.isNotEmpty) {
-        print('');
-        print('失败详情:');
-        for (final f in failures) {
-          print('  - $f');
-        }
-      }
-
-      // 断言：所有存在的文件都应该成功读取
-      expect(failCount, equals(0), reason: '所有 DBC 文件应该都能成功读取');
-    });
-  });
-}
