@@ -126,9 +126,6 @@ final class DbcLoader {
   /// 格式字符串
   String get format => _format;
 
-  /// 字段偏移量
-  FieldOffsets get fieldOffsets => offsets;
-
   /// 获取指定索引的记录
   DbcRecord getRecord(int index) {
     if (index < 0 || index >= header.recordCount) {

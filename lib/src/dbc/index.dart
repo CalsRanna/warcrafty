@@ -23,7 +23,7 @@ final class DbcIndex<T> {
     T Function(DbcRecord record) parse,
   ) {
     final records = loader.records.map(parse).toList();
-    return DbcIndex(records, loader.fieldOffsets.indexField);
+    return DbcIndex(records, loader.offsets.indexField);
   }
 
   int _getId(T record) {

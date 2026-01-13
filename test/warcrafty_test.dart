@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import 'package:warcrafty/src/internal/header.dart';
 // 内部模块导入（仅用于测试）
 import 'package:warcrafty/src/internal/offset.dart';
-import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/internal/locale_field.dart';
 import 'package:warcrafty/src/internal/string_block_reader.dart';
 import 'package:warcrafty/src/internal/string_block_writer.dart';
