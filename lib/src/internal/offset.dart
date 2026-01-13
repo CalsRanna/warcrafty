@@ -1,5 +1,5 @@
-import '../schema/field.dart';
-import '../util/exception.dart';
+import 'field.dart';
+import 'exception.dart';
 
 /// 字段偏移量计算器
 ///

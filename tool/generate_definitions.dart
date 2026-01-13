@@ -8,10 +8,116 @@
 
 import 'dart:io';
 
-const targetVersion = '3.3.5.12340';
-final wowDBDefsPath = Directory(r'D:\Code\WoWDBDefs\definitions');
-final outputPath = Directory(r'D:\Code\warcrafty\lib\src\definition');
-final dbcPath = Directory(r'D:\Simulators\AzerothCore\core\dbc');
+void main() async {
+  print('WoWDBDefs .dbd 解析器');
+  print('目标版本: $targetVersion');
+  print('WoWDBDefs 路径: ${wowDBDefsPath.path}');
+  print('DBC 文件路径: ${dbcPath.path}');
+  print('输出路径: ${outputPath.path}');
+  print('');
+
+  if (!wowDBDefsPath.existsSync()) {
+    print('Error: WoWDBDefs path not found');
+    exit(1);
+  }
+
+  if (!dbcPath.existsSync()) {
+    print('Error: DBC path not found');
+    exit(1);
+  }
+
+  // 获取用户的 DBC 文件列表
+  final dbcFiles = dbcPath
+      .listSync()
+      .whereType<File>()
+      .where((f) => f.path.toLowerCase().endsWith('.dbc'))
+      .map((f) => f.uri.pathSegments.last.replaceAll('.dbc', ''))
+      .toSet();
+
+  print('发现 ${dbcFiles.length} 个 DBC 文件');
+
+  final success = <String>[];
+  final noTargetVersion = <String>[];
+  final noDbdFile = <String>[];
+  final errors = <(String, String)>[];
+  final categoryCounts = <String, int>{};
+
+  // 只处理用户有的 DBC 文件
+  for (final dbcName in dbcFiles.toList()..sort()) {
+    final dbdFile = File('${wowDBDefsPath.path}/$dbcName.dbd');
+
+    if (!dbdFile.existsSync()) {
+      noDbdFile.add(dbcName);
+      continue;
+    }
+
+    try {
+      final dbd = parseDbdFile(dbdFile);
+
+      if (!dbd.hasTargetVersion || dbd.targetFields.isEmpty) {
+        noTargetVersion.add(dbd.name);
+        continue;
+      }
+
+      // 生成代码
+      final dartCode = generateDartDefinition(dbd);
+
+      // 输出目录
+      final category = categorizeDbc(dbd.name);
+      final outDir = Directory('${outputPath.path}/$category');
+      if (!outDir.existsSync()) {
+        outDir.createSync(recursive: true);
+      }
+
+      // 写入文件
+      final outFile = File('${outDir.path}/${toSnakeCase(dbd.name)}.dart');
+      outFile.writeAsStringSync(dartCode);
+
+      success.add(dbd.name);
+      categoryCounts[category] = (categoryCounts[category] ?? 0) + 1;
+    } catch (e) {
+      errors.add((dbcName, e.toString()));
+    }
+  }
+
+  // 结果
+  print('\n=== 生成结果 ===');
+  print('成功: ${success.length}');
+  print('无 $targetVersion 版本定义: ${noTargetVersion.length}');
+  print('无 .dbd 文件: ${noDbdFile.length}');
+  print('错误: ${errors.length}');
+
+  print('\n=== 分类统计 ===');
+  for (final entry
+      in categoryCounts.entries.toList()
+        ..sort((a, b) => a.key.compareTo(b.key))) {
+    print('  ${entry.key}: ${entry.value}');
+  }
+
+  if (noTargetVersion.isNotEmpty) {
+    print('\n=== 无 $targetVersion 版本定义 ===');
+    for (final name in noTargetVersion) {
+      print('  $name');
+    }
+  }
+
+  if (noDbdFile.isNotEmpty) {
+    print('\n=== 无 .dbd 文件 ===');
+    for (final name in noDbdFile) {
+      print('  $name');
+    }
+  }
+
+  if (errors.isNotEmpty) {
+    print('\n=== 错误详情 ===');
+    for (final (name, error) in errors) {
+      print('  $name: $error');
+    }
+  }
+
+  // 生成导出文件
+  await generateExportsTemplate(success);
+}
 
 // 分类规则 (前缀 -> 目录)
 const categoryRules = {
@@ -45,76 +151,20 @@ const categoryRules = {
   'Taxi': 'taxi',
   'Vehicle': 'vehicle',
 };
+const targetVersion = '3.3.5.12340';
+final home = Platform.environment['HOME'] ?? '~';
+final dbcPath = Directory('$home/Code/warcrafty/dbc');
+final outputPath = Directory('$home/Code/warcrafty/lib/src/definition');
+final wowDBDefsPath = Directory('$home/Code/WoWDBDefs/definitions');
 
-class ColumnDef {
-  final String type; // int, float, string, locstring
-  final String name;
-  final String? foreignRef;
-  final bool isUncertain;
-
-  ColumnDef({
-    required this.type,
-    required this.name,
-    this.foreignRef,
-    this.isUncertain = false,
-  });
-}
-
-class FieldDef {
-  final String name;
-  final String? size;
-  final int? arraySize;
-  final bool isId;
-  final bool isRelation;
-  final bool isNoninline;
-
-  FieldDef({
-    required this.name,
-    this.size,
-    this.arraySize,
-    this.isId = false,
-    this.isRelation = false,
-    this.isNoninline = false,
-  });
-}
-
-class DbdFile {
-  final String name;
-  final Map<String, ColumnDef> columns = {};
-  final List<FieldDef> targetFields = [];
-  bool hasTargetVersion = false;
-
-  DbdFile(this.name);
-}
-
-/// 解析版本范围
-(String, String) parseVersionRange(String versionStr) {
-  if (versionStr.contains('-')) {
-    final parts = versionStr.split('-');
-    return (parts[0].trim(), parts[1].trim());
-  }
-  return (versionStr.trim(), versionStr.trim());
-}
-
-/// 版本比较
-List<int> parseVer(String v) {
-  return v.split('.').map(int.parse).toList();
-}
-
-bool versionInRange(String target, String start, String end) {
-  final t = parseVer(target);
-  final s = parseVer(start);
-  final e = parseVer(end);
-
-  int compare(List<int> a, List<int> b) {
-    for (int i = 0; i < a.length && i < b.length; i++) {
-      if (a[i] < b[i]) return -1;
-      if (a[i] > b[i]) return 1;
+/// 确定分类
+String categorizeDbc(String name) {
+  for (final entry in categoryRules.entries) {
+    if (name.startsWith(entry.key)) {
+      return entry.value;
     }
-    return 0;
   }
-
-  return compare(s, t) <= 0 && compare(t, e) <= 0;
+  return 'misc';
 }
 
 /// 检查 BUILD 行是否匹配目标版本
@@ -133,64 +183,171 @@ bool checkVersionMatch(String buildLine, String targetVersion) {
   return false;
 }
 
-/// 解析 COLUMNS 行
-ColumnDef? parseColumnLine(String line) {
-  line = line.trim();
+/// 生成 Dart 定义代码
+String generateDartDefinition(DbdFile dbd) {
+  final lines = <String>[];
 
-  // 移除行末注释 (// ...)
-  final commentIndex = line.indexOf('//');
-  if (commentIndex != -1) {
-    line = line.substring(0, commentIndex).trim();
-  }
-  if (line.isEmpty) return null;
+  // 导入
+  lines.add("import 'package:warcrafty/src/internal/field.dart';");
+  lines.add("import 'package:warcrafty/src/internal/schema.dart';");
 
-  final pattern = RegExp(r'^(int|float|string|locstring)(?:<([^>]+)>)?\s+(\w+)(\?)?$');
-  final match = pattern.firstMatch(line);
-  if (match != null) {
-    return ColumnDef(
-      type: match.group(1)!,
-      name: match.group(3)!,
-      foreignRef: match.group(2),
-      isUncertain: match.group(4) != null,
-    );
+  // 检查是否需要 locale_fields
+  var hasLocstring = false;
+  for (final f in dbd.targetFields) {
+    final col = dbd.columns[f.name];
+    if (col != null && col.type == 'locstring') {
+      hasLocstring = true;
+      break;
+    }
   }
-  return null;
+
+  if (hasLocstring) {
+    lines.add("import 'package:warcrafty/src/internal/locale_field.dart';");
+  }
+
+  lines.add('');
+  lines.add('/// ${dbd.name} 结构定义');
+  lines.add('///');
+  lines.add('/// 基于 WoWDBDefs 定义，版本 $targetVersion');
+
+  // 格式字符串
+  final formatChars = <String>[];
+  for (final f in dbd.targetFields) {
+    final (_, char) = getFieldType(dbd, f);
+    final count = f.arraySize ?? 1;
+
+    if (char == 'LOCSTRING') {
+      formatChars.addAll(List.filled(17, 's'));
+    } else {
+      formatChars.addAll(List.filled(count, char));
+    }
+  }
+  final formatString = formatChars.join();
+
+  final constOrFinal = hasLocstring ? 'final' : 'const';
+  final varName = toCamelCase(dbd.name);
+  // 当外层是 const 时，内部不需要 const 关键字；当外层是 final 时，内部需要 const
+  final fieldConst = hasLocstring ? 'const ' : '';
+
+  lines.add('$constOrFinal $varName = DbcSchema(');
+  lines.add("  name: '${dbd.name}',");
+  lines.add("  format: '$formatString',");
+  lines.add('  fields: [');
+
+  // 字段定义
+  var fieldIndex = 0;
+  for (final f in dbd.targetFields) {
+    final (fieldType, char) = getFieldType(dbd, f);
+    final count = f.arraySize ?? 1;
+
+    if (char == 'LOCSTRING') {
+      lines.add(
+        "    ...createLocaleFieldsWithFlag($fieldIndex, '${f.name}', '${f.name}'),",
+      );
+      fieldIndex += 17;
+    } else if (count > 1) {
+      for (var j = 0; j < count; j++) {
+        lines.add(
+          "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}$j', description: '${f.name} $j', type: $fieldType),",
+        );
+        fieldIndex++;
+      }
+    } else {
+      lines.add(
+        "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}', description: '${f.name}', type: $fieldType),",
+      );
+      fieldIndex++;
+    }
+  }
+
+  lines.add('  ],');
+  lines.add(');');
+  lines.add('');
+
+  return lines.join('\n');
 }
 
-/// 解析字段行
-FieldDef? parseFieldLine(String line) {
-  line = line.trim();
-  if (line.isEmpty ||
-      line.startsWith('LAYOUT') ||
-      line.startsWith('BUILD') ||
-      line.startsWith('COMMENT')) {
-    return null;
+Future<void> generateExportsTemplate(List<String> successNames) async {
+  successNames.sort();
+
+  final lines = <String>[];
+  lines.add('// 自动生成的导出文件');
+  lines.add('// 基于 WoWDBDefs 生成，版本 $targetVersion');
+  lines.add('');
+  lines.add("import 'package:warcrafty/src/internal/schema.dart';");
+  lines.add('');
+
+  // 按分类分组
+  final byCategory = <String, List<String>>{};
+  for (final name in successNames) {
+    final cat = categorizeDbc(name);
+    byCategory.putIfAbsent(cat, () => []).add(name);
   }
 
-  // 移除行末注释 (// ...)
-  final commentIndex = line.indexOf('//');
-  if (commentIndex != -1) {
-    line = line.substring(0, commentIndex).trim();
+  // 导入语句
+  for (final cat in byCategory.keys.toList()..sort()) {
+    lines.add('// $cat');
+    for (final name in byCategory[cat]!..sort()) {
+      final snake = toSnakeCase(name);
+      lines.add("import '$cat/$snake.dart' as struct_$snake;");
+    }
+    lines.add('');
   }
-  if (line.isEmpty) return null;
 
-  final pattern = RegExp(r'^(\$[\w,]+\$)?(\w+)(?:<([^>]+)>)?(?:\[(\d+)\])?$');
-  final match = pattern.firstMatch(line);
-  if (match == null) return null;
+  // Definitions 类
+  lines.add('/// DBC 结构定义集合');
+  lines.add('class Definitions {');
+  lines.add('  Definitions._();');
+  lines.add('');
 
-  final annotation = match.group(1) ?? '';
-  final name = match.group(2)!;
-  final size = match.group(3);
-  final arraySize = match.group(4) != null ? int.parse(match.group(4)!) : null;
+  for (final name in successNames) {
+    final snake = toSnakeCase(name);
+    final camel = toCamelCase(name);
+    lines.add('  static DbcSchema get $camel => struct_$snake.$camel;');
+  }
 
-  return FieldDef(
-    name: name,
-    size: size,
-    arraySize: arraySize,
-    isId: annotation.toLowerCase().contains('id'),
-    isRelation: annotation.toLowerCase().contains('relation'),
-    isNoninline: annotation.toLowerCase().contains('noninline'),
-  );
+  lines.add('}');
+
+  final definitionFile = File('${outputPath.path}/definition.dart');
+  definitionFile.writeAsStringSync(lines.join('\n'));
+  print('\n导出文件已生成: ${definitionFile.path}');
+}
+
+/// 获取字段类型
+(String, String) getFieldType(DbdFile dbd, FieldDef field) {
+  final col = dbd.columns[field.name];
+
+  // $id$ 标记
+  if (field.isId) {
+    return ('FieldType.id', 'n');
+  }
+
+  // 检查字节字段 (<8> 或 <u8>)
+  if (isByteField(field)) {
+    return ('FieldType.uint8', 'b');
+  }
+
+  if (col != null) {
+    switch (col.type) {
+      case 'locstring':
+        return ('LOCSTRING', 'LOCSTRING');
+      case 'float':
+        return ('FieldType.float', 'f');
+      case 'string':
+        return ('FieldType.string', 's');
+      case 'int':
+        return ('FieldType.int32', 'i');
+    }
+  }
+
+  return ('FieldType.int32', 'i');
+}
+
+/// 检查字段是否是字节字段 (`<8>` 或 `<u8>`)
+bool isByteField(FieldDef field) {
+  final size = field.size;
+  if (size == null) return false;
+  return size == '8' || size == 'u8';
 }
 
 /// 检查 BUILD 行是否在 3.x 版本范围内
@@ -211,6 +368,32 @@ bool isVersion3x(String buildLine) {
     }
   }
   return false;
+}
+
+/// 解析 COLUMNS 行
+ColumnDef? parseColumnLine(String line) {
+  line = line.trim();
+
+  // 移除行末注释 (// ...)
+  final commentIndex = line.indexOf('//');
+  if (commentIndex != -1) {
+    line = line.substring(0, commentIndex).trim();
+  }
+  if (line.isEmpty) return null;
+
+  final pattern = RegExp(
+    r'^(int|float|string|locstring)(?:<([^>]+)>)?\s+(\w+)(\?)?$',
+  );
+  final match = pattern.firstMatch(line);
+  if (match != null) {
+    return ColumnDef(
+      type: match.group(1)!,
+      name: match.group(3)!,
+      foreignRef: match.group(2),
+      isUncertain: match.group(4) != null,
+    );
+  }
+  return null;
 }
 
 /// 解析 .dbd 文件 (支持版本回退)
@@ -309,41 +492,65 @@ DbdFile parseDbdFile(File file, {bool debug = false}) {
   return dbd;
 }
 
-/// 检查字段是否是字节字段 (`<8>` 或 `<u8>`)
-bool isByteField(FieldDef field) {
-  final size = field.size;
-  if (size == null) return false;
-  return size == '8' || size == 'u8';
+/// 解析字段行
+FieldDef? parseFieldLine(String line) {
+  line = line.trim();
+  if (line.isEmpty ||
+      line.startsWith('LAYOUT') ||
+      line.startsWith('BUILD') ||
+      line.startsWith('COMMENT')) {
+    return null;
+  }
+
+  // 移除行末注释 (// ...)
+  final commentIndex = line.indexOf('//');
+  if (commentIndex != -1) {
+    line = line.substring(0, commentIndex).trim();
+  }
+  if (line.isEmpty) return null;
+
+  final pattern = RegExp(r'^(\$[\w,]+\$)?(\w+)(?:<([^>]+)>)?(?:\[(\d+)\])?$');
+  final match = pattern.firstMatch(line);
+  if (match == null) return null;
+
+  final annotation = match.group(1) ?? '';
+  final name = match.group(2)!;
+  final size = match.group(3);
+  final arraySize = match.group(4) != null ? int.parse(match.group(4)!) : null;
+
+  return FieldDef(
+    name: name,
+    size: size,
+    arraySize: arraySize,
+    isId: annotation.toLowerCase().contains('id'),
+    isRelation: annotation.toLowerCase().contains('relation'),
+    isNoninline: annotation.toLowerCase().contains('noninline'),
+  );
 }
 
-/// 获取字段类型
-(String, String) getFieldType(DbdFile dbd, FieldDef field) {
-  final col = dbd.columns[field.name];
+/// 版本比较
+List<int> parseVer(String v) {
+  return v.split('.').map(int.parse).toList();
+}
 
-  // $id$ 标记
-  if (field.isId) {
-    return ('FieldType.id', 'n');
+/// 解析版本范围
+(String, String) parseVersionRange(String versionStr) {
+  if (versionStr.contains('-')) {
+    final parts = versionStr.split('-');
+    return (parts[0].trim(), parts[1].trim());
   }
+  return (versionStr.trim(), versionStr.trim());
+}
 
-  // 检查字节字段 (<8> 或 <u8>)
-  if (isByteField(field)) {
-    return ('FieldType.uint8', 'b');
-  }
-
-  if (col != null) {
-    switch (col.type) {
-      case 'locstring':
-        return ('LOCSTRING', 'LOCSTRING');
-      case 'float':
-        return ('FieldType.float', 'f');
-      case 'string':
-        return ('FieldType.string', 's');
-      case 'int':
-        return ('FieldType.int32', 'i');
-    }
-  }
-
-  return ('FieldType.int32', 'i');
+/// 转换为 camelCase
+String toCamelCase(String name) {
+  final snake = toSnakeCase(name);
+  final parts = snake.split('_');
+  return parts[0] +
+      parts
+          .skip(1)
+          .map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}')
+          .join();
 }
 
 /// 转换为 snake_case
@@ -354,257 +561,59 @@ String toSnakeCase(String name) {
       .toLowerCase();
 }
 
-/// 转换为 camelCase
-String toCamelCase(String name) {
-  final snake = toSnakeCase(name);
-  final parts = snake.split('_');
-  return parts[0] +
-      parts.skip(1).map((w) => w.isEmpty ? '' : '${w[0].toUpperCase()}${w.substring(1)}').join();
+bool versionInRange(String target, String start, String end) {
+  final t = parseVer(target);
+  final s = parseVer(start);
+  final e = parseVer(end);
+
+  int compare(List<int> a, List<int> b) {
+    for (int i = 0; i < a.length && i < b.length; i++) {
+      if (a[i] < b[i]) return -1;
+      if (a[i] > b[i]) return 1;
+    }
+    return 0;
+  }
+
+  return compare(s, t) <= 0 && compare(t, e) <= 0;
 }
 
-/// 确定分类
-String categorizeDbc(String name) {
-  for (final entry in categoryRules.entries) {
-    if (name.startsWith(entry.key)) {
-      return entry.value;
-    }
-  }
-  return 'misc';
+class ColumnDef {
+  final String type; // int, float, string, locstring
+  final String name;
+  final String? foreignRef;
+  final bool isUncertain;
+
+  ColumnDef({
+    required this.type,
+    required this.name,
+    this.foreignRef,
+    this.isUncertain = false,
+  });
 }
 
-/// 生成 Dart 定义代码
-String generateDartDefinition(DbdFile dbd) {
-  final lines = <String>[];
+class DbdFile {
+  final String name;
+  final Map<String, ColumnDef> columns = {};
+  final List<FieldDef> targetFields = [];
+  bool hasTargetVersion = false;
 
-  // 导入
-  lines.add("import 'package:warcrafty/src/schema/field.dart';");
-  lines.add("import 'package:warcrafty/src/schema/schema.dart';");
-
-  // 检查是否需要 locale_fields
-  var hasLocstring = false;
-  for (final f in dbd.targetFields) {
-    final col = dbd.columns[f.name];
-    if (col != null && col.type == 'locstring') {
-      hasLocstring = true;
-      break;
-    }
-  }
-
-  if (hasLocstring) {
-    lines.add("import 'package:warcrafty/src/tools/locale_fields.dart';");
-  }
-
-  lines.add('');
-  lines.add('/// ${dbd.name} 结构定义');
-  lines.add('///');
-  lines.add('/// 基于 WoWDBDefs 定义，版本 $targetVersion');
-
-  // 格式字符串
-  final formatChars = <String>[];
-  for (final f in dbd.targetFields) {
-    final (_, char) = getFieldType(dbd, f);
-    final count = f.arraySize ?? 1;
-
-    if (char == 'LOCSTRING') {
-      formatChars.addAll(List.filled(17, 's'));
-    } else {
-      formatChars.addAll(List.filled(count, char));
-    }
-  }
-  final formatString = formatChars.join();
-
-  final constOrFinal = hasLocstring ? 'final' : 'const';
-  final varName = toCamelCase(dbd.name);
-  // 当外层是 const 时，内部不需要 const 关键字；当外层是 final 时，内部需要 const
-  final fieldConst = hasLocstring ? 'const ' : '';
-
-  lines.add('$constOrFinal $varName = DbcSchema(');
-  lines.add("  name: '${dbd.name}',");
-  lines.add("  format: '$formatString',");
-  lines.add('  fields: [');
-
-  // 字段定义
-  var fieldIndex = 0;
-  for (final f in dbd.targetFields) {
-    final (fieldType, char) = getFieldType(dbd, f);
-    final count = f.arraySize ?? 1;
-
-    if (char == 'LOCSTRING') {
-      lines.add(
-          "    ...createLocaleFieldsWithFlag($fieldIndex, '${f.name}', '${f.name}'),");
-      fieldIndex += 17;
-    } else if (count > 1) {
-      for (var j = 0; j < count; j++) {
-        lines.add(
-            "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}$j', description: '${f.name} $j', type: $fieldType),");
-        fieldIndex++;
-      }
-    } else {
-      lines.add(
-          "    ${fieldConst}Field(index: $fieldIndex, name: '${f.name}', description: '${f.name}', type: $fieldType),");
-      fieldIndex++;
-    }
-  }
-
-  lines.add('  ],');
-  lines.add(');');
-  lines.add('');
-
-  return lines.join('\n');
+  DbdFile(this.name);
 }
 
-void main() async {
-  print('WoWDBDefs .dbd 解析器');
-  print('目标版本: $targetVersion');
-  print('WoWDBDefs 路径: ${wowDBDefsPath.path}');
-  print('DBC 文件路径: ${dbcPath.path}');
-  print('输出路径: ${outputPath.path}');
-  print('');
+class FieldDef {
+  final String name;
+  final String? size;
+  final int? arraySize;
+  final bool isId;
+  final bool isRelation;
+  final bool isNoninline;
 
-  if (!wowDBDefsPath.existsSync()) {
-    print('Error: WoWDBDefs path not found');
-    exit(1);
-  }
-
-  if (!dbcPath.existsSync()) {
-    print('Error: DBC path not found');
-    exit(1);
-  }
-
-  // 获取用户的 DBC 文件列表
-  final dbcFiles = dbcPath
-      .listSync()
-      .whereType<File>()
-      .where((f) => f.path.toLowerCase().endsWith('.dbc'))
-      .map((f) => f.uri.pathSegments.last.replaceAll('.dbc', ''))
-      .toSet();
-
-  print('发现 ${dbcFiles.length} 个 DBC 文件');
-
-  final success = <String>[];
-  final noTargetVersion = <String>[];
-  final noDbdFile = <String>[];
-  final errors = <(String, String)>[];
-  final categoryCounts = <String, int>{};
-
-  // 只处理用户有的 DBC 文件
-  for (final dbcName in dbcFiles.toList()..sort()) {
-    final dbdFile = File('${wowDBDefsPath.path}/$dbcName.dbd');
-
-    if (!dbdFile.existsSync()) {
-      noDbdFile.add(dbcName);
-      continue;
-    }
-
-    try {
-      final dbd = parseDbdFile(dbdFile);
-
-      if (!dbd.hasTargetVersion || dbd.targetFields.isEmpty) {
-        noTargetVersion.add(dbd.name);
-        continue;
-      }
-
-      // 生成代码
-      final dartCode = generateDartDefinition(dbd);
-
-      // 输出目录
-      final category = categorizeDbc(dbd.name);
-      final outDir = Directory('${outputPath.path}/$category');
-      if (!outDir.existsSync()) {
-        outDir.createSync(recursive: true);
-      }
-
-      // 写入文件
-      final outFile = File('${outDir.path}/${toSnakeCase(dbd.name)}.dart');
-      outFile.writeAsStringSync(dartCode);
-
-      success.add(dbd.name);
-      categoryCounts[category] = (categoryCounts[category] ?? 0) + 1;
-    } catch (e) {
-      errors.add((dbcName, e.toString()));
-    }
-  }
-
-  // 结果
-  print('\n=== 生成结果 ===');
-  print('成功: ${success.length}');
-  print('无 $targetVersion 版本定义: ${noTargetVersion.length}');
-  print('无 .dbd 文件: ${noDbdFile.length}');
-  print('错误: ${errors.length}');
-
-  print('\n=== 分类统计 ===');
-  for (final entry in categoryCounts.entries.toList()
-    ..sort((a, b) => a.key.compareTo(b.key))) {
-    print('  ${entry.key}: ${entry.value}');
-  }
-
-  if (noTargetVersion.isNotEmpty) {
-    print('\n=== 无 $targetVersion 版本定义 ===');
-    for (final name in noTargetVersion) {
-      print('  $name');
-    }
-  }
-
-  if (noDbdFile.isNotEmpty) {
-    print('\n=== 无 .dbd 文件 ===');
-    for (final name in noDbdFile) {
-      print('  $name');
-    }
-  }
-
-  if (errors.isNotEmpty) {
-    print('\n=== 错误详情 ===');
-    for (final (name, error) in errors) {
-      print('  $name: $error');
-    }
-  }
-
-  // 生成导出文件
-  await generateExportsTemplate(success);
-}
-
-Future<void> generateExportsTemplate(List<String> successNames) async {
-  successNames.sort();
-
-  final lines = <String>[];
-  lines.add('// 自动生成的导出文件');
-  lines.add('// 基于 WoWDBDefs 生成，版本 $targetVersion');
-  lines.add('');
-  lines.add("import 'package:warcrafty/src/schema/schema.dart';");
-  lines.add('');
-
-  // 按分类分组
-  final byCategory = <String, List<String>>{};
-  for (final name in successNames) {
-    final cat = categorizeDbc(name);
-    byCategory.putIfAbsent(cat, () => []).add(name);
-  }
-
-  // 导入语句
-  for (final cat in byCategory.keys.toList()..sort()) {
-    lines.add('// $cat');
-    for (final name in byCategory[cat]!..sort()) {
-      final snake = toSnakeCase(name);
-      lines.add("import '$cat/$snake.dart' as struct_$snake;");
-    }
-    lines.add('');
-  }
-
-  // Definitions 类
-  lines.add('/// DBC 结构定义集合');
-  lines.add('class Definitions {');
-  lines.add('  Definitions._();');
-  lines.add('');
-
-  for (final name in successNames) {
-    final snake = toSnakeCase(name);
-    final camel = toCamelCase(name);
-    lines.add('  static DbcSchema get $camel => struct_$snake.$camel;');
-  }
-
-  lines.add('}');
-
-  final definitionFile = File('${outputPath.path}/definition.dart');
-  definitionFile.writeAsStringSync(lines.join('\n'));
-  print('\n导出文件已生成: ${definitionFile.path}');
+  FieldDef({
+    required this.name,
+    this.size,
+    this.arraySize,
+    this.isId = false,
+    this.isRelation = false,
+    this.isNoninline = false,
+  });
 }

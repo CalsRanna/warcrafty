@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// Cfg_Categories 结构定义
 ///
@@ -10,24 +10,9 @@ final cfgCategories = DbcSchema(
   format: 'niiisssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(
-      index: 1,
-      name: 'LocaleMask',
-      description: 'LocaleMask',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 2,
-      name: 'Create_charsetMask',
-      description: 'Create_charsetMask',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 3,
-      name: 'Flags',
-      description: 'Flags',
-      type: FieldType.int32,
-    ),
+    const Field(index: 1, name: 'LocaleMask', description: 'LocaleMask', type: FieldType.int32),
+    const Field(index: 2, name: 'Create_charsetMask', description: 'Create_charsetMask', type: FieldType.int32),
+    const Field(index: 3, name: 'Flags', description: 'Flags', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(4, 'Name_lang', 'Name_lang'),
   ],
 );

@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// GameTips 结构定义
 ///

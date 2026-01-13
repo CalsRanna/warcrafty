@@ -6,7 +6,7 @@ import 'package:warcrafty/src/dbc/record.dart';
 import '../internal/header.dart';
 import '../internal/offset.dart';
 import '../internal/string.dart';
-import '../util/exception.dart';
+import '../internal/exception.dart';
 
 /// DBC 文件加载器
 final class DbcLoader {

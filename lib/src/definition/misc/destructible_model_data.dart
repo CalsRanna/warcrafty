@@ -1,5 +1,5 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
 
 /// DestructibleModelData 结构定义
 ///

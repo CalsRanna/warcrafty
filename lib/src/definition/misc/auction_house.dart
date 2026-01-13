@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// AuctionHouse 结构定义
 ///
@@ -10,24 +10,9 @@ final auctionHouse = DbcSchema(
   format: 'niiisssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(
-      index: 1,
-      name: 'FactionID',
-      description: 'FactionID',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 2,
-      name: 'DepositRate',
-      description: 'DepositRate',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 3,
-      name: 'ConsignmentRate',
-      description: 'ConsignmentRate',
-      type: FieldType.int32,
-    ),
+    const Field(index: 1, name: 'FactionID', description: 'FactionID', type: FieldType.int32),
+    const Field(index: 2, name: 'DepositRate', description: 'DepositRate', type: FieldType.int32),
+    const Field(index: 3, name: 'ConsignmentRate', description: 'ConsignmentRate', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(4, 'Name_lang', 'Name_lang'),
   ],
 );

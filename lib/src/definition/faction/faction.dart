@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// Faction 结构定义
 ///
@@ -10,138 +10,28 @@ final faction = DbcSchema(
   format: 'niiiiiiiiiiiiiiiiiiffiissssssssssssssssssssssssssssssssss',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(
-      index: 1,
-      name: 'ReputationIndex',
-      description: 'ReputationIndex',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 2,
-      name: 'ReputationRaceMask0',
-      description: 'ReputationRaceMask 0',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 3,
-      name: 'ReputationRaceMask1',
-      description: 'ReputationRaceMask 1',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 4,
-      name: 'ReputationRaceMask2',
-      description: 'ReputationRaceMask 2',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 5,
-      name: 'ReputationRaceMask3',
-      description: 'ReputationRaceMask 3',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 6,
-      name: 'ReputationClassMask0',
-      description: 'ReputationClassMask 0',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 7,
-      name: 'ReputationClassMask1',
-      description: 'ReputationClassMask 1',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 8,
-      name: 'ReputationClassMask2',
-      description: 'ReputationClassMask 2',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 9,
-      name: 'ReputationClassMask3',
-      description: 'ReputationClassMask 3',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 10,
-      name: 'ReputationBase0',
-      description: 'ReputationBase 0',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 11,
-      name: 'ReputationBase1',
-      description: 'ReputationBase 1',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 12,
-      name: 'ReputationBase2',
-      description: 'ReputationBase 2',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 13,
-      name: 'ReputationBase3',
-      description: 'ReputationBase 3',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 14,
-      name: 'ReputationFlags0',
-      description: 'ReputationFlags 0',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 15,
-      name: 'ReputationFlags1',
-      description: 'ReputationFlags 1',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 16,
-      name: 'ReputationFlags2',
-      description: 'ReputationFlags 2',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 17,
-      name: 'ReputationFlags3',
-      description: 'ReputationFlags 3',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 18,
-      name: 'ParentFactionID',
-      description: 'ParentFactionID',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 19,
-      name: 'ParentFactionMod0',
-      description: 'ParentFactionMod 0',
-      type: FieldType.float,
-    ),
-    const Field(
-      index: 20,
-      name: 'ParentFactionMod1',
-      description: 'ParentFactionMod 1',
-      type: FieldType.float,
-    ),
-    const Field(
-      index: 21,
-      name: 'ParentFactionCap0',
-      description: 'ParentFactionCap 0',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 22,
-      name: 'ParentFactionCap1',
-      description: 'ParentFactionCap 1',
-      type: FieldType.int32,
-    ),
+    const Field(index: 1, name: 'ReputationIndex', description: 'ReputationIndex', type: FieldType.int32),
+    const Field(index: 2, name: 'ReputationRaceMask0', description: 'ReputationRaceMask 0', type: FieldType.int32),
+    const Field(index: 3, name: 'ReputationRaceMask1', description: 'ReputationRaceMask 1', type: FieldType.int32),
+    const Field(index: 4, name: 'ReputationRaceMask2', description: 'ReputationRaceMask 2', type: FieldType.int32),
+    const Field(index: 5, name: 'ReputationRaceMask3', description: 'ReputationRaceMask 3', type: FieldType.int32),
+    const Field(index: 6, name: 'ReputationClassMask0', description: 'ReputationClassMask 0', type: FieldType.int32),
+    const Field(index: 7, name: 'ReputationClassMask1', description: 'ReputationClassMask 1', type: FieldType.int32),
+    const Field(index: 8, name: 'ReputationClassMask2', description: 'ReputationClassMask 2', type: FieldType.int32),
+    const Field(index: 9, name: 'ReputationClassMask3', description: 'ReputationClassMask 3', type: FieldType.int32),
+    const Field(index: 10, name: 'ReputationBase0', description: 'ReputationBase 0', type: FieldType.int32),
+    const Field(index: 11, name: 'ReputationBase1', description: 'ReputationBase 1', type: FieldType.int32),
+    const Field(index: 12, name: 'ReputationBase2', description: 'ReputationBase 2', type: FieldType.int32),
+    const Field(index: 13, name: 'ReputationBase3', description: 'ReputationBase 3', type: FieldType.int32),
+    const Field(index: 14, name: 'ReputationFlags0', description: 'ReputationFlags 0', type: FieldType.int32),
+    const Field(index: 15, name: 'ReputationFlags1', description: 'ReputationFlags 1', type: FieldType.int32),
+    const Field(index: 16, name: 'ReputationFlags2', description: 'ReputationFlags 2', type: FieldType.int32),
+    const Field(index: 17, name: 'ReputationFlags3', description: 'ReputationFlags 3', type: FieldType.int32),
+    const Field(index: 18, name: 'ParentFactionID', description: 'ParentFactionID', type: FieldType.int32),
+    const Field(index: 19, name: 'ParentFactionMod0', description: 'ParentFactionMod 0', type: FieldType.float),
+    const Field(index: 20, name: 'ParentFactionMod1', description: 'ParentFactionMod 1', type: FieldType.float),
+    const Field(index: 21, name: 'ParentFactionCap0', description: 'ParentFactionCap 0', type: FieldType.int32),
+    const Field(index: 22, name: 'ParentFactionCap1', description: 'ParentFactionCap 1', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(23, 'Name_lang', 'Name_lang'),
     ...createLocaleFieldsWithFlag(40, 'Description_lang', 'Description_lang'),
   ],

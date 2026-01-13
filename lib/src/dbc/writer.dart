@@ -4,11 +4,11 @@ import 'dart:typed_data';
 import 'package:warcrafty/src/dbc/record.dart';
 
 import 'loader.dart';
-import '../schema/field.dart';
+import '../internal/field.dart';
 import '../internal/header.dart';
 import '../internal/offset.dart';
 import '../internal/string.dart';
-import '../util/exception.dart';
+import '../internal/exception.dart';
 
 /// DBC 文件写入器
 final class DbcWriter {

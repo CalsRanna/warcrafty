@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// SpellDispelType 结构定义
 ///
@@ -11,23 +11,8 @@ final spellDispelType = DbcSchema(
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     ...createLocaleFieldsWithFlag(1, 'Name_lang', 'Name_lang'),
-    const Field(
-      index: 18,
-      name: 'Mask',
-      description: 'Mask',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 19,
-      name: 'ImmunityPossible',
-      description: 'ImmunityPossible',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 20,
-      name: 'InternalName',
-      description: 'InternalName',
-      type: FieldType.string,
-    ),
+    const Field(index: 18, name: 'Mask', description: 'Mask', type: FieldType.int32),
+    const Field(index: 19, name: 'ImmunityPossible', description: 'ImmunityPossible', type: FieldType.int32),
+    const Field(index: 20, name: 'InternalName', description: 'InternalName', type: FieldType.string),
   ],
 );

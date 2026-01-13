@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// SkillLine 结构定义
 ///
@@ -10,36 +10,12 @@ final skillLine = DbcSchema(
   format: 'niissssssssssssssssssssssssssssssssssisssssssssssssssssi',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(
-      index: 1,
-      name: 'CategoryID',
-      description: 'CategoryID',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 2,
-      name: 'SkillCostsID',
-      description: 'SkillCostsID',
-      type: FieldType.int32,
-    ),
+    const Field(index: 1, name: 'CategoryID', description: 'CategoryID', type: FieldType.int32),
+    const Field(index: 2, name: 'SkillCostsID', description: 'SkillCostsID', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(3, 'DisplayName_lang', 'DisplayName_lang'),
     ...createLocaleFieldsWithFlag(20, 'Description_lang', 'Description_lang'),
-    const Field(
-      index: 37,
-      name: 'SpellIconID',
-      description: 'SpellIconID',
-      type: FieldType.int32,
-    ),
-    ...createLocaleFieldsWithFlag(
-      38,
-      'AlternateVerb_lang',
-      'AlternateVerb_lang',
-    ),
-    const Field(
-      index: 55,
-      name: 'CanLink',
-      description: 'CanLink',
-      type: FieldType.int32,
-    ),
+    const Field(index: 37, name: 'SpellIconID', description: 'SpellIconID', type: FieldType.int32),
+    ...createLocaleFieldsWithFlag(38, 'AlternateVerb_lang', 'AlternateVerb_lang'),
+    const Field(index: 55, name: 'CanLink', description: 'CanLink', type: FieldType.int32),
   ],
 );

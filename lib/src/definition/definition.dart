@@ -1,7 +1,7 @@
 // 自动生成的导出文件
 // 基于 WoWDBDefs 生成，版本 3.3.5.12340
 
-import 'package:warcrafty/src/schema/schema.dart';
+import 'package:warcrafty/src/internal/schema.dart';
 
 // achievement
 import 'achievement/achievement.dart' as struct_achievement;

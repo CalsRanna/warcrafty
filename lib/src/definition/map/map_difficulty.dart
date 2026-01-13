@@ -1,6 +1,6 @@
-import 'package:warcrafty/src/schema/field.dart';
-import 'package:warcrafty/src/schema/schema.dart';
-import 'package:warcrafty/src/tool/locale_field.dart';
+import 'package:warcrafty/src/internal/field.dart';
+import 'package:warcrafty/src/internal/schema.dart';
+import 'package:warcrafty/src/internal/locale_field.dart';
 
 /// MapDifficulty 结构定义
 ///
@@ -10,36 +10,11 @@ final mapDifficulty = DbcSchema(
   format: 'niisssssssssssssssssiis',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    const Field(
-      index: 1,
-      name: 'MapID',
-      description: 'MapID',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 2,
-      name: 'Difficulty',
-      description: 'Difficulty',
-      type: FieldType.int32,
-    ),
+    const Field(index: 1, name: 'MapID', description: 'MapID', type: FieldType.int32),
+    const Field(index: 2, name: 'Difficulty', description: 'Difficulty', type: FieldType.int32),
     ...createLocaleFieldsWithFlag(3, 'Message_lang', 'Message_lang'),
-    const Field(
-      index: 20,
-      name: 'RaidDuration',
-      description: 'RaidDuration',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 21,
-      name: 'MaxPlayers',
-      description: 'MaxPlayers',
-      type: FieldType.int32,
-    ),
-    const Field(
-      index: 22,
-      name: 'Difficultystring',
-      description: 'Difficultystring',
-      type: FieldType.string,
-    ),
+    const Field(index: 20, name: 'RaidDuration', description: 'RaidDuration', type: FieldType.int32),
+    const Field(index: 21, name: 'MaxPlayers', description: 'MaxPlayers', type: FieldType.int32),
+    const Field(index: 22, name: 'Difficultystring', description: 'Difficultystring', type: FieldType.string),
   ],
 );

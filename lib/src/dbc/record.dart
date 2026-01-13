@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../schema/field.dart';
+import '../internal/field.dart';
 import '../internal/offset.dart';
 import '../internal/string.dart';
 
@@ -19,9 +19,9 @@ final class DbcRecord {
     required ByteData data,
     required FieldOffsets offsets,
     required StringBlock strings,
-  })  : _data = data,
-        _offsets = offsets,
-        _strings = strings;
+  }) : _data = data,
+       _offsets = offsets,
+       _strings = strings;
 
   /// 字段数量
   int get fieldCount => _offsets.fieldCount;
@@ -70,10 +70,7 @@ final class DbcRecord {
     if (endOffset > _data.lengthInBytes) {
       throw FormatException('Field data exceeds record size');
     }
-    return _data.buffer.asUint8List(
-      _data.offsetInBytes + offset,
-      length,
-    );
+    return _data.buffer.asUint8List(_data.offsetInBytes + offset, length);
   }
 
   /// 转换为 Map

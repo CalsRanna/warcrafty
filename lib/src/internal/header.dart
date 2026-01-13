@@ -1,6 +1,6 @@
 import 'dart:typed_data';
 
-import '../util/exception.dart';
+import 'exception.dart';
 
 /// DBC 文件头
 final class DbcHeader {
