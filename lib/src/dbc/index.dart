@@ -1,3 +1,5 @@
+import 'package:warcrafty/src/dbc/record.dart';
+
 import 'loader.dart';
 
 /// DBC 索引

@@ -343,7 +343,7 @@ void main() {
         }
 
         // 尝试加载 DBC 文件
-        final loader = DbcLoader.loadFromPath(file.path, definition.format);
+        final loader = DbcLoader(file.path, definition.format);
 
         // 验证基本属性
         expect(loader.recordCount, greaterThanOrEqualTo(0));
@@ -355,8 +355,6 @@ void main() {
           final map = firstRecord.toMap();
           expect(map, isNotEmpty);
         }
-
-        loader.close();
       });
     }
   });
@@ -384,7 +382,7 @@ void main() {
         }
 
         try {
-          final loader = DbcLoader.loadFromPath(file.path, definition.format);
+          final loader = DbcLoader(file.path, definition.format);
           final recordCount = loader.records.length;
 
           // 验证记录可读
@@ -393,7 +391,6 @@ void main() {
           }
 
           successCount++;
-          loader.close();
         } catch (e) {
           failCount++;
           failures.add('$fileName: $e');

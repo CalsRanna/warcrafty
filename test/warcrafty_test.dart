@@ -298,7 +298,7 @@ void main() {
           [2, 300, 400],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         expect(loader.recordCount, equals(2));
 
         final record1 = loader.getRecord(0);
@@ -310,8 +310,6 @@ void main() {
         expect(record2.getInt(0), equals(2));
         expect(record2.getInt(1), equals(300));
         expect(record2.getInt(2), equals(400));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -329,12 +327,10 @@ void main() {
           [3, 'Hello'],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'ns');
+        final loader = DbcLoader(testFile.path, 'ns');
         expect(loader.getRecord(0).getString(1), equals('Hello'));
         expect(loader.getRecord(1).getString(1), equals('World'));
         expect(loader.getRecord(2).getString(1), equals('Hello'));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -363,13 +359,11 @@ void main() {
           [1, 100, -100],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         final record = loader.getRecord(0);
 
         expect(record.getInt(1), equals(100));
         expect(record.getInt(2), equals(-100));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -385,12 +379,10 @@ void main() {
           [1, 3.14],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nf');
+        final loader = DbcLoader(testFile.path, 'nf');
         final record = loader.getRecord(0);
 
         expect((record.getFloat(1) - 3.14).abs(), lessThan(0.0001));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -406,14 +398,12 @@ void main() {
           [1, 100, 200],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         final map = loader.getRecord(0).toMap();
 
         expect(map['field_0'], equals(1));
         expect(map['field_1'], equals(100));
         expect(map['field_2'], equals(200));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -433,12 +423,10 @@ void main() {
           [3, 500, 600],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         expect(loader.recordCount, equals(3));
         expect(loader.fieldCount, equals(3));
         expect(loader.format, equals('nii'));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -456,12 +444,10 @@ void main() {
           [3, 50, 60],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         final ids = loader.records.map((r) => r.getInt(0)).toList();
 
         expect(ids, equals([1, 2, 3]));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -478,14 +464,12 @@ void main() {
           [2, 300, 400],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         final mapList = loader.toMapList();
 
         expect(mapList.length, equals(2));
         expect(mapList[0]['field_0'], equals(1));
         expect(mapList[1]['field_0'], equals(2));
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -501,13 +485,11 @@ void main() {
           [1, 100, 200],
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nii');
+        final loader = DbcLoader(testFile.path, 'nii');
         expect(
           () => loader.getRecord(99),
           throwsA(isA<RecordIndexOutOfRangeException>()),
         );
-
-        loader.close();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -523,13 +505,10 @@ void main() {
           [1, 100, 200],
         ]);
 
-        final loader = DbcLoader(testFile.path);
-        await loader.loadAsync('nii');
+        final loader = await DbcLoader.loadAsync(testFile.path, 'nii');
 
         expect(loader.recordCount, equals(1));
         expect(loader.getRecord(0).getInt(0), equals(1));
-
-        await loader.closeAsync();
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();
@@ -592,10 +571,8 @@ void main() {
           [1, 42], // int 可以转为 double
         ]);
 
-        final loader = DbcLoader.loadFromPath(testFile.path, 'nf');
-        expect(loader.getRecord(0).getFloat(1), equals(42.0));
-        loader.close();
-      } finally {
+        final loader = DbcLoader(testFile.path, 'nf');
+        expect(loader.getRecord(0).getFloat(1), equals(42.0));      } finally {
         if (await testFile.exists()) {
           await testFile.delete();
         }

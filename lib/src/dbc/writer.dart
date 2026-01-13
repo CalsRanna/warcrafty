@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'dart:typed_data';
 
+import 'package:warcrafty/src/dbc/record.dart';
+
 import 'loader.dart';
 import '../schema/field.dart';
 import '../internal/header.dart';
@@ -178,10 +180,9 @@ final class DbcWriter {
     String outputPath,
     List<dynamic> Function(DbcRecord source) modify,
   ) {
-    final loader = DbcLoader(sourcePath)..load(format);
+    final loader = DbcLoader(sourcePath, format);
     final records = loader.records.map(modify).toList();
     DbcWriter(outputPath, format).write(records);
-    loader.close();
   }
 
   @override
