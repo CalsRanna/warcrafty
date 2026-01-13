@@ -6,7 +6,6 @@ import 'package:test/test.dart';
 import 'package:warcrafty/src/internal/header.dart';
 // 内部模块导入（仅用于测试）
 import 'package:warcrafty/src/internal/offset.dart';
-import 'package:warcrafty/src/internal/search.dart';
 import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/tool/locale_field.dart';
 import 'package:warcrafty/warcrafty.dart';
@@ -217,35 +216,6 @@ void main() {
       final table = builder.build();
       expect(table[0], equals(0));
       expect(utf8.decode(table.sublist(1)), startsWith('你好世界'));
-    });
-  });
-
-  group('BinarySearch', () {
-    test('finds existing element', () {
-      final list = [1, 3, 5, 7, 9];
-      final result = BinarySearch.search(list, 5, (x) => x);
-      expect(result.found, isTrue);
-      expect(result.index, equals(2));
-    });
-
-    test('returns not found for missing element', () {
-      final list = [1, 3, 5, 7, 9];
-      final result = BinarySearch.search(list, 4, (x) => x);
-      expect(result.found, isFalse);
-    });
-
-    test('lowerBound finds correct position', () {
-      final list = [1, 3, 5, 7, 9];
-      expect(BinarySearch.lowerBound(list, 4, (x) => x), equals(2));
-      expect(BinarySearch.lowerBound(list, 5, (x) => x), equals(2));
-      expect(BinarySearch.lowerBound(list, 6, (x) => x), equals(3));
-    });
-
-    test('upperBound finds correct position', () {
-      final list = [1, 3, 5, 7, 9];
-      expect(BinarySearch.upperBound(list, 4, (x) => x), equals(2));
-      expect(BinarySearch.upperBound(list, 5, (x) => x), equals(3));
-      expect(BinarySearch.upperBound(list, 6, (x) => x), equals(3));
     });
   });
 

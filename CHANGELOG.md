@@ -28,15 +28,6 @@
   - O(1) string lookup with prebuilt index
   - Efficient string deduplication on write
 
-- **Binary Search Utilities**
-  - `BinarySearch.search()` - Find exact matches
-  - `BinarySearch.lowerBound()` - Find insertion point (>=)
-  - `BinarySearch.upperBound()` - Find insertion point (>)
-
-### Fixed
-
-- `BinarySearch.searchByKey` returns `null` instead of `0` when not found
-
 ### Changed
 
 - Refactored `DbcWriter` to extract `_collectStrings()` and `_validateFieldType()` methods
