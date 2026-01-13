@@ -1,8 +1,9 @@
 import 'dart:typed_data';
 
+import 'package:warcrafty/src/internal/string_block_reader.dart';
+
 import '../internal/field.dart';
 import '../internal/offset.dart';
-import '../internal/string.dart';
 
 /// DBC 记录实体
 final class DbcRecord {
@@ -11,14 +12,14 @@ final class DbcRecord {
 
   final ByteData _data;
   final FieldOffsets _offsets;
-  final StringBlock _strings;
+  final StringBlockReader _strings;
 
   /// 创建记录
   DbcRecord({
     required this.index,
     required ByteData data,
     required FieldOffsets offsets,
-    required StringBlock strings,
+    required StringBlockReader strings,
   }) : _data = data,
        _offsets = offsets,
        _strings = strings;

@@ -2,10 +2,10 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:warcrafty/src/dbc/record.dart';
+import 'package:warcrafty/src/internal/string_block_reader.dart';
 
 import '../internal/header.dart';
 import '../internal/offset.dart';
-import '../internal/string.dart';
 import '../internal/exception.dart';
 
 /// DBC 文件加载器
@@ -15,7 +15,7 @@ final class DbcLoader {
   final DbcHeader header;
   final Uint8List data;
   final FieldOffsets offsets;
-  final StringBlock strings;
+  final StringBlockReader strings;
 
   /// 私有构造函数
   DbcLoader._(
@@ -66,7 +66,7 @@ final class DbcLoader {
     final recordEnd = dataStart + header.recordSize * header.recordCount;
 
     final data = bytes.sublist(dataStart, recordEnd);
-    final strings = StringBlock(bytes.sublist(recordEnd));
+    final strings = StringBlockReader(bytes.sublist(recordEnd));
 
     return DbcLoader._(path, format, header, data, offsets, strings);
   }
@@ -87,7 +87,7 @@ final class DbcLoader {
     final recordEnd = header.recordSize * header.recordCount;
 
     final data = bytes.sublist(0, recordEnd);
-    final strings = StringBlock(bytes.sublist(recordEnd));
+    final strings = StringBlockReader(bytes.sublist(recordEnd));
 
     return DbcLoader._(path, format, header, data, offsets, strings);
   }
@@ -112,7 +112,7 @@ final class DbcLoader {
     final recordEnd = header.recordSize * header.recordCount;
 
     final data = bytes.sublist(0, recordEnd);
-    final strings = StringBlock(bytes.sublist(recordEnd));
+    final strings = StringBlockReader(bytes.sublist(recordEnd));
 
     return DbcLoader._(path, format, header, data, offsets, strings);
   }

@@ -2,12 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:warcrafty/src/dbc/record.dart';
+import 'package:warcrafty/src/internal/string_block_writer.dart';
 
 import 'loader.dart';
 import '../internal/field.dart';
 import '../internal/header.dart';
 import '../internal/offset.dart';
-import '../internal/string.dart';
 import '../internal/exception.dart';
 
 /// DBC 文件写入器
@@ -26,7 +26,7 @@ final class DbcWriter {
     final file = File(_path).openSync(mode: FileMode.write);
 
     try {
-      final stringTable = StringTable();
+      final stringTable = StringBlockWriter();
       _collectStrings(records, stringTable);
 
       final table = stringTable.build();
@@ -53,7 +53,7 @@ final class DbcWriter {
     final file = await File(_path).open(mode: FileMode.write);
 
     try {
-      final stringTable = StringTable();
+      final stringTable = StringBlockWriter();
       _collectStrings(records, stringTable);
 
       final table = stringTable.build();
@@ -75,7 +75,7 @@ final class DbcWriter {
     }
   }
 
-  void _collectStrings(List<List<dynamic>> records, StringTable table) {
+  void _collectStrings(List<List<dynamic>> records, StringBlockWriter table) {
     for (int ri = 0; ri < records.length; ri++) {
       final record = records[ri];
       if (record.length != _fieldCount) {
@@ -125,7 +125,7 @@ final class DbcWriter {
     }
   }
 
-  Uint8List _encodeRecord(List<dynamic> record, StringTable table) {
+  Uint8List _encodeRecord(List<dynamic> record, StringBlockWriter table) {
     final bytes = ByteData(_offsets.recordSize);
 
     for (int i = 0; i < _fieldCount; i++) {

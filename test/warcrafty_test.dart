@@ -8,6 +8,8 @@ import 'package:warcrafty/src/internal/header.dart';
 import 'package:warcrafty/src/internal/offset.dart';
 import 'package:warcrafty/src/internal/string.dart';
 import 'package:warcrafty/src/internal/locale_field.dart';
+import 'package:warcrafty/src/internal/string_block_reader.dart';
+import 'package:warcrafty/src/internal/string_block_writer.dart';
 import 'package:warcrafty/warcrafty.dart';
 
 void main() {
@@ -142,7 +144,7 @@ void main() {
 
   group('StringBlock', () {
     test('handles empty string block', () {
-      final handler = StringBlock(Uint8List.fromList([0]));
+      final handler = StringBlockReader(Uint8List.fromList([0]));
       expect(handler.read(0), equals(''));
       expect(handler.count, equals(1));
     });
@@ -156,13 +158,13 @@ void main() {
         0,
       ]);
 
-      final handler = StringBlock(data);
+      final handler = StringBlockReader(data);
       expect(handler.read(1), equals('Hello'));
       expect(handler.read(7), equals('World'));
     });
 
     test('returns empty string for invalid offset', () {
-      final handler = StringBlock(Uint8List.fromList([0]));
+      final handler = StringBlockReader(Uint8List.fromList([0]));
       expect(handler.read(100), equals(''));
     });
 
@@ -175,7 +177,7 @@ void main() {
         0,
       ]);
 
-      final handler = StringBlock(data);
+      final handler = StringBlockReader(data);
       expect(handler.count, equals(3));
       expect(handler.all, containsAll(['Test', 'Another']));
     });
@@ -183,19 +185,19 @@ void main() {
 
   group('StringTable', () {
     test('starts with empty string at offset 0', () {
-      final builder = StringTable();
+      final builder = StringBlockWriter();
       expect(builder.add(''), equals(0));
     });
 
     test('deduplicates strings', () {
-      final builder = StringTable();
+      final builder = StringBlockWriter();
       expect(builder.add('Hello'), equals(1));
       expect(builder.add('Hello'), equals(1));
       expect(builder.add('World'), equals(7));
     });
 
     test('builds correct string table', () {
-      final builder = StringTable();
+      final builder = StringBlockWriter();
       builder.add('Hello');
       builder.add('World');
 
@@ -209,7 +211,7 @@ void main() {
     });
 
     test('handles unicode strings', () {
-      final builder = StringTable();
+      final builder = StringBlockWriter();
       final offset = builder.add('你好世界');
       expect(offset, equals(1));
 
