@@ -79,7 +79,7 @@ final class DbcWriter {
     for (int ri = 0; ri < records.length; ri++) {
       final record = records[ri];
       if (record.length != _fieldCount) {
-        throw FormatException(
+        throw DbcFormatException(
           'Record $ri: expected $_fieldCount fields, got ${record.length}',
         );
       }

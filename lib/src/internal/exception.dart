@@ -11,8 +11,8 @@ final class InvalidSignatureException extends DbcException {
     : super('Invalid signature: 0x${actual.toRadixString(16).padLeft(8, '0')}');
 }
 
-final class FormatException extends DbcException {
-  FormatException(super.message);
+final class DbcFormatException extends DbcException {
+  DbcFormatException(super.message);
 }
 
 final class FieldIndexOutOfRangeException extends DbcException {

@@ -54,13 +54,13 @@ final class DbcHeader {
     final stringBlockSize = byteData.getInt32(16, Endian.little);
 
     if (fieldCount <= 0) {
-      throw FormatException('Invalid field count: $fieldCount');
+      throw DbcFormatException('Invalid field count: $fieldCount');
     }
     if (recordCount < 0) {
-      throw FormatException('Invalid record count: $recordCount');
+      throw DbcFormatException('Invalid record count: $recordCount');
     }
     if (recordSize <= 0) {
-      throw FormatException('Invalid record size: $recordSize');
+      throw DbcFormatException('Invalid record size: $recordSize');
     }
 
     return DbcHeader(

@@ -137,7 +137,10 @@ void main() {
       byteData.setInt32(16, 100, Endian.little);
       final bytes = byteData.buffer.asUint8List();
 
-      expect(() => DbcHeader.fromBytes(bytes), throwsA(isA<FormatException>()));
+      expect(
+        () => DbcHeader.fromBytes(bytes),
+        throwsA(isA<DbcFormatException>()),
+      );
     });
   });
 
@@ -315,7 +318,7 @@ void main() {
         () => DbcWriter.writeToPath(testFile.path, 'nii', [
           [1, 100, 200, 300],
         ]),
-        throwsA(isA<FormatException>()),
+        throwsA(isA<DbcFormatException>()),
       );
     });
   });

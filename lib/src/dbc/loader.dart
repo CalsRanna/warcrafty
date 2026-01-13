@@ -56,7 +56,7 @@ final class DbcLoader {
     final header = DbcHeader.fromBytes(bytes.sublist(0, DbcHeader.size));
 
     if (header.fieldCount != format.length) {
-      throw FormatException(
+      throw DbcFormatException(
         'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
       );
     }
@@ -75,7 +75,7 @@ final class DbcLoader {
     final header = DbcHeader.fromBytes(file.readSync(DbcHeader.size));
 
     if (header.fieldCount != format.length) {
-      throw FormatException(
+      throw DbcFormatException(
         'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
       );
     }
@@ -100,7 +100,7 @@ final class DbcLoader {
     final header = DbcHeader.fromBytes(await file.read(DbcHeader.size));
 
     if (header.fieldCount != format.length) {
-      throw FormatException(
+      throw DbcFormatException(
         'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
       );
     }
