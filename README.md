@@ -38,7 +38,7 @@ A high-performance **pure Dart** library for reading and writing World of Warcra
 - **String Deduplication**: Automatic string deduplication to reduce file size
 - **Sync & Async Operations**: Both synchronous and asynchronous APIs
 - **Type Safety**: Full Dart type safety with comprehensive exception handling
-- **200+ Predefined Schemas**: Built-in format definitions for all major DBC files
+- **245 Predefined Schemas**: Built-in format definitions for all major DBC files
 - **Schema Validation**: Runtime validation of format strings and field types
 
 ## Installation
@@ -47,7 +47,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  warcrafty: ^1.0.1
+  warcrafty: ^1.0.2
 ```
 
 Then run:
@@ -256,7 +256,7 @@ Format strings define the structure of DBC records. Each character represents a 
 
 ## Predefined Schemas
 
-The library includes **200+ predefined format definitions** for all major DBC files:
+The library includes **245 predefined format definitions** for all major DBC files:
 
 ```dart
 import 'package:warcrafty/warcrafty.dart';

@@ -1,3 +1,22 @@
+## 1.0.2
+
+### Fixed
+
+- **Locstring Flag Field Type Mismatch**
+  - Corrected the format string for `locstring` fields: the 17th slot (locale flags) is now `int32` (`i`) instead of `string` (`s`), matching the field definitions produced by `createLocaleFieldsWithFlag` (16 strings + 1 int32 flag)
+  - This resolves a type mismatch between import and export: the flag field was previously read as a `String` on load (via `toMap()`) and expected as a `String` on write, corrupting non-zero locale flags and breaking round-trip write of records carrying int flag values
+  - Record size and field offsets are unchanged (`s` and `i` are both 4 bytes); only the type dispatch at the flag position is corrected
+  - Regenerated all 245 predefined schemas from the fixed generator
+
+### Changed
+
+- **`DbcRecord.toMap()` now returns an `int` for locale flag fields** (previously a `String` parsed from the flag bitmask). Direct accessors `getInt`/`getString` are unaffected because they already read raw bytes by offset
+
+### Added
+
+- **Schema Consistency Test**: asserts `format[i] == fields[i].type.char` across all 245 predefined schemas, preventing format/field drift regressions
+- **Locstring Round-Trip Test**: verifies locale flag fields write and read back as `int`
+
 ## 1.0.1
 
 ### Fixed
