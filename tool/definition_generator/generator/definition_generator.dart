@@ -36,7 +36,10 @@ String generateDartDefinition(DbdFile dbd) {
     final count = f.arraySize ?? 1;
 
     if (char == 'LOCSTRING') {
-      formatChars.addAll(List.filled(17, 's'));
+      // locstring = 16 个语言字符串偏移 (s) + 1 个标志位 (i)
+      // 必须与 createLocaleFieldsWithFlag 生成的字段定义保持一致
+      formatChars.addAll(List.filled(16, 's'));
+      formatChars.add('i');
     } else {
       formatChars.addAll(List.filled(count, char));
     }

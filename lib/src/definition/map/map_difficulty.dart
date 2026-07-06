@@ -7,7 +7,7 @@ import 'package:warcrafty/src/internal/locale_field.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 final mapDifficulty = DbcSchema(
   name: 'MapDifficulty',
-  format: 'niisssssssssssssssssiis',
+  format: 'niissssssssssssssssiiis',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     const Field(index: 1, name: 'MapID', description: 'MapID', type: FieldType.int32),

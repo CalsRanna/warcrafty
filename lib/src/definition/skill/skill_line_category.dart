@@ -7,7 +7,7 @@ import 'package:warcrafty/src/internal/locale_field.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 final skillLineCategory = DbcSchema(
   name: 'SkillLineCategory',
-  format: 'nsssssssssssssssssi',
+  format: 'nssssssssssssssssii',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     ...createLocaleFieldsWithFlag(1, 'Name_lang', 'Name_lang'),

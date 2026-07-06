@@ -7,7 +7,7 @@ import 'package:warcrafty/src/internal/locale_field.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 final itemClass = DbcSchema(
   name: 'ItemClass',
-  format: 'iiisssssssssssssssss',
+  format: 'iiissssssssssssssssi',
   fields: [
     const Field(index: 0, name: 'ClassID', description: 'ClassID', type: FieldType.int32),
     const Field(index: 1, name: 'SubclassMapID', description: 'SubclassMapID', type: FieldType.int32),

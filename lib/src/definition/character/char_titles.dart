@@ -7,7 +7,7 @@ import 'package:warcrafty/src/internal/locale_field.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 final charTitles = DbcSchema(
   name: 'CharTitles',
-  format: 'nissssssssssssssssssssssssssssssssssi',
+  format: 'nissssssssssssssssissssssssssssssssii',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     const Field(index: 1, name: 'Condition_ID', description: 'Condition_ID', type: FieldType.int32),

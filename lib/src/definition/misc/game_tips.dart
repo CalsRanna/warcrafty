@@ -7,7 +7,7 @@ import 'package:warcrafty/src/internal/locale_field.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 final gameTips = DbcSchema(
   name: 'GameTips',
-  format: 'nsssssssssssssssss',
+  format: 'nssssssssssssssssi',
   fields: [
     const Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     ...createLocaleFieldsWithFlag(1, 'Text_lang', 'Text_lang'),

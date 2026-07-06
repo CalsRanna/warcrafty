@@ -6,6 +6,34 @@ import 'package:warcrafty/warcrafty.dart';
 void main() {
   final dbcDir = Directory(dbcDirPath);
 
+  // 纯 schema 校验，不依赖 DBC 文件存在
+  group('DbcSchema 自洽性', () {
+    test('每个 schema 的 format 字符与 fields 类型一一对应', () {
+      final failures = <String>[];
+      for (final entry in dbcDefinitions.entries) {
+        final schema = entry.value;
+        if (schema.format.length != schema.fields.length) {
+          failures.add(
+            '${entry.key}: format 长度 ${schema.format.length} '
+            '!= fields 长度 ${schema.fields.length}',
+          );
+          continue;
+        }
+        for (var i = 0; i < schema.fields.length; i++) {
+          final fChar = schema.format[i];
+          final fieldChar = schema.fields[i].type.char;
+          if (fChar != fieldChar) {
+            failures.add(
+              '${entry.key}[$i]: format=$fChar != field=$fieldChar '
+              '(${schema.fields[i].name})',
+            );
+          }
+        }
+      }
+      expect(failures, isEmpty, reason: failures.join('\n'));
+    });
+  });
+
   group('DBC 文件集成测试', () {
     setUpAll(() {
       if (!dbcDir.existsSync()) {
