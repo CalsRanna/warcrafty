@@ -31,7 +31,7 @@ A high-performance **pure Dart** library for reading and writing World of Warcra
 
 - **Pure Dart Implementation**: No external C libraries or FFI required
 - **High Performance**: Efficient binary data processing using `ByteData` and `Uint8List`
-- **Format String Driven**: Flexible parsing fully compatible with AzerothCore format strings
+- **Format String Driven**: Flexible parsing with explicit Warcrafty and AzerothCore format dialects
 - **O(1) String Lookup**: Prebuilt string index for constant-time string access
 - **ID-Based Indexing**: Fast record lookup with binary search
 - **Full Read/Write Support**: Complete DBC file reading and writing capabilities
@@ -47,7 +47,7 @@ Add to your `pubspec.yaml`:
 
 ```yaml
 dependencies:
-  warcrafty: ^1.0.2
+  warcrafty: ^2.0.0
 ```
 
 Then run:
@@ -227,7 +227,12 @@ final allRecords = index.records;
 
 ## Format String Reference
 
-Format strings define the structure of DBC records. Each character represents a field type:
+Format strings define the structure of DBC records. Warcrafty 2.0 supports two explicit dialects:
+
+- `DbcFormatDialect.warcrafty` (default): extended typed dialect with explicit integer widths and signedness.
+- `DbcFormatDialect.azerothCore`: compatibility dialect for AzerothCore/TrinityCore `DBCfmt.h` (`x X s f i b d n l`; `i` is treated as `uint32`).
+
+Each character in the default Warcrafty dialect represents a field type:
 
 | Character | Type | Size | Description |
 |-----------|------|------|-------------|
@@ -258,6 +263,13 @@ Format strings define the structure of DBC records. Each character represents a 
 
 // Item: ID + class + subclass + different name + name
 'niiiiss'
+
+// Load an AzerothCore DBCfmt.h-style format string explicitly
+final loader = DbcLoader(
+  'SpellItemEnchantmentCondition.dbc',
+  'nbbbbbxxxxxbbbbbbbbbbiiiiiXXXXX',
+  dialect: DbcFormatDialect.azerothCore,
+);
 ```
 
 ## Predefined Schemas
@@ -613,7 +625,7 @@ Compatible with DBC files from:
 - **MaNGOS** (3.3.5a)
 - **Other World of Warcraft server emulators**
 
-Format strings are fully compatible with AzerothCore's DBC format definitions.
+AzerothCore-style format strings are supported through `DbcFormatDialect.azerothCore`. The default Warcrafty dialect is an extended typed dialect; its extra characters (`B`, `h`, `H`, `u`, `q`, `Q`) are not valid in AzerothCore `DBCfmt.h`.
 
 ## Testing
 

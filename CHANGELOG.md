@@ -1,3 +1,17 @@
+## 2.0.0
+
+### Added
+
+- **Explicit Format Dialects**
+  - Added `DbcFormatDialect.warcrafty` as the default extended typed dialect
+  - Added `DbcFormatDialect.azerothCore` for AzerothCore/TrinityCore `DBCfmt.h` compatibility (`x X s f i b d n l`)
+  - `DbcLoader`, `DbcWriter`, `DbcSchema`, and `FieldOffsets` now carry dialect information
+  - AzerothCore dialect interprets `i` as `uint32`, while the default Warcrafty dialect keeps `i` as `int32` and uses `u` for `uint32`
+
+### Changed
+
+- Documentation now describes AzerothCore format strings as a supported dialect rather than claiming all Warcrafty extended format strings are directly valid in AzerothCore `DBCfmt.h`
+
 ## 1.0.2
 
 ### Fixed

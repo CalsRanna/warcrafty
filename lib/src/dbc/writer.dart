@@ -14,12 +14,17 @@ import '../internal/exception.dart';
 final class DbcWriter {
   final String _path;
   final String _format;
+  final DbcFormatDialect _dialect;
   final FieldOffsets _offsets;
   final int _fieldCount;
 
-  DbcWriter(this._path, this._format)
-    : _offsets = FieldOffsets(_format),
-      _fieldCount = _format.length;
+  DbcWriter(
+    this._path,
+    this._format, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) : _dialect = dialect,
+       _offsets = FieldOffsets(_format, dialect: dialect),
+       _fieldCount = _format.length;
 
   /// 写入记录
   void write(List<List<dynamic>> records) {
@@ -85,7 +90,7 @@ final class DbcWriter {
       }
 
       for (int i = 0; i < _fieldCount; i++) {
-        final type = FieldType.fromChar(_format[i]);
+        final type = FieldType.fromChar(_format[i], dialect: _dialect);
         final value = record[i];
         _validateField(ri, i, type, value);
         if (type == FieldType.string) {
@@ -161,7 +166,7 @@ final class DbcWriter {
 
     for (int i = 0; i < _fieldCount; i++) {
       final offset = _offsets[i];
-      final type = FieldType.fromChar(_format[i]);
+      final type = FieldType.fromChar(_format[i], dialect: _dialect);
       final value = record[i];
 
       switch (type) {
@@ -202,18 +207,20 @@ final class DbcWriter {
   static void writeToPath(
     String path,
     String format,
-    List<List<dynamic>> records,
-  ) {
-    DbcWriter(path, format).write(records);
+    List<List<dynamic>> records, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    DbcWriter(path, format, dialect: dialect).write(records);
   }
 
   /// 静态方法：异步写入
   static Future<void> writeToPathAsync(
     String path,
     String format,
-    List<List<dynamic>> records,
-  ) {
-    return DbcWriter(path, format).writeAsync(records);
+    List<List<dynamic>> records, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    return DbcWriter(path, format, dialect: dialect).writeAsync(records);
   }
 
   /// 从现有文件复制并修改
@@ -221,13 +228,15 @@ final class DbcWriter {
     String sourcePath,
     String format,
     String outputPath,
-    List<dynamic> Function(DbcRecord source) modify,
-  ) {
-    final loader = DbcLoader(sourcePath, format);
+    List<dynamic> Function(DbcRecord source) modify, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    final loader = DbcLoader(sourcePath, format, dialect: dialect);
     final records = loader.records.map(modify).toList();
-    DbcWriter(outputPath, format).write(records);
+    DbcWriter(outputPath, format, dialect: dialect).write(records);
   }
 
   @override
-  String toString() => 'DbcWriter($_path, format: $_format)';
+  String toString() =>
+      'DbcWriter($_path, format: $_format, dialect: $_dialect)';
 }

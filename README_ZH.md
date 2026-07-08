@@ -31,7 +31,7 @@
 
 - **纯 Dart 实现**: 无需外部 C 库或 FFI
 - **高性能**: 使用 `ByteData` 和 `Uint8List` 进行高效的二进制数据处理
-- **格式字符串驱动**: 灵活的解析方式，与 AzerothCore 格式字符串完全兼容
+- **格式字符串驱动**: 灵活的解析方式，明确支持 Warcrafty 与 AzerothCore 两种格式方言
 - **O(1) 字符串查找**: 预建字符串索引，常数时间复杂度访问
 - **基于 ID 的索引**: 使用二分搜索快速查找记录
 - **完整读写支持**: 提供 DBC 文件的完整读取和写入功能
@@ -47,7 +47,7 @@
 
 ```yaml
 dependencies:
-  warcrafty: ^1.0.2
+  warcrafty: ^2.0.0
 ```
 
 然后运行：
@@ -227,7 +227,12 @@ final allRecords = index.records;
 
 ## 格式字符串参考
 
-格式字符串定义 DBC 记录的结构。每个字符代表一种字段类型：
+格式字符串定义 DBC 记录的结构。Warcrafty 2.0 明确支持两种方言：
+
+- `DbcFormatDialect.warcrafty`（默认）：带明确整数宽度和有无符号信息的扩展类型方言。
+- `DbcFormatDialect.azerothCore`：兼容 AzerothCore/TrinityCore `DBCfmt.h` 的方言（`x X s f i b d n l`；`i` 按 `uint32` 解释）。
+
+默认 Warcrafty 方言中，每个字符代表一种字段类型：
 
 | 字符 | 类型 | 大小 | 描述 |
 |------|------|------|------|
@@ -258,6 +263,13 @@ final allRecords = index.records;
 
 // 物品：ID + 类别 + 子类 + 不同名称 + 名称
 'niiiiss'
+
+// 显式读取 AzerothCore DBCfmt.h 风格格式字符串
+final loader = DbcLoader(
+  'SpellItemEnchantmentCondition.dbc',
+  'nbbbbbxxxxxbbbbbbbbbbiiiiiXXXXX',
+  dialect: DbcFormatDialect.azerothCore,
+);
 ```
 
 ## 预定义结构
@@ -613,7 +625,7 @@ try {
 - **MaNGOS** (3.3.5a)
 - **其他魔兽世界服务器模拟器**
 
-格式字符串与 AzerothCore 的 DBC 格式定义完全兼容。
+AzerothCore 风格格式字符串通过 `DbcFormatDialect.azerothCore` 支持。默认 Warcrafty 方言是扩展类型方言；额外字符（`B`、`h`、`H`、`u`、`q`、`Q`）不能直接用于 AzerothCore `DBCfmt.h`。
 
 ## 测试
 

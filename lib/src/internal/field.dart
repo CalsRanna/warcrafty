@@ -1,3 +1,15 @@
+/// DBC 格式字符串方言。
+///
+/// [warcrafty] 是带明确整数宽度和有无符号信息的扩展格式；
+/// [azerothCore] 兼容 AzerothCore/TrinityCore DBCfmt.h 使用的格式字符子集。
+enum DbcFormatDialect {
+  /// Warcrafty 扩展格式字符：B/b/h/H/i/u/q/Q 等。
+  warcrafty,
+
+  /// AzerothCore DBCfmt.h 格式字符：x/X/s/f/i/b/d/n/l。
+  azerothCore,
+}
+
 /// 字段类型枚举
 ///
 /// 定义 DBC 文件中支持的字段类型。
@@ -52,12 +64,40 @@ enum FieldType {
 
   const FieldType(this.char);
 
-  /// 根据字符获取对应的类型
-  static FieldType fromChar(String char) {
+  /// 根据字符和格式方言获取对应的类型。
+  ///
+  /// 默认使用 Warcrafty 扩展方言。AzerothCore 方言只接受
+  /// `x X s f i b d n l`，其中 `i` 按 AzerothCore 的 uint32 语义解释。
+  static FieldType fromChar(
+    String char, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    return switch (dialect) {
+      DbcFormatDialect.warcrafty => _fromWarcraftyChar(char),
+      DbcFormatDialect.azerothCore => _fromAzerothCoreChar(char),
+    };
+  }
+
+  static FieldType _fromWarcraftyChar(String char) {
     return values.firstWhere(
       (e) => e.char == char,
       orElse: () => throw FormatException('Unknown field type: $char'),
     );
+  }
+
+  static FieldType _fromAzerothCoreChar(String char) {
+    return switch (char) {
+      'x' => FieldType.unused,
+      'X' => FieldType.unusedByte,
+      's' => FieldType.string,
+      'f' => FieldType.float,
+      'i' => FieldType.uint32,
+      'b' => FieldType.uint8,
+      'd' => FieldType.sort,
+      'n' => FieldType.id,
+      'l' => FieldType.boolean,
+      _ => throw FormatException('Unknown AzerothCore field type: $char'),
+    };
   }
 
   /// 获取字段大小 (字节)

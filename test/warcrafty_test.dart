@@ -34,6 +34,21 @@ void main() {
       expect(FieldType.fromChar('f'), equals(FieldType.float));
     });
 
+    test('fromChar supports AzerothCore dialect explicitly', () {
+      expect(
+        FieldType.fromChar('i', dialect: DbcFormatDialect.azerothCore),
+        equals(FieldType.uint32),
+      );
+      expect(
+        FieldType.fromChar('b', dialect: DbcFormatDialect.azerothCore),
+        equals(FieldType.uint8),
+      );
+      expect(
+        () => FieldType.fromChar('B', dialect: DbcFormatDialect.azerothCore),
+        throwsA(isA<FormatException>()),
+      );
+    });
+
     test('size returns correct byte size', () {
       expect(FieldType.int8.size, equals(1));
       expect(FieldType.uint8.size, equals(1));
@@ -91,6 +106,13 @@ void main() {
 
     test('throws DbcFormatException for invalid format character', () {
       expect(() => FieldOffsets('nz'), throwsA(isA<DbcFormatException>()));
+    });
+
+    test('rejects extended characters in AzerothCore dialect', () {
+      expect(
+        () => FieldOffsets('nB', dialect: DbcFormatDialect.azerothCore),
+        throwsA(isA<DbcFormatException>()),
+      );
     });
   });
 
@@ -743,6 +765,29 @@ void main() {
 
         final loader = DbcLoader(testFile.path, 'nf');
         expect(loader.getRecord(0).getFloat(1), equals(42.0));
+      } finally {
+        if (await testFile.exists()) {
+          await testFile.delete();
+        }
+      }
+    });
+
+    test('AzerothCore dialect treats i as uint32', () async {
+      final testFile = File('${Directory.systemTemp.path}/test_ac_uint32.dbc');
+
+      try {
+        DbcWriter.writeToPath(testFile.path, 'ni', [
+          [1, 0xFFFFFFFF],
+        ], dialect: DbcFormatDialect.azerothCore);
+
+        final loader = DbcLoader(
+          testFile.path,
+          'ni',
+          dialect: DbcFormatDialect.azerothCore,
+        );
+        expect(loader.dialect, equals(DbcFormatDialect.azerothCore));
+        expect(loader.getRecord(0).getUint(1), equals(0xFFFFFFFF));
+        expect(loader.getRecord(0).toMap()['field_1'], equals(0xFFFFFFFF));
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();

@@ -84,7 +84,11 @@ void main() {
         }
 
         // 尝试加载 DBC 文件
-        final loader = DbcLoader(file.path, definition.format);
+        final loader = DbcLoader(
+          file.path,
+          definition.format,
+          dialect: definition.dialect,
+        );
 
         // 验证基本属性
         expect(loader.recordCount, greaterThanOrEqualTo(0));
@@ -123,7 +127,11 @@ void main() {
         }
 
         try {
-          final loader = DbcLoader(file.path, definition.format);
+          final loader = DbcLoader(
+            file.path,
+            definition.format,
+            dialect: definition.dialect,
+          );
           final recordCount = loader.records.length;
 
           // 验证记录可读

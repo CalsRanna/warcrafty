@@ -6,10 +6,15 @@ import 'exception.dart';
 /// 根据格式字符串计算每个字段在记录中的字节偏移量。
 final class FieldOffsets {
   final String _format;
+  final DbcFormatDialect _dialect;
   late final List<int> _offsets;
 
   /// 创建偏移量计算器
-  FieldOffsets(String format) : _format = format {
+  FieldOffsets(
+    String format, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) : _format = format,
+       _dialect = dialect {
     _validate();
     _calculate();
   }
@@ -18,7 +23,7 @@ final class FieldOffsets {
     for (int i = 0; i < _format.length; i++) {
       final char = _format[i];
       try {
-        FieldType.fromChar(char);
+        FieldType.fromChar(char, dialect: _dialect);
       } on FormatException {
         throw DbcFormatException(
           'Invalid format character: "$char" at position $i',
@@ -33,7 +38,7 @@ final class FieldOffsets {
 
     _offsets[0] = 0;
     for (int i = 1; i < _format.length; i++) {
-      final prevType = FieldType.fromChar(_format[i - 1]);
+      final prevType = FieldType.fromChar(_format[i - 1], dialect: _dialect);
       _offsets[i] = _offsets[i - 1] + prevType.size;
     }
   }
@@ -41,13 +46,19 @@ final class FieldOffsets {
   /// 格式字符串
   String get format => _format;
 
+  /// 格式字符串方言
+  DbcFormatDialect get dialect => _dialect;
+
   /// 字段数量
   int get fieldCount => _format.length;
 
   /// 总记录大小 (字节)
   int get recordSize {
     if (_format.isEmpty) return 0;
-    final lastType = FieldType.fromChar(_format[_format.length - 1]);
+    final lastType = FieldType.fromChar(
+      _format[_format.length - 1],
+      dialect: _dialect,
+    );
     return _offsets.last + lastType.size;
   }
 
@@ -66,7 +77,7 @@ final class FieldOffsets {
   List<int> indicesOf(FieldType type) {
     final indices = <int>[];
     for (int i = 0; i < _format.length; i++) {
-      if (FieldType.fromChar(_format[i]) == type) {
+      if (FieldType.fromChar(_format[i], dialect: _dialect) == type) {
         indices.add(i);
       }
     }
@@ -80,18 +91,20 @@ final class FieldOffsets {
   bool get hasIndexField => indexField >= 0;
 
   /// 获取字段的类型
-  FieldType getFieldType(int index) => FieldType.fromChar(_format[index]);
+  FieldType getFieldType(int index) =>
+      FieldType.fromChar(_format[index], dialect: _dialect);
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
     if (other is! FieldOffsets) return false;
-    return _format == other._format;
+    return _format == other._format && _dialect == other._dialect;
   }
 
   @override
-  int get hashCode => _format.hashCode;
+  int get hashCode => Object.hash(_format, _dialect);
 
   @override
-  String toString() => 'FieldOffsets($_format, size: $recordSize)';
+  String toString() =>
+      'FieldOffsets($_format, dialect: $_dialect, size: $recordSize)';
 }

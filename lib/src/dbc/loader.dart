@@ -7,11 +7,13 @@ import 'package:warcrafty/src/internal/string_block_reader.dart';
 import '../internal/header.dart';
 import '../internal/offset.dart';
 import '../internal/exception.dart';
+import '../internal/field.dart';
 
 /// DBC 文件加载器
 final class DbcLoader {
   final String _path;
   final String _format;
+  final DbcFormatDialect _dialect;
   final DbcHeader header;
   final Uint8List data;
   final FieldOffsets offsets;
@@ -21,6 +23,7 @@ final class DbcLoader {
   DbcLoader._(
     this._path,
     this._format,
+    this._dialect,
     this.header,
     this.data,
     this.offsets,
@@ -28,22 +31,30 @@ final class DbcLoader {
   );
 
   /// 从文件路径同步加载
-  factory DbcLoader(String path, String format) {
-    final offsets = FieldOffsets(format);
+  factory DbcLoader(
+    String path,
+    String format, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    final offsets = FieldOffsets(format, dialect: dialect);
     final file = File(path).openSync();
     try {
-      return _load(path, format, offsets, file);
+      return _load(path, format, dialect, offsets, file);
     } finally {
       file.closeSync();
     }
   }
 
   /// 从文件路径异步加载
-  static Future<DbcLoader> loadAsync(String path, String format) async {
-    final offsets = FieldOffsets(format);
+  static Future<DbcLoader> loadAsync(
+    String path,
+    String format, {
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) async {
+    final offsets = FieldOffsets(format, dialect: dialect);
     final file = await File(path).open();
     try {
-      return await _loadAsync(path, format, offsets, file);
+      return await _loadAsync(path, format, dialect, offsets, file);
     } finally {
       await file.close();
     }
@@ -52,10 +63,11 @@ final class DbcLoader {
   /// 从字节数据加载
   factory DbcLoader.fromBytes(
     Uint8List bytes,
-    String format, [
+    String format, {
     String path = '',
-  ]) {
-    final offsets = FieldOffsets(format);
+    DbcFormatDialect dialect = DbcFormatDialect.warcrafty,
+  }) {
+    final offsets = FieldOffsets(format, dialect: dialect);
     final header = DbcHeader.fromBytes(bytes);
     _validateHeader(header, offsets, format);
 
@@ -73,12 +85,13 @@ final class DbcLoader {
     final data = bytes.sublist(dataStart, recordEnd);
     final strings = StringBlockReader(bytes.sublist(recordEnd, expectedSize));
 
-    return DbcLoader._(path, format, header, data, offsets, strings);
+    return DbcLoader._(path, format, dialect, header, data, offsets, strings);
   }
 
   static DbcLoader _load(
     String path,
     String format,
+    DbcFormatDialect dialect,
     FieldOffsets offsets,
     RandomAccessFile file,
   ) {
@@ -104,12 +117,13 @@ final class DbcLoader {
     final data = bytes.sublist(0, recordEnd);
     final strings = StringBlockReader(bytes.sublist(recordEnd, dataSize));
 
-    return DbcLoader._(path, format, header, data, offsets, strings);
+    return DbcLoader._(path, format, dialect, header, data, offsets, strings);
   }
 
   static Future<DbcLoader> _loadAsync(
     String path,
     String format,
+    DbcFormatDialect dialect,
     FieldOffsets offsets,
     RandomAccessFile file,
   ) async {
@@ -135,7 +149,7 @@ final class DbcLoader {
     final data = bytes.sublist(0, recordEnd);
     final strings = StringBlockReader(bytes.sublist(recordEnd, dataSize));
 
-    return DbcLoader._(path, format, header, data, offsets, strings);
+    return DbcLoader._(path, format, dialect, header, data, offsets, strings);
   }
 
   static void _validateHeader(
@@ -169,6 +183,9 @@ final class DbcLoader {
 
   /// 格式字符串
   String get format => _format;
+
+  /// 格式字符串方言
+  DbcFormatDialect get dialect => _dialect;
 
   /// 获取指定索引的记录
   DbcRecord getRecord(int index) {

@@ -10,12 +10,16 @@ final class DbcSchema {
   /// 格式字符串
   final String format;
 
+  /// 格式字符串方言
+  final DbcFormatDialect dialect;
+
   /// 字段定义列表
   final List<Field> fields;
 
   const DbcSchema({
     required this.name,
     required this.format,
+    this.dialect = DbcFormatDialect.warcrafty,
     required this.fields,
   });
 
@@ -27,7 +31,7 @@ final class DbcSchema {
     if (format.isEmpty) return 0;
     var total = 0;
     for (var i = 0; i < format.length; i++) {
-      total += FieldType.fromChar(format[i]).size;
+      total += FieldType.fromChar(format[i], dialect: dialect).size;
     }
     return total;
   }
