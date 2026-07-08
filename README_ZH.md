@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Dart SDK](https://img.shields.io/badge/Dart-3.10%2B-blue.svg)](https://dart.dev)
 
-一个高性能的 **纯 Dart** 库，用于读写魔兽世界客户端使用的 DBC (Database Client) 二进制文件格式。无需外部运行时依赖。
+一个高性能的 **纯 Dart** 库，用于读写魔兽世界客户端使用的 DBC (Database Client) 二进制文件，可选支持通过 StormLib FFI 读写 MPQ 归档。
 
 [English](README.md)
 
@@ -20,6 +20,7 @@
   - [DbcIndex](#dbcindex)
 - [格式字符串参考](#格式字符串参考)
 - [预定义结构](#预定义结构)
+- [MPQ 归档支持](#mpq-归档支持)
 - [高级用法](#高级用法)
 - [兼容性](#兼容性)
 - [测试](#测试)
@@ -29,17 +30,18 @@
 
 ## 功能特性
 
-- **纯 Dart 实现**: 无需外部 C 库或 FFI
+- **纯 Dart 实现**: DBC 操作无需外部 C 库
 - **高性能**: 使用 `ByteData` 和 `Uint8List` 进行高效的二进制数据处理
 - **格式字符串驱动**: 灵活的解析方式，明确支持 Warcrafty 与 AzerothCore 两种格式方言
 - **O(1) 字符串查找**: 预建字符串索引，常数时间复杂度访问
-- **基于 ID 的索引**: 使用二分搜索快速查找记录
-- **完整读写支持**: 提供 DBC 文件的完整读取和写入功能
+- **基于 ID 的索引**: 使用哈希表快速查找记录
+- **完整读写支持**: 提供 DBC 文件的完整读取和写入功能，含类型校验
+- **MPQ 归档支持**: 通过 StormLib FFI 读写暴雪 MPQ 归档
 - **字符串去重**: 写入时自动进行字符串去重以减少文件大小
 - **同步与异步**: 同时支持同步和异步 API
 - **类型安全**: 完整的 Dart 类型安全，丰富的异常处理
 - **245 个预定义结构**: 内置所有主要 DBC 文件的格式定义
-- **结构验证**: 运行时验证格式字符串和字段类型
+- **结构验证**: 运行时验证格式字符串、字段类型和写入时类型检查
 
 ## 安装
 
@@ -72,14 +74,23 @@ void main() {
     print('ID: $id, 名称: $name');
   }
 
-  // 构建索引以实现快速查找
-  final index = DbcIndex.fromLoader(loader, (record) => record.toMap());
+  // 构建索引以实现 O(1) 快速查找
+  final index = DbcIndex<Map<String, dynamic>>.fromLoader(
+    loader,
+    (record) => record.toMap(),
+  );
   final raceData = index.lookup(1); // 获取 ID 为 1 的种族
 
-  // 写入 DBC 文件
+  // 写入 DBC 文件（含类型校验）
   DbcWriter.writeToPath('output.dbc', 'niiiiss', [
     [1, 0, 84, 0, 0, 'Human', 'Human'],
   ]);
+
+  // 打开 MPQ 归档并提取 DBC 文件
+  final mpq = MpqArchive.open('patch-zhCN.MPQ');
+  final dbcBytes = mpq.extract(r'DBFilesClient\ChrRaces.dbc');
+  final mpqLoader = DbcLoader.fromBytes(dbcBytes, Definitions.chrRaces.format);
+  mpq.close();
 }
 ```
 
@@ -131,8 +142,17 @@ final value = record.getInt(5);
 // 读取无符号整数（32 位）
 final unsigned = record.getUint(1);
 
-// 读取 8 位整数
-final byteValue = record.getUint8(0);
+// 读取 8 位有符号/无符号整数
+final byteSigned = record.getInt8(0);
+final byteUnsigned = record.getUint8(0);
+
+// 读取 16 位有符号/无符号整数
+final shortSigned = record.getInt16(0);
+final shortUnsigned = record.getUint16(0);
+
+// 读取 64 位有符号/无符号整数
+final longSigned = record.getInt64(0);
+final longUnsigned = record.getUint64(0);
 
 // 读取浮点数（32 位）
 final floatValue = record.getFloat(3);
@@ -187,6 +207,11 @@ final writer = DbcWriter('custom.dbc', 'niiiiss');
 writer.write([
   [1, 0, 84, 0, 0, 'Human', 'Human'],
 ]);
+
+// 写入时类型校验 — 以下会抛出 WriteException：
+//   [1, '不是整数', 84, ...]    // 期望 int 但拿到 String
+//   [1, 300, 84, ...]           // uint8 超出范围（0-255）
+//   [1, true, 84, ...]          // 期望 int 但拿到 bool
 ```
 
 ### DbcIndex
@@ -221,8 +246,15 @@ final record = index[1];
 print('总记录数: ${index.count}');
 print('索引字段: ${index.indexField}');
 
-// 获取所有记录
+// 获取所有记录（不可修改）
 final allRecords = index.records;
+
+// 索引支持泛型 — 可以直接操作 DbcRecord
+final typedIndex = DbcIndex<DbcRecord>.fromLoader(
+  loader,
+  (r) => r,
+);
+final spellRecord = typedIndex.lookup(133); // ID 为 133 的法术
 ```
 
 ## 格式字符串参考
@@ -252,17 +284,19 @@ final allRecords = index.records;
 | `d` | 排序 | 4 字节 | 排序字段（不包含在数据中）|
 | `l` | 布尔值 | 4 字节 | 布尔值/逻辑值（存储为 32 位整数）|
 
+> **AzerothCore 方言**: 在 `DbcFormatDialect.azerothCore` 模式下，`i` 按 `uint32` 解释，`b` 按 `uint8` 解释。扩展字符（`B`、`h`、`H`、`u`、`q`、`Q`）在此方言中无效。
+
 ### 格式字符串示例
 
 ```dart
 // 简单记录：ID + 2 个整数 + 2 个字符串
 'niiiiss'
 
+// 扩展整数宽度：ID + int8 + uint8 + int16 + uint16 + int32 + uint32 + int64 + uint64
+'nBbhHiuqQ'
+
 // 种族角色：ID + 标志 + 阵营 + 2 个显示 ID + 2 个字符串 + 45 个本地化字符串
 'niiiiisiiiisiissssssssssssssssssssssssssssssssssssssssssssssssssssssi'
-
-// 物品：ID + 类别 + 子类 + 不同名称 + 名称
-'niiiiss'
 
 // 显式读取 AzerothCore DBCfmt.h 风格格式字符串
 final loader = DbcLoader(
@@ -294,269 +328,91 @@ final field = Definitions.chrRaces.getFieldByName('ID');
 ### 可用分类
 
 - **成就 (Achievement)**: Achievement, Achievement_Category, Achievement_Criteria
-- **区域 (Area)**: AreaTable, AreaGroup, AreaPOI, WorldMapArea, WorldSafeLocs
-- **角色 (Character)**: ChrRaces, ChrClasses, CharBaseInfo, CharTitles, CharSections
-- **生物 (Creature)**: CreatureDisplayInfo, CreatureFamily, CreatureModelData, CreatureSpellData
+- **区域 (Area)**: AreaTable, AreaGroup, AreaPOI, AreaTrigger, WMOAreaTable, WorldMapArea, WorldMapContinent, WorldSafeLocs
+- **角色 (Character)**: ChrRaces, ChrClasses, CharBaseInfo, CharHairGeosets, CharHairTextures, CharSections, CharStartOutfit, CharTitles
+- **生物 (Creature)**: CreatureDisplayInfo, CreatureFamily, CreatureModelData, CreatureMovementInfo, CreatureSpellData, CreatureType
 - **阵营 (Faction)**: Faction, FactionGroup, FactionTemplate
 - **游戏对象 (GameObject)**: GameObjectDisplayInfo, GameObjectArtKit
-- **物品 (Item)**: Item, ItemSet, ItemExtendedCost, ItemDisplayInfo, GemProperties
-- **地图 (Map)**: Map, DungeonEncounter, DungeonMap, MapDifficulty
-- **任务 (Quest)**: QuestInfo, QuestSort, QuestXP
-- **技能 (Skill)**: SkillLine, SkillLineAbility, SkillTiers
-- **音效 (Sound)**: SoundEntries, SoundAmbience, SoundEmitters
-- **法术 (Spell)**: Spell, SpellRange, SpellDuration, SpellRadius, SpellIcon
+- **物品 (Item)**: Item, ItemBagFamily, ItemClass, ItemDisplayInfo, ItemExtendedCost, ItemSet, GemProperties
+- **光照 (Light)**: Light, LightFloatBand, LightIntBand, LightParams, LightSkybox
+- **地图 (Map)**: Map, DungeonEncounter, DungeonMap, DungeonMapChunk, LFGDungeons, MapDifficulty
+- **任务 (Quest)**: QuestInfo, QuestSort, QuestXP, QuestFactionReward
+- **技能 (Skill)**: SkillLine, SkillLineAbility, SkillCostsData, SkillRaceClassInfo, SkillTiers
+- **音效 (Sound)**: SoundEntries, SoundAmbience, SoundEmitters, SoundFilter, SoundWaterType
+- **法术 (Spell)**: Spell, SpellCastTimes, SpellDuration, SpellIcon, SpellItemEnchantment, SpellRadius, SpellRange, SpellVisual, GlyphProperties, TotemCategory
 - **天赋 (Talent)**: Talent, TalentTab
 - **出租车 (Taxi)**: TaxiNodes, TaxiPath, TaxiPathNode
-- **载具 (Vehicle)**: Vehicle, VehicleSeat
-- **GT 表**: GtCombatRatings, GtChanceToSpellCrit, GtRegenHPPerSpt
+- **载具 (Vehicle)**: Vehicle, VehicleSeat, VehicleUIIndSeat, VehicleUIIndicator
+- **杂项 (Misc)**: AnimationData, AttackAnimKits, Emotes, Holidays, Languages, LoadingScreens, Movie, ScreenEffect, Weather, ZoneMusic
+- **GT 表**: GtBarberShopCostBase, GtChanceToMeleeCrit, GtChanceToSpellCrit, GtCombatRatings, GtRegenHPPerSpt, GtRegenMPPerSpt
 
 ### 完整结构列表
 
 ```dart
-// 所有可用结构
-Definitions.achievement
-Definitions.achievementCategory
-Definitions.achievementCriteria
-Definitions.areaGroup
-Definitions.areaPOI
-Definitions.areaTable
-Definitions.areaTrigger
-Definitions.auctionHouse
-Definitions.bankBagSlotPrices
-Definitions.bannedAddOns
-Definitions.barberShopStyle
-Definitions.battlemasterList
-Definitions.cameraShakes
-Definitions.cfgCategories
-Definitions.cfgConfigs
-Definitions.charBaseInfo
-Definitions.charHairGeosets
-Definitions.charHairTextures
-Definitions.charSections
-Definitions.charStartOutfit
-Definitions.charTitles
-Definitions.characterFacialHairStyles
-Definitions.chatChannels
-Definitions.chatProfanity
-Definitions.chrClasses
-Definitions.chrRaces
-Definitions.cinematicCamera
-Definitions.cinematicSequences
-Definitions.creatureDisplayInfo
-Definitions.creatureDisplayInfoExtra
-Definitions.creatureFamily
-Definitions.creatureModelData
-Definitions.creatureMovementInfo
-Definitions.creatureSoundData
-Definitions.creatureSpellData
-Definitions.creatureType
-Definitions.currencyCategory
-Definitions.currencyTypes
-Definitions.danceMoves
-Definitions.deathThudLookups
-Definitions.declinedWord
-Definitions.declinedWordCases
-Definitions.destructibleModelData
-Definitions.dungeonEncounter
-Definitions.dungeonMap
-Definitions.dungeonMapChunk
-Definitions.durabilityCosts
-Definitions.durabilityQuality
-Definitions.emotes
-Definitions.emotesText
-Definitions.emotesTextData
-Definitions.emotesTextSound
-Definitions.environmentalDamage
-Definitions.exhaustion
-Definitions.faction
-Definitions.factionGroup
-Definitions.factionTemplate
-Definitions.fileData
-Definitions.footprintTextures
-Definitions.footstepTerrainLookup
-Definitions.gMSurveyAnswers
-Definitions.gMSurveyCurrentSurvey
-Definitions.gMSurveyQuestions
-Definitions.gMSurveySurveys
-Definitions.gMTicketCategory
-Definitions.gameObjectArtKit
-Definitions.gameObjectDisplayInfo
-Definitions.gameTables
-Definitions.gameTips
-Definitions.gemProperties
-Definitions.glyphProperties
-Definitions.glyphSlot
-Definitions.groundEffectDoodad
-Definitions.groundEffectTexture
-Definitions.helmetGeosetVisData
-Definitions.holidayDescriptions
-Definitions.holidayNames
-Definitions.holidays
-Definitions.item
-Definitions.itemBagFamily
-Definitions.itemClass
-Definitions.itemCondExtCosts
-Definitions.itemDisplayInfo
-Definitions.itemExtendedCost
-Definitions.itemGroupSounds
-Definitions.itemLimitCategory
-Definitions.itemPetFood
-Definitions.itemPurchaseGroup
-Definitions.itemRandomProperties
-Definitions.itemRandomSuffix
-Definitions.itemSet
-Definitions.itemSubClass
-Definitions.itemSubClassMask
-Definitions.itemVisualEffects
-Definitions.itemVisuals
-Definitions.lFGDungeonExpansion
-Definitions.lFGDungeonGroup
-Definitions.lFGDungeons
-Definitions.languageWords
-Definitions.languages
-Definitions.light
-Definitions.lightFloatBand
-Definitions.lightIntBand
-Definitions.lightParams
-Definitions.lightSkybox
-Definitions.liquidMaterial
-Definitions.liquidType
-Definitions.loadingScreenTaxiSplines
-Definitions.loadingScreens
-Definitions.lock
-Definitions.lockType
-Definitions.mailTemplate
-Definitions.map
-Definitions.mapDifficulty
-Definitions.material
-Definitions.movie
-Definitions.movieFileData
-Definitions.movieVariation
-Definitions.nPCSounds
-Definitions.nameGen
-Definitions.namesProfanity
-Definitions.namesReserved
-Definitions.objectEffect
-Definitions.objectEffectGroup
-Definitions.objectEffectModifier
-Definitions.objectEffectPackage
-Definitions.objectEffectPackageElem
-Definitions.overrideSpellData
-Definitions.package
-Definitions.pageTextMaterial
-Definitions.paperDollItemFrame
-Definitions.particleColor
-Definitions.petPersonality
-Definitions.petitionType
-Definitions.powerDisplay
-Definitions.pvpDifficulty
-Definitions.questFactionReward
-Definitions.questInfo
-Definitions.questSort
-Definitions.questXP
-Definitions.randPropPoints
-Definitions.resistances
-Definitions.scalingStatDistribution
-Definitions.scalingStatValues
-Definitions.screenEffect
-Definitions.serverMessages
-Definitions.sheatheSoundLookups
-Definitions.skillCostsData
-Definitions.skillLine
-Definitions.skillLineAbility
-Definitions.skillLineCategory
-Definitions.skillRaceClassInfo
-Definitions.skillTiers
-Definitions.soundAmbience
-Definitions.soundEmitters
-Definitions.soundEntries
-Definitions.soundEntriesAdvanced
-Definitions.soundFilter
-Definitions.soundFilterElem
-Definitions.soundProviderPreferences
-Definitions.soundSamplePreferences
-Definitions.soundWaterType
-Definitions.spamMessages
-Definitions.spell
-Definitions.spellCastTimes
-Definitions.spellCategory
-Definitions.spellChainEffects
-Definitions.spellDescriptionVariables
-Definitions.spellDifficulty
-Definitions.spellDispelType
-Definitions.spellDuration
-Definitions.spellEffectCameraShakes
-Definitions.spellFocusObject
-Definitions.spellIcon
-Definitions.spellItemEnchantment
-Definitions.spellItemEnchantmentCondition
-Definitions.spellMechanic
-Definitions.spellMissile
-Definitions.spellMissileMotion
-Definitions.spellRadius
-Definitions.spellRange
-Definitions.spellRuneCost
-Definitions.spellShapeshiftForm
-Definitions.spellVisual
-Definitions.spellVisualEffectName
-Definitions.spellVisualKit
-Definitions.spellVisualKitAreaModel
-Definitions.spellVisualKitModelAttach
-Definitions.spellVisualPrecastTransitions
-Definitions.stableSlotPrices
-Definitions.startupStrings
-Definitions.stationery
-Definitions.stringLookups
-Definitions.summonProperties
-Definitions.talent
-Definitions.talentTab
-Definitions.taxiNodes
-Definitions.taxiPath
-Definitions.taxiPathNode
-Definitions.teamContributionPoints
-Definitions.terrainType
-Definitions.terrainTypeSounds
-Definitions.totemCategory
-Definitions.transportAnimation
-Definitions.transportPhysics
-Definitions.transportRotation
-Definitions.uISoundLookups
-Definitions.unitBlood
-Definitions.unitBloodLevels
-Definitions.vehicle
-Definitions.vehicleSeat
-Definitions.vehicleUIIndSeat
-Definitions.vehicleUIIndicator
-Definitions.videoHardware
-Definitions.vocalUISounds
-Definitions.wMOAreaTable
-Definitions.weaponImpactSounds
-Definitions.weaponSwingSounds2
-Definitions.weather
-Definitions.worldChunkSounds
-Definitions.worldMapArea
-Definitions.worldMapContinent
-Definitions.worldMapOverlay
-Definitions.worldMapTransforms
-Definitions.worldSafeLocs
-Definitions.worldStateUI
-Definitions.worldStateZoneSounds
-Definitions.wowErrorStrings
-Definitions.zoneIntroMusicTable
-Definitions.zoneMusic
-// GT（游戏表）定义
-Definitions.gtbarberShopCostBase
-Definitions.gtchanceToMeleeCrit
-Definitions.gtchanceToMeleeCritBase
-Definitions.gtchanceToSpellCrit
-Definitions.gtchanceToSpellCritBase
-Definitions.gtcombatRatings
-Definitions.gtnPCManaCostScaler
-Definitions.gtoCTClassCombatRatingScalar
-Definitions.gtoCTRegenHP
-Definitions.gtoCTRegenMP
-Definitions.gtregenHPPerSpt
-Definitions.gtregenMPPerSpt
+// 所有 245 个结构均可通过 `Definitions` 的静态 getter 访问。
+// 完整列表见源文件：lib/src/definition/definition.dart
+//
+// 示例：
+Definitions.achievement          // Achievement.dbc
+Definitions.chrRaces            // ChrRaces.dbc
+Definitions.item                // Item.dbc
+Definitions.spell               // Spell.dbc
+Definitions.map                 // Map.dbc
+Definitions.taxiNodes           // TaxiNodes.dbc
+Definitions.vehicle             // Vehicle.dbc
+Definitions.gtcombatRatings     // gtCombatRatings.dbc
+Definitions.animationData       // AnimationData.dbc
+Definitions.attackAnimKits      // AttackAnimKits.dbc
+```
+
+## MPQ 归档支持
+
+Warcrafty 可选地通过 StormLib FFI 提供 MPQ 归档读写支持。需要 `ffi` 包及系统上安装的 StormLib 原生库。
+
+```dart
+import 'package:warcrafty/warcrafty.dart';
+
+// 打开现有归档（默认只读）
+final mpq = MpqArchive.open('patch-zhCN.MPQ');
+
+// 提取文件到内存
+final dbcBytes = mpq.extract(r'DBFilesClient\ChrRaces.dbc');
+final loader = DbcLoader.fromBytes(dbcBytes, Definitions.chrRaces.format);
+
+// 直接提取到磁盘
+mpq.extractTo(r'DBFilesClient\Item.dbc', '/tmp/Item.dbc');
+
+// 枚举归档中所有文件
+for (final file in mpq.files) {
+  print(file);
+}
+
+mpq.close();
+
+// 以读写模式打开
+final rwMpq = MpqArchive.open('patch-zhCN.MPQ', readOnly: false);
+rwMpq.removeFile(r'DBFilesClient\old.dbc');
+rwMpq.compact(); // 回收已删除文件的空间
+rwMpq.close();
+
+// 创建新归档
+final out = MpqArchive.create('custom.MPQ', maxFileCount: 32);
+out.addFile(r'data\my.dbc', encodedBytes, compress: true);
+out.close();
+```
+
+### MPQ 异常
+
+```dart
+try {
+  final mpq = MpqArchive.open('missing.MPQ');
+} on MpqOpenException catch (e) {
+  print('无法打开归档: ${e.message}');
+} on MpqFileNotFoundException catch (e) {
+  print('归档中文件不存在: ${e.message}');
+} on MpqReadException catch (e) {
+  print('读取错误: ${e.message}');
+}
 ```
 
 ## 高级用法
@@ -614,7 +470,41 @@ try {
   print('字符串偏移错误: ${e.message}');
 } on FileReadException catch (e) {
   print('文件读取错误: ${e.message}');
+} on WriteException catch (e) {
+  print('写入错误: ${e.message}');
+} on MpqOpenException catch (e) {
+  print('MPQ 打开错误: ${e.message}');
+} on MpqFileNotFoundException catch (e) {
+  print('MPQ 文件未找到: ${e.message}');
 }
+```
+
+### 本地化字段工具
+
+用于生成预定义结构字段的辅助函数：
+
+```dart
+// 这些工具函数由定义生成器内部使用，也可用于自定义结构创建。
+
+// 生成 16 种语言的字符串字段
+List<Field> createLocaleFields(int startIndex, String baseName, String desc);
+
+// 生成 16 种语言字段 + 1 个标志字段
+List<Field> createLocaleFieldsWithFlag(
+  int startIndex, String baseName, String desc,
+  {String? flagName},
+);
+
+// 生成未使用/跳过字段
+List<Field> createUnusedFields(
+  int startIndex, int count,
+  {String baseName = 'Unused', FieldType type = FieldType.unused},
+);
+
+// 生成连续整数型字段
+List<Field> createIntFields(
+  int startIndex, int count, String baseName, String desc,
+);
 ```
 
 ## 兼容性
@@ -645,6 +535,15 @@ dart pub global run coverage:format_coverage --lcov --in=coverage/coverage.json 
 # 运行特定测试文件
 dart test test/dbc_integration_test.dart
 ```
+
+## 运行时依赖
+
+| 包名 | 用途 |
+|------|------|
+| `ffi` | StormLib 的 FFI 绑定（MPQ 支持）|
+| `hooks` | 平台原生库解析 |
+
+DBC 读写操作不依赖原生库。仅需 Dart 的 `ffi` 包。MPQ 支持需要系统上安装 StormLib 原生库。
 
 ## 性能
 

@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Dart SDK](https://img.shields.io/badge/Dart-3.10%2B-blue.svg)](https://dart.dev)
 
-A high-performance **pure Dart** library for reading and writing World of Warcraft DBC (Database Client) binary file format. No external runtime dependencies.
+A high-performance **pure Dart** library for reading and writing World of Warcraft DBC (Database Client) binary files, with optional MPQ archive support via StormLib FFI.
 
 [中文文档](README_ZH.md)
 
@@ -20,6 +20,7 @@ A high-performance **pure Dart** library for reading and writing World of Warcra
   - [DbcIndex](#dbcindex)
 - [Format String Reference](#format-string-reference)
 - [Predefined Schemas](#predefined-schemas)
+- [MPQ Archive Support](#mpq-archive-support)
 - [Advanced Usage](#advanced-usage)
 - [Compatibility](#compatibility)
 - [Testing](#testing)
@@ -29,17 +30,18 @@ A high-performance **pure Dart** library for reading and writing World of Warcra
 
 ## Features
 
-- **Pure Dart Implementation**: No external C libraries or FFI required
+- **Pure Dart Implementation**: No external C libraries required for DBC operations
 - **High Performance**: Efficient binary data processing using `ByteData` and `Uint8List`
 - **Format String Driven**: Flexible parsing with explicit Warcrafty and AzerothCore format dialects
 - **O(1) String Lookup**: Prebuilt string index for constant-time string access
-- **ID-Based Indexing**: Fast record lookup with binary search
-- **Full Read/Write Support**: Complete DBC file reading and writing capabilities
+- **ID-Based Indexing**: Fast record lookup via hash map
+- **Full Read/Write Support**: Complete DBC file reading and writing with type validation
+- **MPQ Archive Support**: Read and write Blizzard MPQ archives via StormLib FFI
 - **String Deduplication**: Automatic string deduplication to reduce file size
 - **Sync & Async Operations**: Both synchronous and asynchronous APIs
 - **Type Safety**: Full Dart type safety with comprehensive exception handling
 - **245 Predefined Schemas**: Built-in format definitions for all major DBC files
-- **Schema Validation**: Runtime validation of format strings and field types
+- **Schema Validation**: Runtime validation of format strings, field types, and write-time type checking
 
 ## Installation
 
@@ -72,14 +74,23 @@ void main() {
     print('ID: $id, Name: $name');
   }
 
-  // Build an index for fast lookup
-  final index = DbcIndex.fromLoader(loader, (record) => record.toMap());
+  // Build an index for O(1) lookup
+  final index = DbcIndex<Map<String, dynamic>>.fromLoader(
+    loader,
+    (record) => record.toMap(),
+  );
   final raceData = index.lookup(1); // Get race with ID 1
 
-  // Write a DBC file
+  // Write a DBC file with type validation
   DbcWriter.writeToPath('output.dbc', 'niiiiss', [
     [1, 0, 84, 0, 0, 'Human', 'Human'],
   ]);
+
+  // Open an MPQ archive and extract a DBC file
+  final mpq = MpqArchive.open('patch-zhCN.MPQ');
+  final dbcBytes = mpq.extract(r'DBFilesClient\ChrRaces.dbc');
+  final mpqLoader = DbcLoader.fromBytes(dbcBytes, Definitions.chrRaces.format);
+  mpq.close();
 }
 ```
 
@@ -131,8 +142,17 @@ final value = record.getInt(5);
 // Read unsigned integers (32-bit)
 final unsigned = record.getUint(1);
 
-// Read 8-bit integers
-final byteValue = record.getUint8(0);
+// Read 8-bit signed/unsigned integers
+final byteSigned = record.getInt8(0);
+final byteUnsigned = record.getUint8(0);
+
+// Read 16-bit signed/unsigned integers
+final shortSigned = record.getInt16(0);
+final shortUnsigned = record.getUint16(0);
+
+// Read 64-bit signed/unsigned integers
+final longSigned = record.getInt64(0);
+final longUnsigned = record.getUint64(0);
 
 // Read floats (32-bit)
 final floatValue = record.getFloat(3);
@@ -187,6 +207,11 @@ final writer = DbcWriter('custom.dbc', 'niiiiss');
 writer.write([
   [1, 0, 84, 0, 0, 'Human', 'Human'],
 ]);
+
+// Type validation on write — these throw WriteException:
+//   [1, 'not int', 84, ...]    // String where int expected
+//   [1, 300, 84, ...]          // uint8 out of range (0-255)
+//   [1, true, 84, ...]         // bool where int expected
 ```
 
 ### DbcIndex
@@ -221,8 +246,15 @@ final record = index[1];
 print('Total records: ${index.count}');
 print('Index field: ${index.indexField}');
 
-// Get all records
+// Get all records (unmodifiable)
 final allRecords = index.records;
+
+// Index is generic — work directly with DbcRecord
+final typedIndex = DbcIndex<DbcRecord>.fromLoader(
+  loader,
+  (r) => r,
+);
+final spellRecord = typedIndex.lookup(133); // Spell with ID 133
 ```
 
 ## Format String Reference
@@ -252,17 +284,16 @@ Each character in the default Warcrafty dialect represents a field type:
 | `d` | Sort | 4 bytes | Sort field (not included in data) |
 | `l` | Boolean | 4 bytes | Boolean/logical value (stored as 32-bit int) |
 
+> **AzerothCore dialect**: In `DbcFormatDialect.azerothCore` mode, `i` is treated as `uint32` and `b` as `uint8`. Extended characters (`B`, `h`, `H`, `u`, `q`, `Q`) are not valid in this dialect.
+
 ### Example Format Strings
 
 ```dart
 // Simple record: ID + 2 integers + 2 strings
 'niiiiss'
 
-// Character race: ID + flags + faction + 2 display IDs + 2 strings + 45 localized strings
-'niiiiisiiiisiissssssssssssssssssssssssssssssssssssssssssssssssssssssi'
-
-// Item: ID + class + subclass + different name + name
-'niiiiss'
+// Extended integer widths: ID + int8 + uint8 + int16 + uint16 + int32 + uint32 + int64 + uint64
+'nBbhHiuqQ'
 
 // Load an AzerothCore DBCfmt.h-style format string explicitly
 final loader = DbcLoader(
@@ -294,269 +325,91 @@ final field = Definitions.chrRaces.getFieldByName('ID');
 ### Available Categories
 
 - **Achievement**: Achievement, Achievement_Category, Achievement_Criteria
-- **Area**: AreaTable, AreaGroup, AreaPOI, WorldMapArea, WorldSafeLocs
-- **Character**: ChrRaces, ChrClasses, CharBaseInfo, CharTitles, CharSections
-- **Creature**: CreatureDisplayInfo, CreatureFamily, CreatureModelData, CreatureSpellData
+- **Area**: AreaTable, AreaGroup, AreaPOI, AreaTrigger, WMOAreaTable, WorldMapArea, WorldMapContinent, WorldSafeLocs
+- **Character**: ChrRaces, ChrClasses, CharBaseInfo, CharHairGeosets, CharHairTextures, CharSections, CharStartOutfit, CharTitles
+- **Creature**: CreatureDisplayInfo, CreatureFamily, CreatureModelData, CreatureMovementInfo, CreatureSpellData, CreatureType
 - **Faction**: Faction, FactionGroup, FactionTemplate
 - **GameObject**: GameObjectDisplayInfo, GameObjectArtKit
-- **Item**: Item, ItemSet, ItemExtendedCost, ItemDisplayInfo, GemProperties
-- **Map**: Map, DungeonEncounter, DungeonMap, MapDifficulty
-- **Quest**: QuestInfo, QuestSort, QuestXP
-- **Skill**: SkillLine, SkillLineAbility, SkillTiers
-- **Sound**: SoundEntries, SoundAmbience, SoundEmitters
-- **Spell**: Spell, SpellRange, SpellDuration, SpellRadius, SpellIcon
+- **Item**: Item, ItemBagFamily, ItemClass, ItemDisplayInfo, ItemExtendedCost, ItemSet, GemProperties
+- **Light**: Light, LightFloatBand, LightIntBand, LightParams, LightSkybox
+- **Map**: Map, DungeonEncounter, DungeonMap, DungeonMapChunk, LFGDungeons, MapDifficulty
+- **Quest**: QuestInfo, QuestSort, QuestXP, QuestFactionReward
+- **Skill**: SkillLine, SkillLineAbility, SkillCostsData, SkillRaceClassInfo, SkillTiers
+- **Sound**: SoundEntries, SoundAmbience, SoundEmitters, SoundFilter, SoundWaterType
+- **Spell**: Spell, SpellCastTimes, SpellDuration, SpellIcon, SpellItemEnchantment, SpellRadius, SpellRange, SpellVisual, GlyphProperties, TotemCategory
 - **Talent**: Talent, TalentTab
 - **Taxi**: TaxiNodes, TaxiPath, TaxiPathNode
-- **Vehicle**: Vehicle, VehicleSeat
-- **GT Tables**: GtCombatRatings, GtChanceToSpellCrit, GtRegenHPPerSpt
+- **Vehicle**: Vehicle, VehicleSeat, VehicleUIIndSeat, VehicleUIIndicator
+- **Misc**: AnimationData, AttackAnimKits, Emotes, Holidays, Languages, LoadingScreens, Movie, ScreenEffect, Weather, ZoneMusic
+- **GT Tables**: GtBarberShopCostBase, GtChanceToMeleeCrit, GtChanceToSpellCrit, GtCombatRatings, GtRegenHPPerSpt, GtRegenMPPerSpt
 
 ### Full Schema List
 
 ```dart
-// All available schemas
-Definitions.achievement
-Definitions.achievementCategory
-Definitions.achievementCriteria
-Definitions.areaGroup
-Definitions.areaPOI
-Definitions.areaTable
-Definitions.areaTrigger
-Definitions.auctionHouse
-Definitions.bankBagSlotPrices
-Definitions.bannedAddOns
-Definitions.barberShopStyle
-Definitions.battlemasterList
-Definitions.cameraShakes
-Definitions.cfgCategories
-Definitions.cfgConfigs
-Definitions.charBaseInfo
-Definitions.charHairGeosets
-Definitions.charHairTextures
-Definitions.charSections
-Definitions.charStartOutfit
-Definitions.charTitles
-Definitions.characterFacialHairStyles
-Definitions.chatChannels
-Definitions.chatProfanity
-Definitions.chrClasses
-Definitions.chrRaces
-Definitions.cinematicCamera
-Definitions.cinematicSequences
-Definitions.creatureDisplayInfo
-Definitions.creatureDisplayInfoExtra
-Definitions.creatureFamily
-Definitions.creatureModelData
-Definitions.creatureMovementInfo
-Definitions.creatureSoundData
-Definitions.creatureSpellData
-Definitions.creatureType
-Definitions.currencyCategory
-Definitions.currencyTypes
-Definitions.danceMoves
-Definitions.deathThudLookups
-Definitions.declinedWord
-Definitions.declinedWordCases
-Definitions.destructibleModelData
-Definitions.dungeonEncounter
-Definitions.dungeonMap
-Definitions.dungeonMapChunk
-Definitions.durabilityCosts
-Definitions.durabilityQuality
-Definitions.emotes
-Definitions.emotesText
-Definitions.emotesTextData
-Definitions.emotesTextSound
-Definitions.environmentalDamage
-Definitions.exhaustion
-Definitions.faction
-Definitions.factionGroup
-Definitions.factionTemplate
-Definitions.fileData
-Definitions.footprintTextures
-Definitions.footstepTerrainLookup
-Definitions.gMSurveyAnswers
-Definitions.gMSurveyCurrentSurvey
-Definitions.gMSurveyQuestions
-Definitions.gMSurveySurveys
-Definitions.gMTicketCategory
-Definitions.gameObjectArtKit
-Definitions.gameObjectDisplayInfo
-Definitions.gameTables
-Definitions.gameTips
-Definitions.gemProperties
-Definitions.glyphProperties
-Definitions.glyphSlot
-Definitions.groundEffectDoodad
-Definitions.groundEffectTexture
-Definitions.helmetGeosetVisData
-Definitions.holidayDescriptions
-Definitions.holidayNames
-Definitions.holidays
-Definitions.item
-Definitions.itemBagFamily
-Definitions.itemClass
-Definitions.itemCondExtCosts
-Definitions.itemDisplayInfo
-Definitions.itemExtendedCost
-Definitions.itemGroupSounds
-Definitions.itemLimitCategory
-Definitions.itemPetFood
-Definitions.itemPurchaseGroup
-Definitions.itemRandomProperties
-Definitions.itemRandomSuffix
-Definitions.itemSet
-Definitions.itemSubClass
-Definitions.itemSubClassMask
-Definitions.itemVisualEffects
-Definitions.itemVisuals
-Definitions.lFGDungeonExpansion
-Definitions.lFGDungeonGroup
-Definitions.lFGDungeons
-Definitions.languageWords
-Definitions.languages
-Definitions.light
-Definitions.lightFloatBand
-Definitions.lightIntBand
-Definitions.lightParams
-Definitions.lightSkybox
-Definitions.liquidMaterial
-Definitions.liquidType
-Definitions.loadingScreenTaxiSplines
-Definitions.loadingScreens
-Definitions.lock
-Definitions.lockType
-Definitions.mailTemplate
-Definitions.map
-Definitions.mapDifficulty
-Definitions.material
-Definitions.movie
-Definitions.movieFileData
-Definitions.movieVariation
-Definitions.nPCSounds
-Definitions.nameGen
-Definitions.namesProfanity
-Definitions.namesReserved
-Definitions.objectEffect
-Definitions.objectEffectGroup
-Definitions.objectEffectModifier
-Definitions.objectEffectPackage
-Definitions.objectEffectPackageElem
-Definitions.overrideSpellData
-Definitions.package
-Definitions.pageTextMaterial
-Definitions.paperDollItemFrame
-Definitions.particleColor
-Definitions.petPersonality
-Definitions.petitionType
-Definitions.powerDisplay
-Definitions.pvpDifficulty
-Definitions.questFactionReward
-Definitions.questInfo
-Definitions.questSort
-Definitions.questXP
-Definitions.randPropPoints
-Definitions.resistances
-Definitions.scalingStatDistribution
-Definitions.scalingStatValues
-Definitions.screenEffect
-Definitions.serverMessages
-Definitions.sheatheSoundLookups
-Definitions.skillCostsData
-Definitions.skillLine
-Definitions.skillLineAbility
-Definitions.skillLineCategory
-Definitions.skillRaceClassInfo
-Definitions.skillTiers
-Definitions.soundAmbience
-Definitions.soundEmitters
-Definitions.soundEntries
-Definitions.soundEntriesAdvanced
-Definitions.soundFilter
-Definitions.soundFilterElem
-Definitions.soundProviderPreferences
-Definitions.soundSamplePreferences
-Definitions.soundWaterType
-Definitions.spamMessages
-Definitions.spell
-Definitions.spellCastTimes
-Definitions.spellCategory
-Definitions.spellChainEffects
-Definitions.spellDescriptionVariables
-Definitions.spellDifficulty
-Definitions.spellDispelType
-Definitions.spellDuration
-Definitions.spellEffectCameraShakes
-Definitions.spellFocusObject
-Definitions.spellIcon
-Definitions.spellItemEnchantment
-Definitions.spellItemEnchantmentCondition
-Definitions.spellMechanic
-Definitions.spellMissile
-Definitions.spellMissileMotion
-Definitions.spellRadius
-Definitions.spellRange
-Definitions.spellRuneCost
-Definitions.spellShapeshiftForm
-Definitions.spellVisual
-Definitions.spellVisualEffectName
-Definitions.spellVisualKit
-Definitions.spellVisualKitAreaModel
-Definitions.spellVisualKitModelAttach
-Definitions.spellVisualPrecastTransitions
-Definitions.stableSlotPrices
-Definitions.startupStrings
-Definitions.stationery
-Definitions.stringLookups
-Definitions.summonProperties
-Definitions.talent
-Definitions.talentTab
-Definitions.taxiNodes
-Definitions.taxiPath
-Definitions.taxiPathNode
-Definitions.teamContributionPoints
-Definitions.terrainType
-Definitions.terrainTypeSounds
-Definitions.totemCategory
-Definitions.transportAnimation
-Definitions.transportPhysics
-Definitions.transportRotation
-Definitions.uISoundLookups
-Definitions.unitBlood
-Definitions.unitBloodLevels
-Definitions.vehicle
-Definitions.vehicleSeat
-Definitions.vehicleUIIndSeat
-Definitions.vehicleUIIndicator
-Definitions.videoHardware
-Definitions.vocalUISounds
-Definitions.wMOAreaTable
-Definitions.weaponImpactSounds
-Definitions.weaponSwingSounds2
-Definitions.weather
-Definitions.worldChunkSounds
-Definitions.worldMapArea
-Definitions.worldMapContinent
-Definitions.worldMapOverlay
-Definitions.worldMapTransforms
-Definitions.worldSafeLocs
-Definitions.worldStateUI
-Definitions.worldStateZoneSounds
-Definitions.wowErrorStrings
-Definitions.zoneIntroMusicTable
-Definitions.zoneMusic
-// GT (Game Table) definitions
-Definitions.gtbarberShopCostBase
-Definitions.gtchanceToMeleeCrit
-Definitions.gtchanceToMeleeCritBase
-Definitions.gtchanceToSpellCrit
-Definitions.gtchanceToSpellCritBase
-Definitions.gtcombatRatings
-Definitions.gtnPCManaCostScaler
-Definitions.gtoCTClassCombatRatingScalar
-Definitions.gtoCTRegenHP
-Definitions.gtoCTRegenMP
-Definitions.gtregenHPPerSpt
-Definitions.gtregenMPPerSpt
+// All 245 schemas are accessible as static getters on `Definitions`.
+// See lib/src/definition/definition.dart for the complete list.
+//
+// Some examples:
+Definitions.achievement          // Achievement.dbc
+Definitions.chrRaces            // ChrRaces.dbc
+Definitions.item                // Item.dbc
+Definitions.spell               // Spell.dbc
+Definitions.map                 // Map.dbc
+Definitions.taxiNodes           // TaxiNodes.dbc
+Definitions.vehicle             // Vehicle.dbc
+Definitions.gtcombatRatings     // gtCombatRatings.dbc
+Definitions.animationData       // AnimationData.dbc
+Definitions.attackAnimKits      // AttackAnimKits.dbc
+```
+
+## MPQ Archive Support
+
+Warcrafty includes optional MPQ archive read/write support via StormLib FFI. This requires the `ffi` package and a StormLib native library on your system.
+
+```dart
+import 'package:warcrafty/warcrafty.dart';
+
+// Open an existing archive (read-only by default)
+final mpq = MpqArchive.open('patch-zhCN.MPQ');
+
+// Extract a file to memory
+final dbcBytes = mpq.extract(r'DBFilesClient\ChrRaces.dbc');
+final loader = DbcLoader.fromBytes(dbcBytes, Definitions.chrRaces.format);
+
+// Extract directly to disk
+mpq.extractTo(r'DBFilesClient\Item.dbc', '/tmp/Item.dbc');
+
+// Enumerate all files in the archive
+for (final file in mpq.files) {
+  print(file);
+}
+
+mpq.close();
+
+// Open in read-write mode
+final rwMpq = MpqArchive.open('patch-zhCN.MPQ', readOnly: false);
+rwMpq.removeFile(r'DBFilesClient\old.dbc');
+rwMpq.compact(); // reclaim space from deleted files
+rwMpq.close();
+
+// Create a new archive
+final out = MpqArchive.create('custom.MPQ', maxFileCount: 32);
+out.addFile(r'data\my.dbc', encodedBytes, compress: true);
+out.close();
+```
+
+### MPQ Exceptions
+
+```dart
+try {
+  final mpq = MpqArchive.open('missing.MPQ');
+} on MpqOpenException catch (e) {
+  print('Failed to open archive: ${e.message}');
+} on MpqFileNotFoundException catch (e) {
+  print('File not found in archive: ${e.message}');
+} on MpqReadException catch (e) {
+  print('Read error: ${e.message}');
+}
 ```
 
 ## Advanced Usage
@@ -614,7 +467,42 @@ try {
   print('String offset error: ${e.message}');
 } on FileReadException catch (e) {
   print('File read error: ${e.message}');
+} on WriteException catch (e) {
+  print('Write error: ${e.message}');
+} on MpqOpenException catch (e) {
+  print('MPQ open error: ${e.message}');
+} on MpqFileNotFoundException catch (e) {
+  print('MPQ file not found: ${e.message}');
 }
+```
+
+### Locale Field Utilities
+
+Helper functions for generating fields in predefined schemas:
+
+```dart
+// These utilities are used internally by the definition generator.
+// They are available for custom schema creation.
+
+// Generate 16 language string fields
+List<Field> createLocaleFields(int startIndex, String baseName, String desc);
+
+// Generate 16 language string fields + 1 flags field
+List<Field> createLocaleFieldsWithFlag(
+  int startIndex, String baseName, String desc,
+  {String? flagName},
+);
+
+// Generate unused/skip fields
+List<Field> createUnusedFields(
+  int startIndex, int count,
+  {String baseName = 'Unused', FieldType type = FieldType.unused},
+);
+
+// Generate consecutive integer fields
+List<Field> createIntFields(
+  int startIndex, int count, String baseName, String desc,
+);
 ```
 
 ## Compatibility
@@ -645,6 +533,15 @@ dart pub global run coverage:format_coverage --lcov --in=coverage/coverage.json 
 # Run specific test file
 dart test test/dbc_integration_test.dart
 ```
+
+## Runtime Dependencies
+
+| Package | Purpose |
+|---------|---------|
+| `ffi` | FFI bindings for StormLib (MPQ support) |
+| `hooks` | Platform-native library resolution |
+
+DBC read/write operations have zero native dependencies. Only the `ffi` Dart package is required at runtime. MPQ support requires a StormLib native library on your system.
 
 ## Performance
 
