@@ -13,3 +13,7 @@ export 'src/definition/definition.dart'; // Definitions
 
 // 异常
 export 'src/internal/exception.dart';
+
+// MPQ 归档 (基于 StormLib FFI)
+export 'src/mpq/mpq_archive.dart'; // MpqArchive
+export 'src/mpq/mpq_exception.dart'; // MpqException
