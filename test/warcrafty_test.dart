@@ -22,18 +22,30 @@ void main() {
   group('FieldType', () {
     test('fromChar returns correct format', () {
       expect(FieldType.fromChar('n'), equals(FieldType.id));
+      expect(FieldType.fromChar('B'), equals(FieldType.int8));
+      expect(FieldType.fromChar('b'), equals(FieldType.uint8));
+      expect(FieldType.fromChar('h'), equals(FieldType.int16));
+      expect(FieldType.fromChar('H'), equals(FieldType.uint16));
       expect(FieldType.fromChar('i'), equals(FieldType.int32));
+      expect(FieldType.fromChar('u'), equals(FieldType.uint32));
+      expect(FieldType.fromChar('q'), equals(FieldType.int64));
+      expect(FieldType.fromChar('Q'), equals(FieldType.uint64));
       expect(FieldType.fromChar('s'), equals(FieldType.string));
       expect(FieldType.fromChar('f'), equals(FieldType.float));
-      expect(FieldType.fromChar('b'), equals(FieldType.uint8));
     });
 
     test('size returns correct byte size', () {
+      expect(FieldType.int8.size, equals(1));
       expect(FieldType.uint8.size, equals(1));
       expect(FieldType.unusedByte.size, equals(1));
+      expect(FieldType.int16.size, equals(2));
+      expect(FieldType.uint16.size, equals(2));
       expect(FieldType.int32.size, equals(4));
+      expect(FieldType.uint32.size, equals(4));
       expect(FieldType.float.size, equals(4));
       expect(FieldType.string.size, equals(4));
+      expect(FieldType.int64.size, equals(8));
+      expect(FieldType.uint64.size, equals(8));
     });
   });
 
@@ -59,6 +71,12 @@ void main() {
       expect(calculator[3], equals(6));
       expect(calculator[4], equals(10));
       expect(calculator.recordSize, equals(14));
+    });
+
+    test('handles extended integer widths correctly', () {
+      final calculator = FieldOffsets('nBbhHiuqQ');
+      expect(calculator.all, equals([0, 4, 5, 6, 8, 10, 14, 18, 26]));
+      expect(calculator.recordSize, equals(34));
     });
 
     test('finds index field position', () {
@@ -403,6 +421,47 @@ void main() {
         expect(loader.getRecord(0).getString(1), equals('Hello'));
         expect(loader.getRecord(1).getString(1), equals('World'));
         expect(loader.getRecord(2).getString(1), equals('Hello'));
+      } finally {
+        if (await testFile.exists()) {
+          await testFile.delete();
+        }
+      }
+    });
+
+    test('writes and reads extended integer widths', () async {
+      final testFile = File('${Directory.systemTemp.path}/test_widths.dbc');
+
+      try {
+        DbcWriter.writeToPath(testFile.path, 'nBbhHiuqQ', [
+          [
+            1,
+            -5,
+            250,
+            -300,
+            60000,
+            -123456,
+            4000000000,
+            -1234567890123,
+            9000000000000,
+          ],
+        ]);
+
+        final loader = DbcLoader(testFile.path, 'nBbhHiuqQ');
+        final record = loader.getRecord(0);
+        expect(record.getInt(0), equals(1));
+        expect(record.getInt8(1), equals(-5));
+        expect(record.getUint8(2), equals(250));
+        expect(record.getInt16(3), equals(-300));
+        expect(record.getUint16(4), equals(60000));
+        expect(record.getInt(5), equals(-123456));
+        expect(record.getUint(6), equals(4000000000));
+        expect(record.getInt64(7), equals(-1234567890123));
+        expect(record.getUint64(8), equals(9000000000000));
+
+        final map = record.toMap();
+        expect(map['field_1'], equals(-5));
+        expect(map['field_6'], equals(4000000000));
+        expect(map['field_8'], equals(9000000000000));
       } finally {
         if (await testFile.exists()) {
           await testFile.delete();

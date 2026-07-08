@@ -1,9 +1,8 @@
-import '../config.dart';
 import '../models/models.dart';
 import '../utils/naming.dart';
 
 /// 生成 Dart 定义代码
-String generateDartDefinition(DbdFile dbd) {
+String generateDartDefinition(DbdFile dbd, String targetVersion) {
   final lines = <String>[];
 
   // 导入
@@ -30,21 +29,7 @@ String generateDartDefinition(DbdFile dbd) {
   lines.add('/// 基于 WoWDBDefs 定义，版本 $targetVersion');
 
   // 格式字符串
-  final formatChars = <String>[];
-  for (final f in dbd.targetFields) {
-    final (_, char) = getFieldType(dbd, f);
-    final count = f.arraySize ?? 1;
-
-    if (char == 'LOCSTRING') {
-      // locstring = 16 个语言字符串偏移 (s) + 1 个标志位 (i)
-      // 必须与 createLocaleFieldsWithFlag 生成的字段定义保持一致
-      formatChars.addAll(List.filled(16, 's'));
-      formatChars.add('i');
-    } else {
-      formatChars.addAll(List.filled(count, char));
-    }
-  }
-  final formatString = formatChars.join();
+  final formatString = buildFormatString(dbd);
 
   final constOrFinal = hasLocstring ? 'final' : 'const';
   final varName = toCamelCase(dbd.name);
@@ -89,32 +74,77 @@ String generateDartDefinition(DbdFile dbd) {
   return lines.join('\n');
 }
 
+/// 根据 DBD 字段构建 warcrafty 格式字符串。
+String buildFormatString(DbdFile dbd) {
+  final formatChars = <String>[];
+  for (final f in dbd.targetFields) {
+    final (_, char) = getFieldType(dbd, f);
+    final count = f.arraySize ?? 1;
+
+    if (char == 'LOCSTRING') {
+      // WDBC locstring = 16 个语言字符串偏移 (s) + 1 个标志位 (i)
+      // 必须与 createLocaleFieldsWithFlag 生成的字段定义保持一致
+      formatChars.addAll(List.filled(16, 's'));
+      formatChars.add('i');
+    } else {
+      formatChars.addAll(List.filled(count, char));
+    }
+  }
+  return formatChars.join();
+}
+
 /// 获取字段类型
 (String, String) getFieldType(DbdFile dbd, FieldDef field) {
   final col = dbd.columns[field.name];
+  if (col == null) {
+    throw FormatException('Unknown column "${field.name}" in ${dbd.name}');
+  }
 
-  // $id$ 标记
+  // $id$ 标记。warcrafty 当前只支持 inline 32-bit ID 作为索引字段。
   if (field.isId) {
+    final width = field.intWidth ?? 32;
+    if (width != 32 || field.isUnsigned) {
+      throw UnsupportedError(
+        'Unsupported ID width <${field.size}> for ${dbd.name}.${field.name}',
+      );
+    }
     return ('FieldType.id', 'n');
   }
 
-  // 检查字节字段 (<8> 或 <u8>)
-  if (field.isByteField) {
-    return ('FieldType.uint8', 'b');
+  switch (col.type) {
+    case 'locstring':
+      return ('LOCSTRING', 'LOCSTRING');
+    case 'float':
+      return ('FieldType.float', 'f');
+    case 'string':
+      return ('FieldType.string', 's');
+    case 'int':
+    case 'uint':
+      return _getIntegerFieldType(dbd, field, col.type == 'uint');
   }
 
-  if (col != null) {
-    switch (col.type) {
-      case 'locstring':
-        return ('LOCSTRING', 'LOCSTRING');
-      case 'float':
-        return ('FieldType.float', 'f');
-      case 'string':
-        return ('FieldType.string', 's');
-      case 'int':
-        return ('FieldType.int32', 'i');
-    }
-  }
+  throw UnsupportedError('Unsupported column type ${col.type} in ${dbd.name}');
+}
 
-  return ('FieldType.int32', 'i');
+(String, String) _getIntegerFieldType(
+  DbdFile dbd,
+  FieldDef field,
+  bool unsignedColumn,
+) {
+  final width = field.intWidth ?? 32;
+  final unsigned = field.isUnsigned || unsignedColumn;
+
+  return switch ((width, unsigned)) {
+    (8, false) => ('FieldType.int8', 'B'),
+    (8, true) => ('FieldType.uint8', 'b'),
+    (16, false) => ('FieldType.int16', 'h'),
+    (16, true) => ('FieldType.uint16', 'H'),
+    (32, false) => ('FieldType.int32', 'i'),
+    (32, true) => ('FieldType.uint32', 'u'),
+    (64, false) => ('FieldType.int64', 'q'),
+    (64, true) => ('FieldType.uint64', 'Q'),
+    _ => throw UnsupportedError(
+      'Unsupported integer width <${field.size}> in ${dbd.name}.${field.name}',
+    ),
+  };
 }

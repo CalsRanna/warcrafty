@@ -14,11 +14,29 @@ enum FieldType {
   /// 浮点数 (4 字节)
   float('f'),
 
-  /// 32位有符号整数 (4 字节)
-  int32('i'),
+  /// 8位有符号整数 (1 字节)
+  int8('B'),
 
   /// 8位无符号整数 (1 字节)
   uint8('b'),
+
+  /// 16位有符号整数 (2 字节)
+  int16('h'),
+
+  /// 16位无符号整数 (2 字节)
+  uint16('H'),
+
+  /// 32位有符号整数 (4 字节)
+  int32('i'),
+
+  /// 32位无符号整数 (4 字节)
+  uint32('u'),
+
+  /// 64位有符号整数 (8 字节)
+  int64('q'),
+
+  /// 64位无符号整数 (8 字节)
+  uint64('Q'),
 
   /// 排序字段，不包含在数据中 (4 字节)
   sort('d'),
@@ -27,8 +45,7 @@ enum FieldType {
   id('n'),
 
   /// 布尔值 (4 字节)
-  boolean('l'),
-  ;
+  boolean('l');
 
   /// 格式字符
   final String char;
@@ -46,7 +63,9 @@ enum FieldType {
   /// 获取字段大小 (字节)
   int get size {
     return switch (this) {
-      FieldType.uint8 || FieldType.unusedByte => 1,
+      FieldType.int8 || FieldType.uint8 || FieldType.unusedByte => 1,
+      FieldType.int16 || FieldType.uint16 => 2,
+      FieldType.int64 || FieldType.uint64 => 8,
       _ => 4,
     };
   }

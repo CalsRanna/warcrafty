@@ -6,7 +6,7 @@ import 'package:warcrafty/src/internal/schema.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 const spellChainEffects = DbcSchema(
   name: 'SpellChainEffects',
-  format: 'nffffiisiifiiffffffffffffffffffffffffffbbbbbsiff',
+  format: 'nffffiisiifiiffffffffffffffffffffffffffBBBBBsiff',
   fields: [
     Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
     Field(index: 1, name: 'AvgSegLen', description: 'AvgSegLen', type: FieldType.float),
@@ -47,11 +47,11 @@ const spellChainEffects = DbcSchema(
     Field(index: 36, name: 'PulseSpeed', description: 'PulseSpeed', type: FieldType.float),
     Field(index: 37, name: 'PulseOnLength', description: 'PulseOnLength', type: FieldType.float),
     Field(index: 38, name: 'PulseFadeLength', description: 'PulseFadeLength', type: FieldType.float),
-    Field(index: 39, name: 'Alpha', description: 'Alpha', type: FieldType.uint8),
-    Field(index: 40, name: 'Red', description: 'Red', type: FieldType.uint8),
-    Field(index: 41, name: 'Green', description: 'Green', type: FieldType.uint8),
-    Field(index: 42, name: 'Blue', description: 'Blue', type: FieldType.uint8),
-    Field(index: 43, name: 'BlendMode', description: 'BlendMode', type: FieldType.uint8),
+    Field(index: 39, name: 'Alpha', description: 'Alpha', type: FieldType.int8),
+    Field(index: 40, name: 'Red', description: 'Red', type: FieldType.int8),
+    Field(index: 41, name: 'Green', description: 'Green', type: FieldType.int8),
+    Field(index: 42, name: 'Blue', description: 'Blue', type: FieldType.int8),
+    Field(index: 43, name: 'BlendMode', description: 'BlendMode', type: FieldType.int8),
     Field(index: 44, name: 'Combo', description: 'Combo', type: FieldType.string),
     Field(index: 45, name: 'RenderLayer', description: 'RenderLayer', type: FieldType.int32),
     Field(index: 46, name: 'TextureLength', description: 'TextureLength', type: FieldType.float),

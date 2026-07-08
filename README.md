@@ -232,8 +232,14 @@ Format strings define the structure of DBC records. Each character represents a 
 | Character | Type | Size | Description |
 |-----------|------|------|-------------|
 | `n` | ID Field | 4 bytes | Index field (ID) for fast lookup - 32-bit signed integer |
-| `i` | Int32 | 4 bytes | 32-bit signed integer |
+| `B` | Int8 | 1 byte | 8-bit signed integer |
 | `b` | Uint8 | 1 byte | 8-bit unsigned integer (0-255) |
+| `h` | Int16 | 2 bytes | 16-bit signed integer |
+| `H` | Uint16 | 2 bytes | 16-bit unsigned integer |
+| `i` | Int32 | 4 bytes | 32-bit signed integer |
+| `u` | Uint32 | 4 bytes | 32-bit unsigned integer |
+| `q` | Int64 | 8 bytes | 64-bit signed integer |
+| `Q` | Uint64 | 8 bytes | 64-bit unsigned integer |
 | `f` | Float | 4 bytes | 32-bit floating point number |
 | `s` | String | 4 bytes | String offset (points to string block) |
 | `x` | Unused | 4 bytes | Unknown/skip field (32-bit) |

@@ -97,15 +97,30 @@ final class DbcWriter {
 
   void _validateField(int ri, int fi, FieldType type, dynamic value) {
     switch (type) {
+      case FieldType.int8:
+        _validateIntRange(ri, fi, value, -128, 127, 'int8');
       case FieldType.uint8:
+        _validateIntRange(ri, fi, value, 0, 255, 'uint8');
+      case FieldType.int16:
+        _validateIntRange(ri, fi, value, -32768, 32767, 'int16');
+      case FieldType.uint16:
+        _validateIntRange(ri, fi, value, 0, 65535, 'uint16');
       case FieldType.int32:
       case FieldType.id:
-        if (value is! int) {
-          throw WriteException('Record $ri, field $fi: expected int');
-        }
-        if (type == FieldType.uint8 && (value < 0 || value > 255)) {
-          throw WriteException('Record $ri, field $fi: byte out of range');
-        }
+        _validateIntRange(ri, fi, value, -2147483648, 2147483647, 'int32');
+      case FieldType.uint32:
+        _validateIntRange(ri, fi, value, 0, 4294967295, 'uint32');
+      case FieldType.int64:
+        _validateIntRange(
+          ri,
+          fi,
+          value,
+          -9223372036854775808,
+          9223372036854775807,
+          'int64',
+        );
+      case FieldType.uint64:
+        _validateIntRange(ri, fi, value, 0, 9223372036854775807, 'uint64');
       case FieldType.float:
         if (value is! num) {
           throw WriteException('Record $ri, field $fi: expected num');
@@ -125,6 +140,22 @@ final class DbcWriter {
     }
   }
 
+  void _validateIntRange(
+    int ri,
+    int fi,
+    dynamic value,
+    int min,
+    int max,
+    String typeName,
+  ) {
+    if (value is! int) {
+      throw WriteException('Record $ri, field $fi: expected int');
+    }
+    if (value < min || value > max) {
+      throw WriteException('Record $ri, field $fi: $typeName out of range');
+    }
+  }
+
   Uint8List _encodeRecord(List<dynamic> record, StringBlockWriter table) {
     final bytes = ByteData(_offsets.recordSize);
 
@@ -134,11 +165,23 @@ final class DbcWriter {
       final value = record[i];
 
       switch (type) {
+        case FieldType.int8:
+          bytes.setInt8(offset, value as int);
         case FieldType.uint8:
           bytes.setUint8(offset, value as int);
+        case FieldType.int16:
+          bytes.setInt16(offset, value as int, Endian.little);
+        case FieldType.uint16:
+          bytes.setUint16(offset, value as int, Endian.little);
         case FieldType.int32:
         case FieldType.id:
           bytes.setInt32(offset, value as int, Endian.little);
+        case FieldType.uint32:
+          bytes.setUint32(offset, value as int, Endian.little);
+        case FieldType.int64:
+          bytes.setInt64(offset, value as int, Endian.little);
+        case FieldType.uint64:
+          bytes.setUint64(offset, value as int, Endian.little);
         case FieldType.float:
           bytes.setFloat32(offset, (value as num).toDouble(), Endian.little);
         case FieldType.string:

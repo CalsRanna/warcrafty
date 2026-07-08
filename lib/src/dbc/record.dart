@@ -51,6 +51,30 @@ final class DbcRecord {
     return _data.getUint8(offset);
   }
 
+  /// 读取 16 位有符号整数
+  int getInt16(int field) {
+    final offset = _offsets[field];
+    return _data.getInt16(offset, Endian.little);
+  }
+
+  /// 读取 16 位无符号整数
+  int getUint16(int field) {
+    final offset = _offsets[field];
+    return _data.getUint16(offset, Endian.little);
+  }
+
+  /// 读取 64 位有符号整数
+  int getInt64(int field) {
+    final offset = _offsets[field];
+    return _data.getInt64(offset, Endian.little);
+  }
+
+  /// 读取 64 位无符号整数
+  int getUint64(int field) {
+    final offset = _offsets[field];
+    return _data.getUint64(offset, Endian.little);
+  }
+
   /// 读取浮点数
   double getFloat(int field) {
     final offset = _offsets[field];
@@ -84,11 +108,23 @@ final class DbcRecord {
           map['field_$i'] = getString(i);
         case FieldType.float:
           map['field_$i'] = getFloat(i);
+        case FieldType.int8:
+          map['field_$i'] = getInt8(i);
+        case FieldType.uint8:
+          map['field_$i'] = getUint8(i);
+        case FieldType.int16:
+          map['field_$i'] = getInt16(i);
+        case FieldType.uint16:
+          map['field_$i'] = getUint16(i);
         case FieldType.int32:
         case FieldType.id:
           map['field_$i'] = getInt(i);
-        case FieldType.uint8:
-          map['field_$i'] = getUint8(i);
+        case FieldType.uint32:
+          map['field_$i'] = getUint(i);
+        case FieldType.int64:
+          map['field_$i'] = getInt64(i);
+        case FieldType.uint64:
+          map['field_$i'] = getUint64(i);
         case FieldType.unused:
         case FieldType.unusedByte:
         case FieldType.sort:

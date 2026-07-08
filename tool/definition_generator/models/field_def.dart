@@ -27,9 +27,13 @@ class FieldDef {
     this.isNoninline = false,
   });
 
-  /// 检查字段是否是字节字段 (`<8>` 或 `<u8>`)
-  bool get isByteField {
-    if (size == null) return false;
-    return size == '8' || size == 'u8';
+  /// 整数字段宽度，未指定时返回 null。
+  int? get intWidth {
+    if (size == null) return null;
+    final normalized = size!.startsWith('u') ? size!.substring(1) : size!;
+    return int.tryParse(normalized);
   }
+
+  /// 整数字段是否是无符号。
+  bool get isUnsigned => size?.startsWith('u') ?? false;
 }

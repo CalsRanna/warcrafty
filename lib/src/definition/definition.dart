@@ -55,6 +55,20 @@ import 'faction/faction_template.dart' as struct_faction_template;
 import 'gameobject/game_object_art_kit.dart' as struct_game_object_art_kit;
 import 'gameobject/game_object_display_info.dart' as struct_game_object_display_info;
 
+// gt
+import 'gt/gtbarber_shop_cost_base.dart' as struct_gtbarber_shop_cost_base;
+import 'gt/gtchance_to_melee_crit.dart' as struct_gtchance_to_melee_crit;
+import 'gt/gtchance_to_melee_crit_base.dart' as struct_gtchance_to_melee_crit_base;
+import 'gt/gtchance_to_spell_crit.dart' as struct_gtchance_to_spell_crit;
+import 'gt/gtchance_to_spell_crit_base.dart' as struct_gtchance_to_spell_crit_base;
+import 'gt/gtcombat_ratings.dart' as struct_gtcombat_ratings;
+import 'gt/gtn_p_c_mana_cost_scaler.dart' as struct_gtn_p_c_mana_cost_scaler;
+import 'gt/gto_c_t_class_combat_rating_scalar.dart' as struct_gto_c_t_class_combat_rating_scalar;
+import 'gt/gto_c_t_regen_h_p.dart' as struct_gto_c_t_regen_h_p;
+import 'gt/gto_c_t_regen_m_p.dart' as struct_gto_c_t_regen_m_p;
+import 'gt/gtregen_h_p_per_spt.dart' as struct_gtregen_h_p_per_spt;
+import 'gt/gtregen_m_p_per_spt.dart' as struct_gtregen_m_p_per_spt;
+
 // item
 import 'item/gem_properties.dart' as struct_gem_properties;
 import 'item/item.dart' as struct_item;
@@ -198,18 +212,6 @@ import 'misc/weather.dart' as struct_weather;
 import 'misc/wow_error__strings.dart' as struct_wow_error__strings;
 import 'misc/zone_intro_music_table.dart' as struct_zone_intro_music_table;
 import 'misc/zone_music.dart' as struct_zone_music;
-import 'misc/gtbarber_shop_cost_base.dart' as struct_gtbarber_shop_cost_base;
-import 'misc/gtchance_to_melee_crit.dart' as struct_gtchance_to_melee_crit;
-import 'misc/gtchance_to_melee_crit_base.dart' as struct_gtchance_to_melee_crit_base;
-import 'misc/gtchance_to_spell_crit.dart' as struct_gtchance_to_spell_crit;
-import 'misc/gtchance_to_spell_crit_base.dart' as struct_gtchance_to_spell_crit_base;
-import 'misc/gtcombat_ratings.dart' as struct_gtcombat_ratings;
-import 'misc/gtn_p_c_mana_cost_scaler.dart' as struct_gtn_p_c_mana_cost_scaler;
-import 'misc/gto_c_t_class_combat_rating_scalar.dart' as struct_gto_c_t_class_combat_rating_scalar;
-import 'misc/gto_c_t_regen_h_p.dart' as struct_gto_c_t_regen_h_p;
-import 'misc/gto_c_t_regen_m_p.dart' as struct_gto_c_t_regen_m_p;
-import 'misc/gtregen_h_p_per_spt.dart' as struct_gtregen_h_p_per_spt;
-import 'misc/gtregen_m_p_per_spt.dart' as struct_gtregen_m_p_per_spt;
 
 // quest
 import 'quest/quest_faction_reward.dart' as struct_quest_faction_reward;

@@ -4,7 +4,11 @@ import '../config.dart';
 import '../utils/naming.dart';
 
 /// 生成导出文件
-Future<void> generateExportsFile(List<String> successNames) async {
+Future<void> generateExportsFile(
+  List<String> successNames,
+  Directory outputPath,
+  String targetVersion,
+) async {
   successNames.sort();
 
   final lines = <String>[];

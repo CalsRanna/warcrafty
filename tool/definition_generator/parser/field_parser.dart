@@ -1,13 +1,13 @@
 import '../models/field_def.dart';
 
 /// 解析字段行
-FieldDef? parseFieldLine(String line) {
+FieldDef parseFieldLine(String line) {
   line = line.trim();
   if (line.isEmpty ||
       line.startsWith('LAYOUT') ||
       line.startsWith('BUILD') ||
       line.startsWith('COMMENT')) {
-    return null;
+    throw FormatException('Invalid field line: $line');
   }
 
   // 移除行末注释 (// ...)
@@ -15,11 +15,15 @@ FieldDef? parseFieldLine(String line) {
   if (commentIndex != -1) {
     line = line.substring(0, commentIndex).trim();
   }
-  if (line.isEmpty) return null;
+  if (line.isEmpty) {
+    throw const FormatException('Empty field line');
+  }
 
   final pattern = RegExp(r'^(\$[\w,]+\$)?(\w+)(?:<([^>]+)>)?(?:\[(\d+)\])?$');
   final match = pattern.firstMatch(line);
-  if (match == null) return null;
+  if (match == null) {
+    throw FormatException('Invalid field line: $line');
+  }
 
   final annotation = match.group(1) ?? '';
   final name = match.group(2)!;

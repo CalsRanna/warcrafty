@@ -6,13 +6,13 @@ import 'package:warcrafty/src/internal/schema.dart';
 /// 基于 WoWDBDefs 定义，版本 3.3.5.12340
 const charStartOutfit = DbcSchema(
   name: 'CharStartOutfit',
-  format: 'nbbbbiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
+  format: 'nBBBBiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii',
   fields: [
     Field(index: 0, name: 'ID', description: 'ID', type: FieldType.id),
-    Field(index: 1, name: 'RaceID', description: 'RaceID', type: FieldType.uint8),
-    Field(index: 2, name: 'ClassID', description: 'ClassID', type: FieldType.uint8),
-    Field(index: 3, name: 'SexID', description: 'SexID', type: FieldType.uint8),
-    Field(index: 4, name: 'OutfitID', description: 'OutfitID', type: FieldType.uint8),
+    Field(index: 1, name: 'RaceID', description: 'RaceID', type: FieldType.int8),
+    Field(index: 2, name: 'ClassID', description: 'ClassID', type: FieldType.int8),
+    Field(index: 3, name: 'SexID', description: 'SexID', type: FieldType.int8),
+    Field(index: 4, name: 'OutfitID', description: 'OutfitID', type: FieldType.int8),
     Field(index: 5, name: 'ItemID0', description: 'ItemID 0', type: FieldType.int32),
     Field(index: 6, name: 'ItemID1', description: 'ItemID 1', type: FieldType.int32),
     Field(index: 7, name: 'ItemID2', description: 'ItemID 2', type: FieldType.int32),

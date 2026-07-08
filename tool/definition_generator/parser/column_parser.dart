@@ -1,7 +1,7 @@
 import '../models/column_def.dart';
 
 /// 解析 COLUMNS 行
-ColumnDef? parseColumnLine(String line) {
+ColumnDef parseColumnLine(String line) {
   line = line.trim();
 
   // 移除行末注释 (// ...)
@@ -9,10 +9,12 @@ ColumnDef? parseColumnLine(String line) {
   if (commentIndex != -1) {
     line = line.substring(0, commentIndex).trim();
   }
-  if (line.isEmpty) return null;
+  if (line.isEmpty) {
+    throw const FormatException('Empty column line');
+  }
 
   final pattern = RegExp(
-    r'^(int|float|string|locstring)(?:<([^>]+)>)?\s+(\w+)(\?)?$',
+    r'^(int|uint|float|string|locstring)(?:<([^>]+)>)?\s+(\w+)(\?)?$',
   );
   final match = pattern.firstMatch(line);
   if (match != null) {
@@ -23,5 +25,5 @@ ColumnDef? parseColumnLine(String line) {
       isUncertain: match.group(4) != null,
     );
   }
-  return null;
+  throw FormatException('Invalid column line: $line');
 }
