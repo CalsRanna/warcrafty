@@ -1,5 +1,6 @@
 // 核心 API
-export 'src/dbc/loader.dart'; // DbcLoader, DbcRecord
+export 'src/dbc/loader.dart'; // DbcLoader
+export 'src/dbc/record.dart'; // DbcRecord
 export 'src/dbc/writer.dart'; // DbcWriter
 export 'src/dbc/index.dart'; // DbcIndex
 

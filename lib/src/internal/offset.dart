@@ -19,7 +19,7 @@ final class FieldOffsets {
       final char = _format[i];
       try {
         FieldType.fromChar(char);
-      } on DbcException {
+      } on FormatException {
         throw DbcFormatException(
           'Invalid format character: "$char" at position $i',
         );

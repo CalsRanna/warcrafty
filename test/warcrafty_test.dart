@@ -12,6 +12,13 @@ import 'package:warcrafty/src/internal/string_block_writer.dart';
 import 'package:warcrafty/warcrafty.dart';
 
 void main() {
+  group('Public API', () {
+    test('exports DbcRecord from package entrypoint', () {
+      DbcRecord? record;
+      expect(record, isNull);
+    });
+  });
+
   group('FieldType', () {
     test('fromChar returns correct format', () {
       expect(FieldType.fromChar('n'), equals(FieldType.id));
@@ -62,6 +69,10 @@ void main() {
     test('returns -1 when no index field exists', () {
       final calculator = FieldOffsets('iiii');
       expect(calculator.indexField, equals(-1));
+    });
+
+    test('throws DbcFormatException for invalid format character', () {
+      expect(() => FieldOffsets('nz'), throwsA(isA<DbcFormatException>()));
     });
   });
 
@@ -142,6 +153,37 @@ void main() {
         throwsA(isA<DbcFormatException>()),
       );
     });
+
+    test('throws on invalid string block size', () {
+      final byteData = ByteData(20);
+      byteData.setUint32(0, DbcHeader.signatureValue, Endian.little);
+      byteData.setInt32(4, 10, Endian.little);
+      byteData.setInt32(8, 5, Endian.little);
+      byteData.setInt32(12, 20, Endian.little);
+      byteData.setInt32(16, -1, Endian.little);
+      final bytes = byteData.buffer.asUint8List();
+
+      expect(
+        () => DbcHeader.fromBytes(bytes),
+        throwsA(isA<DbcFormatException>()),
+      );
+    });
+
+    test('toBytes returns only header bytes when given larger buffer', () {
+      final header = DbcHeader(
+        signature: 'WDBC',
+        recordCount: 1,
+        fieldCount: 2,
+        recordSize: 8,
+        stringBlockSize: 1,
+      );
+      final buffer = Uint8List(32);
+
+      final bytes = header.toBytes(buffer);
+
+      expect(bytes.length, equals(DbcHeader.size));
+      expect(DbcHeader.fromBytes(bytes), equals(header));
+    });
   });
 
   group('StringBlock', () {
@@ -165,8 +207,16 @@ void main() {
       expect(handler.read(7), equals('World'));
     });
 
-    test('returns empty string for invalid offset', () {
+    test('throws for invalid offset in strict mode', () {
       final handler = StringBlockReader(Uint8List.fromList([0]));
+      expect(
+        () => handler.read(100),
+        throwsA(isA<StringOffsetOutOfRangeException>()),
+      );
+    });
+
+    test('returns empty string for invalid offset in non-strict mode', () {
+      final handler = StringBlockReader(Uint8List.fromList([0]), strict: false);
       expect(handler.read(100), equals(''));
     });
 
@@ -258,6 +308,55 @@ void main() {
 
       final builder = DbcIndex<Map<String, dynamic>>(records, 0);
       expect(() => builder.lookupOrThrow(99), throwsA(isA<StateError>()));
+    });
+
+    test('builds index from loader records converted to maps', () async {
+      final testFile = File('${Directory.systemTemp.path}/test_index_map.dbc');
+
+      try {
+        DbcWriter.writeToPath(testFile.path, 'nii', [
+          [1, 100, 200],
+          [2, 300, 400],
+        ]);
+
+        final loader = DbcLoader(testFile.path, 'nii');
+        final index = DbcIndex<Map<String, dynamic>>.fromLoader(
+          loader,
+          (record) => record.toMap(),
+        );
+
+        expect(index.lookup(1)?['field_1'], equals(100));
+        expect(index.lookup(2)?['field_2'], equals(400));
+      } finally {
+        if (await testFile.exists()) {
+          await testFile.delete();
+        }
+      }
+    });
+
+    test('fromLoader throws when format has no ID field', () async {
+      final testFile = File(
+        '${Directory.systemTemp.path}/test_index_no_id.dbc',
+      );
+
+      try {
+        DbcWriter.writeToPath(testFile.path, 'ii', [
+          [100, 200],
+        ]);
+
+        final loader = DbcLoader(testFile.path, 'ii');
+        expect(
+          () => DbcIndex<Map<String, dynamic>>.fromLoader(
+            loader,
+            (record) => record.toMap(),
+          ),
+          throwsA(isA<ArgumentError>()),
+        );
+      } finally {
+        if (await testFile.exists()) {
+          await testFile.delete();
+        }
+      }
     });
   });
 
@@ -468,6 +567,45 @@ void main() {
           await testFile.delete();
         }
       }
+    });
+
+    test('fromBytes throws FileReadException for short header', () {
+      expect(
+        () => DbcLoader.fromBytes(Uint8List(10), 'n'),
+        throwsA(isA<FileReadException>()),
+      );
+    });
+
+    test('fromBytes throws FileReadException for truncated data', () {
+      final header = DbcHeader(
+        signature: 'WDBC',
+        recordCount: 1,
+        fieldCount: 1,
+        recordSize: 4,
+        stringBlockSize: 1,
+      );
+      final bytes = Uint8List.fromList([...header.toBytes(), 1, 2, 3]);
+
+      expect(
+        () => DbcLoader.fromBytes(bytes, 'n'),
+        throwsA(isA<FileReadException>()),
+      );
+    });
+
+    test('throws when header record size does not match format', () {
+      final header = DbcHeader(
+        signature: 'WDBC',
+        recordCount: 0,
+        fieldCount: 1,
+        recordSize: 8,
+        stringBlockSize: 1,
+      );
+      final bytes = Uint8List.fromList([...header.toBytes(), 0]);
+
+      expect(
+        () => DbcLoader.fromBytes(bytes, 'n'),
+        throwsA(isA<DbcFormatException>()),
+      );
     });
 
     test('async load works correctly', () async {

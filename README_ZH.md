@@ -168,10 +168,10 @@ await DbcWriter.writeToPathAsync('output.dbc', 'niiiiss', [
 
 // 从现有文件复制并修改
 DbcWriter.copyWithModify(
-  sourcePath: 'input.dbc',
-  format: 'niiiiss',
-  outputPath: 'output.dbc',
-  modify: (source) => [
+  'input.dbc',
+  'niiiiss',
+  'output.dbc',
+  (source) => [
     source.getInt(0),
     source.getInt(1) + 1,
     source.getInt(2),

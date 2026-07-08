@@ -224,57 +224,35 @@ Future<void> example5_LoadingFromBytes() async {
 
 /// 示例 6: 复制并修改文件
 Future<void> example6_CopyAndModify() async {
-  const inputPath = 'ChrRaces.dbc';
+  const inputPath = 'example_source.dbc';
   const outputPath = 'example_modified.dbc';
+  const format = 'nii';
 
-  if (!File(inputPath).existsSync()) {
-    print('文件不存在: $inputPath，跳过复制修改示例');
-    return;
-  }
+  // 创建一个小型源文件，确保示例可以独立运行。
+  DbcWriter.writeToPath(inputPath, format, [
+    [1, 100, 200],
+    [2, 300, 400],
+  ]);
 
   print('从 $inputPath 复制并修改到 $outputPath');
 
-  DbcWriter.copyWithModify(inputPath, Definitions.chrRaces.format, outputPath, (
-    source,
-  ) {
-    // 获取原始数据
-    final id = source.getInt(0);
-    final flags = source.getInt(1);
-    final factionId = source.getInt(2);
-
-    // 修改一些值（示例：增加 faction ID）
-    return [
-      id,
-      flags,
-      factionId + 1000, // 修改 faction ID
-      source.getInt(3),
-      source.getInt(4),
-      source.getInt(5),
-      source.getString(6),
-      source.getInt(7),
-      source.getInt(8),
-      source.getInt(9),
-      source.getInt(10),
-      source.getString(11),
-      source.getInt(12),
-      source.getInt(13),
-      source.getString(14),
-      source.getString(15),
-      // ... 其他字段（注意：这里为了简化只复制了部分字段）
-    ];
+  DbcWriter.copyWithModify(inputPath, format, outputPath, (source) {
+    return [source.getInt(0), source.getInt(1), source.getInt(2) + 1000];
   });
 
   print('复制修改完成');
 
   // 验证结果
-  if (File(outputPath).existsSync()) {
-    final outputLoader = DbcLoader(outputPath, Definitions.chrRaces.format);
-    print('输出文件记录数: ${outputLoader.recordCount}');
+  final outputLoader = DbcLoader(outputPath, format);
+  print('输出文件记录数: ${outputLoader.recordCount}');
+  print('第一条记录修改后的字段 2: ${outputLoader.getRecord(0).getInt(2)}');
 
-    // 清理
-    File(outputPath).deleteSync();
-    print('已清理输出文件');
+  // 清理
+  for (final path in [inputPath, outputPath]) {
+    final file = File(path);
+    if (file.existsSync()) file.deleteSync();
   }
+  print('已清理示例文件');
 }
 
 /// 示例 7: 自定义结构

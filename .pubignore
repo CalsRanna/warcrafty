@@ -1,0 +1,7 @@
+CLAUDE.md
+.DS_Store
+.dart_tool/
+.claude/
+.vscode/
+dbc/
+pubspec.lock

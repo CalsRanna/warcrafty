@@ -22,13 +22,24 @@ final class DbcIndex<T> {
     DbcLoader loader,
     T Function(DbcRecord record) parse,
   ) {
+    final indexField = loader.offsets.indexField;
+    if (indexField < 0) {
+      throw ArgumentError('Loader format has no ID field');
+    }
+
     final records = loader.records.map(parse).toList();
-    return DbcIndex(records, loader.offsets.indexField);
+    return DbcIndex(records, indexField);
   }
 
   int _getId(T record) {
     if (record is DbcRecord) return record.getInt(_indexField);
-    if (record is Map<String, dynamic>) return record['ID'] as int;
+    if (record is Map) {
+      final id = record['ID'] ?? record['field_$_indexField'];
+      if (id is int) return id;
+      throw ArgumentError(
+        'Map record must contain an int ID or field_$_indexField value',
+      );
+    }
     throw ArgumentError('Unsupported record type: $T');
   }
 

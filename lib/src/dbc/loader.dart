@@ -29,9 +29,10 @@ final class DbcLoader {
 
   /// 从文件路径同步加载
   factory DbcLoader(String path, String format) {
+    final offsets = FieldOffsets(format);
     final file = File(path).openSync();
     try {
-      return _load(path, format, file);
+      return _load(path, format, offsets, file);
     } finally {
       file.closeSync();
     }
@@ -39,9 +40,10 @@ final class DbcLoader {
 
   /// 从文件路径异步加载
   static Future<DbcLoader> loadAsync(String path, String format) async {
+    final offsets = FieldOffsets(format);
     final file = await File(path).open();
     try {
-      return await _loadAsync(path, format, file);
+      return await _loadAsync(path, format, offsets, file);
     } finally {
       await file.close();
     }
@@ -53,41 +55,54 @@ final class DbcLoader {
     String format, [
     String path = '',
   ]) {
-    final header = DbcHeader.fromBytes(bytes.sublist(0, DbcHeader.size));
+    final offsets = FieldOffsets(format);
+    final header = DbcHeader.fromBytes(bytes);
+    _validateHeader(header, offsets, format);
 
-    if (header.fieldCount != format.length) {
-      throw DbcFormatException(
-        'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
+    final dataStart = DbcHeader.size;
+    final recordDataSize = _recordDataSize(header);
+    final recordEnd = dataStart + recordDataSize;
+    final expectedSize = recordEnd + header.stringBlockSize;
+
+    if (bytes.length < expectedSize) {
+      throw FileReadException(
+        'DBC data too short: ${bytes.length} bytes (expected at least $expectedSize)',
       );
     }
 
-    final offsets = FieldOffsets(format);
-    final dataStart = DbcHeader.size;
-    final recordEnd = dataStart + header.recordSize * header.recordCount;
-
     final data = bytes.sublist(dataStart, recordEnd);
-    final strings = StringBlockReader(bytes.sublist(recordEnd));
+    final strings = StringBlockReader(bytes.sublist(recordEnd, expectedSize));
 
     return DbcLoader._(path, format, header, data, offsets, strings);
   }
 
-  static DbcLoader _load(String path, String format, RandomAccessFile file) {
+  static DbcLoader _load(
+    String path,
+    String format,
+    FieldOffsets offsets,
+    RandomAccessFile file,
+  ) {
     final header = DbcHeader.fromBytes(file.readSync(DbcHeader.size));
+    _validateHeader(header, offsets, format);
 
-    if (header.fieldCount != format.length) {
-      throw DbcFormatException(
-        'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
+    final dataSize = _dataSize(header);
+    final remaining = file.lengthSync() - DbcHeader.size;
+    if (remaining < dataSize) {
+      throw FileReadException(
+        'DBC file too short: $remaining data bytes (expected $dataSize)',
       );
     }
 
-    final offsets = FieldOffsets(format);
-    final dataSize =
-        header.recordSize * header.recordCount + header.stringBlockSize;
     final bytes = file.readSync(dataSize);
-    final recordEnd = header.recordSize * header.recordCount;
+    if (bytes.length != dataSize) {
+      throw FileReadException(
+        'Failed to read DBC data: ${bytes.length} bytes read (expected $dataSize)',
+      );
+    }
 
+    final recordEnd = _recordDataSize(header);
     final data = bytes.sublist(0, recordEnd);
-    final strings = StringBlockReader(bytes.sublist(recordEnd));
+    final strings = StringBlockReader(bytes.sublist(recordEnd, dataSize));
 
     return DbcLoader._(path, format, header, data, offsets, strings);
   }
@@ -95,27 +110,56 @@ final class DbcLoader {
   static Future<DbcLoader> _loadAsync(
     String path,
     String format,
+    FieldOffsets offsets,
     RandomAccessFile file,
   ) async {
     final header = DbcHeader.fromBytes(await file.read(DbcHeader.size));
+    _validateHeader(header, offsets, format);
 
+    final dataSize = _dataSize(header);
+    final remaining = await file.length() - DbcHeader.size;
+    if (remaining < dataSize) {
+      throw FileReadException(
+        'DBC file too short: $remaining data bytes (expected $dataSize)',
+      );
+    }
+
+    final bytes = await file.read(dataSize);
+    if (bytes.length != dataSize) {
+      throw FileReadException(
+        'Failed to read DBC data: ${bytes.length} bytes read (expected $dataSize)',
+      );
+    }
+
+    final recordEnd = _recordDataSize(header);
+    final data = bytes.sublist(0, recordEnd);
+    final strings = StringBlockReader(bytes.sublist(recordEnd, dataSize));
+
+    return DbcLoader._(path, format, header, data, offsets, strings);
+  }
+
+  static void _validateHeader(
+    DbcHeader header,
+    FieldOffsets offsets,
+    String format,
+  ) {
     if (header.fieldCount != format.length) {
       throw DbcFormatException(
         'Field count mismatch: header=${header.fieldCount}, format=${format.length}',
       );
     }
-
-    final offsets = FieldOffsets(format);
-    final dataSize =
-        header.recordSize * header.recordCount + header.stringBlockSize;
-    final bytes = await file.read(dataSize);
-    final recordEnd = header.recordSize * header.recordCount;
-
-    final data = bytes.sublist(0, recordEnd);
-    final strings = StringBlockReader(bytes.sublist(recordEnd));
-
-    return DbcLoader._(path, format, header, data, offsets, strings);
+    if (header.recordSize != offsets.recordSize) {
+      throw DbcFormatException(
+        'Record size mismatch: header=${header.recordSize}, format=${offsets.recordSize}',
+      );
+    }
   }
+
+  static int _recordDataSize(DbcHeader header) =>
+      header.recordSize * header.recordCount;
+
+  static int _dataSize(DbcHeader header) =>
+      _recordDataSize(header) + header.stringBlockSize;
 
   /// 记录数量
   int get recordCount => header.recordCount;

@@ -1,14 +1,17 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
+import 'exception.dart';
+
 /// 字符串块读取器
 ///
 /// 处理 DBC 文件末尾的字符串表，支持 O(1) 查找。
 final class StringBlockReader {
   final Uint8List _data;
+  final bool strict;
   final Map<int, String> _cache = {};
 
-  StringBlockReader(this._data) {
+  StringBlockReader(this._data, {this.strict = true}) {
     _buildIndex();
   }
 
@@ -35,8 +38,16 @@ final class StringBlockReader {
 
   /// 读取字符串
   String read(int offset) {
-    if (offset < 0 || offset >= _data.length) return '';
-    return _cache[offset] ?? '';
+    if (offset < 0 || offset >= _data.length) {
+      if (strict) throw StringOffsetOutOfRangeException(offset, _data.length);
+      return '';
+    }
+
+    final value = _cache[offset];
+    if (value != null) return value;
+
+    if (strict) throw StringOffsetOutOfRangeException(offset, _data.length);
+    return '';
   }
 
   /// 检查偏移量是否有效

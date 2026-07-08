@@ -62,6 +62,9 @@ final class DbcHeader {
     if (recordSize <= 0) {
       throw DbcFormatException('Invalid record size: $recordSize');
     }
+    if (stringBlockSize < 0) {
+      throw DbcFormatException('Invalid string block size: $stringBlockSize');
+    }
 
     return DbcHeader(
       signature: 'WDBC',
@@ -74,9 +77,17 @@ final class DbcHeader {
 
   /// 将头信息写入字节缓冲区
   Uint8List toBytes([Uint8List? buffer]) {
+    if (buffer != null && buffer.length < size) {
+      throw ArgumentError.value(
+        buffer.length,
+        'buffer.length',
+        'must be >= $size',
+      );
+    }
+
     final byteData = buffer != null
-        ? ByteData.sublistView(buffer)
-        : ByteData(20);
+        ? ByteData.sublistView(buffer, 0, size)
+        : ByteData(size);
 
     byteData.setUint32(0, signatureValue, Endian.little);
     byteData.setInt32(4, recordCount, Endian.little);
@@ -84,7 +95,7 @@ final class DbcHeader {
     byteData.setInt32(12, recordSize, Endian.little);
     byteData.setInt32(16, stringBlockSize, Endian.little);
 
-    return byteData.buffer.asUint8List();
+    return byteData.buffer.asUint8List(byteData.offsetInBytes, size);
   }
 
   @override
