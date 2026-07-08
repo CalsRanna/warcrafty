@@ -4,4 +4,5 @@ CLAUDE.md
 .claude/
 .vscode/
 dbc/
+tool/
 pubspec.lock
